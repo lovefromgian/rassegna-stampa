@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Revisione uscita — mockup rassegna stampa</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<p class="mockup-note">Mockup statico di riferimento — l'operatore verifica la cattura e assegna la rilevanza. È qui che si scopre il banner cookie che ha rovinato lo screenshot.</p>
+<div class="app">
+<div class="topbar"><span class="brand">Rassegna stampa</span><span class="user">Marco B. · supervisore</span></div>
+<p class="crumbs"><a href="05-dettaglio-rassegna.html">Grado punta sulla cultura</a> / Revisione</p>
+<div class="page-head">
+  <h1>Revisione uscita <span style="font-size:15px;color:var(--text-muted);font-weight:400;">— 3 di 8</span></h1>
+  <p>Verifica la cattura, correggi i metadati, assegna la rilevanza.</p>
+</div>
+<div style="display:grid;grid-template-columns:1.3fr 1fr;gap:16px;align-items:start;">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <h2 style="margin:0;">Anteprima cattura</h2>
+      <span class="pill success">Screenshot valido</span>
+    </div>
+    <div class="shot" style="min-height:420px;">Screenshot full-page dell'articolo<br><span style="font-size:12px;">(salvati anche il PDF multipagina e il testo estratto)</span></div>
+    <div class="actions" style="margin-top:12px;">
+      <button class="btn">Ingrandisci</button>
+      <button class="btn">Ricattura</button>
+      <button class="btn">Sostituisci file</button>
+    </div>
+    <div class="note" style="margin-top:12px;">Se il banner cookie copre l'articolo o il paywall lo tronca, si vede qui: ricattura, oppure carica a mano uno screenshot tuo.</div>
+  </div>
+  <div>
+    <div class="card">
+      <h2>Dati dell'uscita</h2>
+      <table class="data">
+        <tr><td>Testata</td><td>Il Goriziano</td></tr>
+        <tr><td>Titolo</td><td style="text-align:right;">Estate 2026 a Grado, si punta sulla cultura…</td></tr>
+        <tr><td>Data</td><td>25 giugno 2026</td></tr>
+        <tr><td>Link</td><td style="color:var(--accent);">ilgoriziano.it/articolo/…</td></tr>
+        <tr><td>Testo estratto</td><td>2.140 caratteri</td></tr>
+        <tr><td>Rilevata il</td><td>25 giu, 08:00</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h2>Classificazione</h2>
+      <label class="field">Tipo di media</label>
+      <select>
+        <option selected>Online</option>
+        <option>Carta stampata</option>
+        <option>Radio</option>
+        <option>TV</option>
+        <option>Agenzia di stampa</option>
+        <option>Social / blog</option>
+      </select>
+      <label class="field">Rilevanza</label>
+      <select>
+        <option selected>Principale — articolo dedicato</option>
+        <option>Secondaria — tratta il tema tra altri</option>
+        <option>Citazione — menzione di passaggio</option>
+      </select>
+      <label class="field">Note interne</label>
+      <textarea placeholder="Visibili solo al team"></textarea>
+    </div>
+    <div class="actions">
+      <button class="btn">Scarta</button>
+      <button class="btn primary">Approva e vai avanti</button>
+    </div>
+  </div>
+</div>
+</div>
+</body>
+</html>

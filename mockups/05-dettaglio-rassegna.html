@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dettaglio rassegna — mockup rassegna stampa</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<p class="mockup-note">Mockup statico di riferimento — cruscotto della rassegna: stato della raccolta e accesso alle tre fasi.</p>
+<div class="app">
+<div class="topbar"><span class="brand">Rassegna stampa</span><span class="user">Marco B. · supervisore</span></div>
+<p class="crumbs"><a href="01-clienti.html">Clienti</a> / <a href="02-scheda-cliente.html">Comune di Grado</a> / Grado punta sulla cultura</p>
+<div class="page-head">
+  <h1>Grado punta sulla cultura</h1>
+  <p>Comunicato del 25 giugno 2026 · monitoraggio attivo fino al 9 luglio · ultima scansione oggi alle 08:00</p>
+</div>
+<div class="metrics">
+  <div class="metric"><div class="label">Candidati da decidere</div><div class="value">6</div></div>
+  <div class="metric"><div class="label">Da revisionare</div><div class="value">2</div></div>
+  <div class="metric"><div class="label">Approvate</div><div class="value">6</div></div>
+  <div class="metric"><div class="label">Scartate</div><div class="value">3</div></div>
+</div>
+<div class="card">
+  <h2>Prossimo passo</h2>
+  <div class="actions" style="flex-direction:column;gap:10px;">
+    <a class="btn primary wide" href="06-candidati.html" style="text-decoration:none;text-align:center;">Conferma i 6 candidati proposti</a>
+    <a class="btn wide" href="07-revisione-uscita.html" style="text-decoration:none;text-align:center;">Revisiona le 2 uscite in attesa</a>
+    <a class="btn wide" href="08-ordine-pdf.html" style="text-decoration:none;text-align:center;">Ordina e genera il PDF</a>
+  </div>
+  <div class="note" style="margin-top:14px;">Il PDF si genera solo quando nessuna uscita resta in stato "candidato" e ogni uscita approvata ha uno screenshot valido.</div>
+</div>
+<div class="card">
+  <h2>Uscite raccolte</h2>
+  <div class="list">
+    <div class="row">
+      <div class="main"><div class="title">Il Piccolo · Weekend, pag. 55</div><div class="sub">Storia e tradizioni nei musei di Grado · 25 giu · carta stampata</div></div>
+      <span class="pill success">Approvata</span>
+    </div>
+    <div class="row">
+      <div class="main"><div class="title">Il Goriziano</div><div class="sub">Estate 2026 a Grado, si punta sulla cultura · 25 giu</div></div>
+      <span class="pill success">Approvata</span>
+    </div>
+    <div class="row">
+      <div class="main"><div class="title">Nordest News</div><div class="sub">Grado punta sulla cultura: musei, visite guidate · 25 giu</div></div>
+      <span class="pill success">Approvata</span>
+    </div>
+    <div class="row">
+      <div class="main"><div class="title">Il Pais</div><div class="sub">Grado oltre il mare: un viaggio tra storia, arte e civiltà lagunare · 25 giu</div></div>
+      <span class="pill warning">Cattura da rifare</span>
+    </div>
+    <div class="row">
+      <div class="main"><div class="title">Udine Today</div><div class="sub">Grado punta sulla cultura · 27 giu</div></div>
+      <span class="pill neutral">In cattura</span>
+    </div>
+  </div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Impostazioni cliente — mockup rassegna stampa</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<p class="mockup-note">Mockup statico di riferimento — logo e colore ereditati da ogni rassegna del cliente. Solo supervisore.</p>
+<div class="app">
+<div class="topbar"><span class="brand">Rassegna stampa</span><span class="user">Marco B. · supervisore</span></div>
+<p class="crumbs"><a href="01-clienti.html">Clienti</a> / <a href="02-scheda-cliente.html">Comune di Grado</a> / Impostazioni</p>
+<div class="page-head">
+  <h1>Impostazioni cliente</h1>
+  <p>Configurate una volta sola: ogni nuova rassegna del cliente le eredita.</p>
+</div>
+<div class="card">
+  <h2>Anagrafica</h2>
+  <label class="field">Nome</label>
+  <input type="text" value="Comune di Grado">
+  <label class="field">Referente</label>
+  <input type="text" value="Ufficio stampa">
+  <label class="field">Email referente</label>
+  <input type="email" value="ufficio.stampa@comunegrado.it">
+  <label class="field">Stato</label>
+  <select><option>Attivo</option><option>Archiviato</option></select>
+</div>
+<div class="card">
+  <h2>Grafica del PDF</h2>
+  <p style="font-size:13px;color:var(--text-secondary);margin:0 0 14px;">L'impaginazione è fissa. Si personalizzano solo logo e colore d'accento.</p>
+  <label class="field">Logo (copertina)</label>
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
+    <div class="shot" style="width:110px;min-height:80px;">grado_logo.png</div>
+    <button class="btn">Sostituisci</button>
+  </div>
+  <label class="field">Colore d'accento (bordi e intestazioni)</label>
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+    <div style="width:32px;height:32px;border-radius:6px;background:#e8836b;border:1px solid var(--border-strong);"></div>
+    <input type="text" value="#E8836B" style="margin:0;max-width:140px;">
+  </div>
+</div>
+<div class="card">
+  <h2>Destinatari della rassegna</h2>
+  <p style="font-size:13px;color:var(--text-secondary);margin:0 0 12px;">L'invio è manuale: il sistema produce il PDF, l'invio lo fa l'agenzia. Questi indirizzi sono un promemoria.</p>
+  <input type="email" value="ufficio.stampa@comunegrado.it">
+  <input type="email" value="sindaco@comunegrado.it">
+  <button class="btn">+ Aggiungi destinatario</button>
+</div>
+<div class="actions" style="max-width:340px;">
+  <button class="btn">Annulla</button>
+  <button class="btn primary">Salva</button>
+</div>
+</div>
+</body>
+</html>

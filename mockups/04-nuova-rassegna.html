@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nuova rassegna — mockup rassegna stampa</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<p class="mockup-note">Mockup statico di riferimento — creazione rassegna. Il periodo si precompila dal comunicato, ma la rassegna può esistere anche senza.</p>
+<div class="app">
+<div class="topbar"><span class="brand">Rassegna stampa</span><span class="user">Marco B. · supervisore</span></div>
+<p class="crumbs"><a href="01-clienti.html">Clienti</a> / <a href="02-scheda-cliente.html">Comune di Grado</a> / Nuova rassegna</p>
+<div class="page-head">
+  <h1>Nuova rassegna</h1>
+  <p>Definisci cosa cercare e per quanto tempo.</p>
+</div>
+<div class="card">
+  <h2>Comunicato</h2>
+  <p style="font-size:13px;color:var(--text-secondary);margin:0 0 14px;">Facoltativo: una rassegna può monitorare anche solo un periodo, senza un comunicato dietro. Se lo carichi, il sistema compila la copertina del PDF e suggerisce le parole chiave.</p>
+  <label class="field">Titolo del comunicato</label>
+  <input type="text" value="Grado punta sulla cultura: musei, visite guidate e nuovi strumenti per scoprire l'isola">
+  <label class="field">Sottotitolo</label>
+  <input type="text" value="Un'offerta sempre più ampia tra archeologia, laguna, storia e itinerari nel centro storico">
+  <label class="field">Data del comunicato</label>
+  <input type="date" value="2026-06-25" style="max-width:200px;">
+  <label class="field">Testo o file del comunicato</label>
+  <div class="shot" style="min-height:90px;">Trascina qui il comunicato (PDF, DOCX) oppure incolla il testo</div>
+</div>
+<div class="card">
+  <h2>Cosa cercare</h2>
+  <label class="field">Parole chiave richieste</label>
+  <div class="tags" style="margin-bottom:10px;">
+    <span class="pill accent">Grado</span>
+    <span class="pill accent">musei</span>
+    <span class="pill accent">Iulia Felix</span>
+    <span class="pill accent">FVGcard Aquileia</span>
+    <span class="pill neutral">+ aggiungi</span>
+  </div>
+  <p style="font-size:13px;color:var(--text-muted);margin:0 0 16px;">Suggerite dal testo del comunicato. Correggile pure.</p>
+  <label class="field">Parole da escludere</label>
+  <div class="tags" style="margin-bottom:10px;">
+    <span class="pill danger">gradi</span>
+    <span class="pill danger">grado di parentela</span>
+    <span class="pill neutral">+ aggiungi</span>
+  </div>
+  <div class="note">Le esclusioni servono a tagliare i falsi positivi. Un nome ambiguo come "Grado" ne genera parecchi: articoli sulle temperature, sui gradi di parentela, sui gradi militari.</div>
+</div>
+<div class="card">
+  <h2>Periodo di monitoraggio</h2>
+  <div style="display:flex;gap:14px;">
+    <div style="flex:1;"><label class="field">Dal</label><input type="date" value="2026-06-25"></div>
+    <div style="flex:1;"><label class="field">Al</label><input type="date" value="2026-07-09"></div>
+  </div>
+  <p style="font-size:13px;color:var(--text-muted);margin:0;">Precompilato: data del comunicato + 14 giorni. Il sistema scandaglia una volta al giorno finché il periodo è attivo.</p>
+</div>
+<div class="actions" style="max-width:340px;">
+  <button class="btn">Annulla</button>
+  <button class="btn primary">Crea rassegna</button>
+</div>
+</div>
+</body>
+</html>

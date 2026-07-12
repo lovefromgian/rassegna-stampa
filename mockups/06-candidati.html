@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conferma candidati — mockup rassegna stampa</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<p class="mockup-note">Mockup statico di riferimento — qui si decide solo dentro/fuori. La rilevanza si assegna dopo, in revisione.</p>
+<div class="app">
+<div class="topbar"><span class="brand">Rassegna stampa</span><span class="user">Marco B. · supervisore</span></div>
+<p class="crumbs"><a href="05-dettaglio-rassegna.html">Grado punta sulla cultura</a> / Candidati</p>
+<div class="page-head">
+  <h1>Candidati da confermare</h1>
+  <p>6 nuovi · scansione del 27 giugno, ore 08:00 · ordinati per corrispondenza</p>
+</div>
+<div class="card">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+    <label style="font-size:14px;color:var(--text-secondary);"><input type="checkbox"> Seleziona tutti</label>
+    <span style="font-size:13px;color:var(--text-muted);">2 selezionati</span>
+  </div>
+  <div class="list">
+    <div class="row" style="align-items:flex-start;">
+      <input type="checkbox" checked style="margin-top:4px;">
+      <div class="main">
+        <div style="display:flex;justify-content:space-between;gap:12px;">
+          <span class="title">Udine Today</span>
+          <span class="sub" style="white-space:nowrap;">27 giu 2026</span>
+        </div>
+        <div style="margin:2px 0 6px;">Grado punta sulla cultura: musei, visite guidate e nuovi strumenti per scoprire l'isola</div>
+        <div class="sub" style="line-height:1.5;">Grado rafforza la propria proposta culturale e amplia le opportunità di visita per residenti e turisti con un'offerta che accompagna la stagione estiva e prosegue fino a dicembre…</div>
+        <div style="display:flex;gap:10px;align-items:center;margin-top:8px;">
+          <span class="pill success">Corrispondenza alta</span>
+          <a href="#" style="font-size:13px;color:var(--accent);">Apri l'articolo ↗</a>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="align-items:flex-start;">
+      <input type="checkbox" checked style="margin-top:4px;">
+      <div class="main">
+        <div style="display:flex;justify-content:space-between;gap:12px;">
+          <span class="title">TriestePrima</span>
+          <span class="sub" style="white-space:nowrap;">27 giu 2026</span>
+        </div>
+        <div style="margin:2px 0 6px;">Musei, visite guidate e nuovi strumenti per scoprire l'isola: Grado punta sulla cultura</div>
+        <div class="sub" style="line-height:1.5;">L'offerta si arricchisce con le visite guidate promosse da PromoTurismoFVG, in programma da aprile a settembre con partenza dall'infopoint di Grado…</div>
+        <div style="display:flex;gap:10px;align-items:center;margin-top:8px;">
+          <span class="pill success">Corrispondenza alta</span>
+          <a href="#" style="font-size:13px;color:var(--accent);">Apri l'articolo ↗</a>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="align-items:flex-start;">
+      <input type="checkbox" style="margin-top:4px;">
+      <div class="main">
+        <div style="display:flex;justify-content:space-between;gap:12px;">
+          <span class="title">Friuli VG</span>
+          <span class="sub" style="white-space:nowrap;">27 giu 2026</span>
+        </div>
+        <div style="margin:2px 0 6px;">Non solo mare e spiaggia, Grado punta anche su storia e cultura con i Musei e le Basiliche del "Castrum"</div>
+        <div class="sub" style="line-height:1.5;">Grado rafforza la propria proposta culturale e amplia le opportunità di visita per residenti e turisti con un'offerta che accompagna la stagione estiva…</div>
+        <div style="display:flex;gap:10px;align-items:center;margin-top:8px;">
+          <span class="pill warning">Possibile duplicato di Udine Today</span>
+          <a href="#" style="font-size:13px;color:var(--accent);">Apri l'articolo ↗</a>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="align-items:flex-start;">
+      <input type="checkbox" style="margin-top:4px;">
+      <div class="main">
+        <div style="display:flex;justify-content:space-between;gap:12px;">
+          <span class="title">Blog Viaggi Nordest</span>
+          <span class="sub" style="white-space:nowrap;">26 giu 2026</span>
+        </div>
+        <div style="margin:2px 0 6px;">Dieci gradi in meno: dove rifugiarsi dal caldo in Friuli</div>
+        <div class="sub" style="line-height:1.5;">Con temperature che superano i trenta gradi, il weekend è l'occasione per cercare refrigerio in montagna…</div>
+        <div style="display:flex;gap:10px;align-items:center;margin-top:8px;">
+          <span class="pill danger">Corrispondenza debole</span>
+          <a href="#" style="font-size:13px;color:var(--accent);">Apri l'articolo ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="actions" style="margin-top:16px;">
+    <button class="btn">Scarta selezionati</button>
+    <button class="btn primary">Conferma selezionati</button>
+  </div>
+  <button class="btn wide" style="margin-top:10px;">+ Aggiungi un'uscita manualmente (URL o ritaglio cartaceo)</button>
+  <div class="note" style="margin-top:14px;">Il falso positivo è fisiologico: il quarto candidato contiene "gradi" ma non parla di Grado. Il sistema lo segnala come debole, non lo esclude da solo. Allo stesso modo, un'uscita può sfuggire alla scansione: l'aggiunta manuale è parte del flusso normale.</div>
+</div>
+</div>
+</body>
+</html>

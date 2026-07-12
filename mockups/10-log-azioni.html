@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Log azioni — mockup rassegna stampa</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<p class="mockup-note">Mockup statico di riferimento — immutabile. Nessuno lo modifica, nemmeno il supervisore.</p>
+<div class="app">
+<div class="topbar"><span class="brand">Rassegna stampa</span><span class="user">Marco B. · supervisore</span></div>
+<p class="crumbs"><a href="05-dettaglio-rassegna.html">Grado punta sulla cultura</a> / Log azioni</p>
+<div class="page-head">
+  <h1>Log azioni</h1>
+  <p>Chi ha fatto cosa, e quando. Registro immutabile: non si modifica né si cancella.</p>
+</div>
+<div class="card">
+  <div style="display:flex;gap:10px;margin-bottom:14px;">
+    <select style="margin:0;max-width:200px;"><option>Tutte le azioni</option><option>Generazione PDF</option><option>Approvazioni</option></select>
+    <select style="margin:0;max-width:200px;"><option>Tutti gli utenti</option><option>Marco B.</option><option>Laura T.</option></select>
+  </div>
+  <div class="list">
+    <div class="row"><div class="main"><div class="title">Marco B. ha generato il PDF v1</div><div class="sub">8 uscite incluse · 27 giu 2026, 16:42</div></div><span class="pill accent">Generazione</span></div>
+    <div class="row"><div class="main"><div class="title">Laura T. ha approvato l'uscita "Il Goriziano"</div><div class="sub">rilevanza: principale · 27 giu 2026, 15:10</div></div><span class="pill success">Approvazione</span></div>
+    <div class="row"><div class="main"><div class="title">Laura T. ha scartato l'uscita "Blog Viaggi Nordest"</div><div class="sub">motivo: falso positivo · 27 giu 2026, 15:04</div></div><span class="pill warning">Scarto</span></div>
+    <div class="row"><div class="main"><div class="title">Laura T. ha confermato 4 candidati</div><div class="sub">scansione del 27 giu · 27 giu 2026, 15:01</div></div><span class="pill neutral">Conferma</span></div>
+    <div class="row"><div class="main"><div class="title">Marco B. ha modificato le impostazioni di "Comune di Grado"</div><div class="sub">colore d'accento: #E8836B · 24 giu 2026, 09:20</div></div><span class="pill neutral">Anagrafica</span></div>
+  </div>
+</div>
+</div>
+</body>
+</html>

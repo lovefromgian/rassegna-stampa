@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clienti — mockup rassegna stampa</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<p class="mockup-note">Mockup statico di riferimento — elenco clienti, punto d'ingresso del gestionale.</p>
+<div class="app">
+<div class="topbar"><span class="brand">Rassegna stampa</span><span class="user">Marco B. · supervisore</span></div>
+<div class="page-head">
+  <h1>Clienti</h1>
+  <p>Ogni cliente raccoglie le sue rassegne. Le impostazioni grafiche del PDF si configurano una volta sola.</p>
+</div>
+<div class="card">
+  <div style="display:flex;gap:10px;margin-bottom:14px;">
+    <input type="text" placeholder="Cerca cliente" style="margin:0;">
+    <button class="btn primary" style="white-space:nowrap;">+ Nuovo cliente</button>
+  </div>
+  <div class="list">
+    <div class="row">
+      <div class="avatar">CG</div>
+      <div class="main"><div class="title">Comune di Grado</div><div class="sub">5 rassegne · 31 uscite nel 2026</div></div>
+      <span class="pill warning">2 attive</span>
+    </div>
+    <div class="row">
+      <div class="avatar">PT</div>
+      <div class="main"><div class="title">PromoTurismoFVG</div><div class="sub">9 rassegne · 84 uscite nel 2026</div></div>
+      <span class="pill warning">1 attiva</span>
+    </div>
+    <div class="row">
+      <div class="avatar">HB</div>
+      <div class="main"><div class="title">Hotel Bellariva</div><div class="sub">2 rassegne · 7 uscite nel 2026</div></div>
+      <span class="pill neutral">Nessuna attiva</span>
+    </div>
+  </div>
+  <p style="font-size:13px;color:var(--text-muted);margin:14px 0 0;">Solo il supervisore crea, modifica o elimina un cliente. L'operatore vede l'elenco in sola lettura.</p>
+</div>
+</div>
+</body>
+</html>

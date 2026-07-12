@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ordine e generazione PDF — mockup rassegna stampa</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<p class="mockup-note">Mockup statico di riferimento — l'ordine è una scelta editoriale: il sistema propone, l'operatore trascina.</p>
+<div class="app">
+<div class="topbar"><span class="brand">Rassegna stampa</span><span class="user">Marco B. · supervisore</span></div>
+<p class="crumbs"><a href="05-dettaglio-rassegna.html">Grado punta sulla cultura</a> / Genera PDF</p>
+<div class="page-head">
+  <h1>Ordine delle uscite e generazione</h1>
+  <p>Ordinamento proposto: rilevanza, poi data. Trascina per riordinare.</p>
+</div>
+<div style="display:grid;grid-template-columns:1.4fr 1fr;gap:16px;align-items:start;">
+  <div class="card">
+    <h2>Uscite nel PDF <span style="font-weight:400;color:var(--text-muted);font-size:14px;">— 8 approvate</span></h2>
+    <div class="list">
+      <div class="row"><span style="color:var(--text-muted);">⠿</span><span style="color:var(--text-muted);width:16px;">1</span>
+        <div class="main"><div class="title">Il Piccolo · Weekend, pag. 55</div><div class="sub">Storia e tradizioni nei musei di Grado · 25 giu</div></div>
+        <span class="pill accent">Carta</span><span class="pill success">Principale</span></div>
+      <div class="row"><span style="color:var(--text-muted);">⠿</span><span style="color:var(--text-muted);width:16px;">2</span>
+        <div class="main"><div class="title">Il Goriziano</div><div class="sub">Estate 2026 a Grado, si punta sulla cultura · 25 giu</div></div>
+        <span class="pill neutral">Online</span><span class="pill success">Principale</span></div>
+      <div class="row"><span style="color:var(--text-muted);">⠿</span><span style="color:var(--text-muted);width:16px;">3</span>
+        <div class="main"><div class="title">Nordest News</div><div class="sub">Grado punta sulla cultura: musei, visite guidate · 25 giu</div></div>
+        <span class="pill neutral">Online</span><span class="pill success">Principale</span></div>
+      <div class="row"><span style="color:var(--text-muted);">⠿</span><span style="color:var(--text-muted);width:16px;">4</span>
+        <div class="main"><div class="title">Il Pais</div><div class="sub">Grado oltre il mare: un viaggio tra storia e arte · 25 giu</div></div>
+        <span class="pill neutral">Online</span><span class="pill success">Principale</span></div>
+      <div class="row"><span style="color:var(--text-muted);">⠿</span><span style="color:var(--text-muted);width:16px;">5</span>
+        <div class="main"><div class="title">Udine Today</div><div class="sub">Grado punta sulla cultura · 27 giu</div></div>
+        <span class="pill neutral">Online</span><span class="pill neutral">Secondaria</span></div>
+      <div class="row"><span style="color:var(--text-muted);">⠿</span><span style="color:var(--text-muted);width:16px;">6</span>
+        <div class="main"><div class="title">TriestePrima</div><div class="sub">Musei, visite guidate e nuovi strumenti · 27 giu</div></div>
+        <span class="pill neutral">Online</span><span class="pill neutral">Secondaria</span></div>
+      <div class="row"><span style="color:var(--text-muted);">⠿</span><span style="color:var(--text-muted);width:16px;">7</span>
+        <div class="main"><div class="title">Friuli VG</div><div class="sub">Non solo mare e spiaggia · 27 giu</div></div>
+        <span class="pill neutral">Online</span><span class="pill neutral">Secondaria</span></div>
+      <div class="row"><span style="color:var(--text-muted);">⠿</span><span style="color:var(--text-muted);width:16px;">8</span>
+        <div class="main"><div class="title">Radio Punto Zero</div><div class="sub">Intervista all'assessore · 26 giu · inserita a mano</div></div>
+        <span class="pill accent">Radio</span><span class="pill neutral">Citazione</span></div>
+    </div>
+    <div class="note" style="margin-top:14px;">Il Piccolo apre la rassegna pur non essendo il più recente: è una scelta editoriale, ed è il motivo per cui il riordino manuale esiste.</div>
+  </div>
+  <div>
+    <div class="card">
+      <h2>Anteprima</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="shot" style="min-height:160px;border-color:#e8836b;">Copertina<br><span style="font-size:12px;">logo cliente + titolo comunicato</span></div>
+        <div class="shot" style="min-height:160px;">Indice delle uscite</div>
+        <div class="shot" style="min-height:160px;">Pagina uscita<br><span style="font-size:12px;">testata · data · link</span></div>
+        <div class="shot" style="min-height:160px;">Pagina uscita</div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Riepilogo</h2>
+      <table class="data">
+        <tr><td>Uscite incluse</td><td>8 di 8 approvate</td></tr>
+        <tr><td>Candidati pendenti</td><td>0</td></tr>
+        <tr><td>Screenshot mancanti</td><td>0</td></tr>
+        <tr><td>Pagine totali</td><td>10</td></tr>
+        <tr><td>Versione</td><td>v1 (prima generazione)</td></tr>
+      </table>
+      <button class="btn primary wide" style="margin-top:14px;">Genera PDF</button>
+      <p style="font-size:13px;color:var(--text-muted);margin:10px 0 0;">Il PDF si scarica e si invia a mano. Il sistema registra chi l'ha generato e quando.</p>
+    </div>
+    <div class="card">
+      <h2>Versioni precedenti</h2>
+      <p style="font-size:13px;color:var(--text-secondary);margin:0;">Nessuna. Se dopo la chiusura arriva un'uscita tardiva, il supervisore riapre la rassegna e si genera la v2: la v1 resta, così si sa sempre cosa è stato consegnato.</p>
+    </div>
+  </div>
+</div>
+</div>
+</body>
+</html>
