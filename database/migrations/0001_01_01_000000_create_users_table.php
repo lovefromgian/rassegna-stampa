@@ -17,6 +17,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            // Ruolo applicativo: supervisore | operatore (App\Enums\RuoloUtente).
+            // I permessi si applicano lato server con Policy (docs/modello-dati.md §User).
+            $table->string('ruolo')->default('operatore');
             $table->rememberToken();
             $table->timestamps();
         });
