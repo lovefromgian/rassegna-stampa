@@ -11,9 +11,8 @@ patterns=(
   "rm -rf /"
   "rm -rf ~"
   "rm -rf \\*"
-  "git push --force"
+  "git push --force"          # force-push resta a conferma umana: riscrive la storia
   "git push -f"
-  "git push"                  # il push è un checkpoint: solo con conferma umana
   "php artisan migrate:fresh" # ricrea il DB da zero: distruttivo
   "php artisan db:wipe"
   "migrate:rollback"          # conferma umana: tocca lo schema
