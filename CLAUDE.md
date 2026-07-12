@@ -48,8 +48,8 @@ php artisan schedule:work      # scansioni giornaliere delle rassegne attive
 
 | File | Cosa contiene | Stato |
 |------|---------------|-------|
-| `docs/modello-dati.md` | entità, campi, relazioni, stati | da scrivere in M1 |
-| `docs/regole-business.md` | deduplica, blocchi alla generazione, riapertura, scansioni | da scrivere in M1 |
+| `docs/modello-dati.md` | entità, campi, relazioni, stati | firmata |
+| `docs/regole-business.md` | deduplica, blocchi alla generazione, riapertura, scansioni | firmata |
 | `mockups/*.html` | mockup UI concordati (clienti, scheda cliente, impostazioni, rassegna, candidati, revisione, ordine PDF, generazione) | concordati in fase di progettazione |
 | `TECH-DEBT.md` | registro autoritativo dei debiti tecnici | Vivo |
 | `PROGRESS.md` | stato vivo del lavoro | Vivo |

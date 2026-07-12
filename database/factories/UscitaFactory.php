@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\Rilevanza;
 use App\Enums\StatoUscita;
 use App\Enums\TipoMedia;
 use App\Models\Rassegna;
@@ -57,7 +58,7 @@ class UscitaFactory extends Factory
             'stato' => StatoUscita::Approvato,
             'screenshot_path' => 'screenshots/'.fake()->uuid().'.png',
             'testo_estratto' => fake()->paragraphs(3, true),
-            'rilevanza' => \App\Enums\Rilevanza::Principale,
+            'rilevanza' => Rilevanza::Principale,
         ]);
     }
 

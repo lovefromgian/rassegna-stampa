@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Database\Factories\DocumentoGeneratoFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DocumentoGenerato extends Model
 {
-    /** @use HasFactory<\Database\Factories\DocumentoGeneratoFactory> */
+    /** @use HasFactory<DocumentoGeneratoFactory> */
     use HasFactory;
 
     protected $table = 'documenti_generati';

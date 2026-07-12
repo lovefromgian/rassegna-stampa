@@ -1,11 +1,201 @@
-@import 'tailwindcss';
+/* Mockup rassegna stampa — stile condiviso.
+   Bozza statica di riferimento: nessuna logica, solo layout.
+   Le viste Blade/Livewire si costruiscono guardando questi file. */
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
-
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+:root {
+  --bg: #f7f7f5;
+  --surface: #ffffff;
+  --surface-alt: #fafaf8;
+  --border: #e3e2dd;
+  --border-strong: #cfcec8;
+  --text: #1f1f1d;
+  --text-secondary: #66655f;
+  --text-muted: #93928b;
+  --accent: #185fa5;
+  --accent-bg: #e6f1fb;
+  --success: #3b6d11;
+  --success-bg: #eaf3de;
+  --warning: #854f0b;
+  --warning-bg: #faeeda;
+  --danger: #a32d2d;
+  --danger-bg: #fcebeb;
+  --radius: 8px;
 }
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 24px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.app { max-width: 1100px; margin: 0 auto; }
+
+/* Barra superiore */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 20px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 12px; margin-bottom: 20px;
+}
+.brand { font-weight: 500; font-size: 16px; }
+.user { font-size: 13px; color: var(--text-secondary); }
+
+/* Briciole di pane */
+.crumbs { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
+.crumbs a { color: var(--text-secondary); text-decoration: none; }
+
+/* Intestazione pagina */
+.page-head { margin-bottom: 20px; }
+.page-head h1 { font-size: 22px; font-weight: 500; margin: 0 0 4px; }
+.page-head p { margin: 0; color: var(--text-secondary); font-size: 14px; }
+
+/* Card */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px; margin-bottom: 16px;
+}
+.card h2 { font-size: 16px; font-weight: 500; margin: 0 0 12px; }
+
+/* Metriche */
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.metric { background: var(--surface-alt); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; }
+.metric .label { font-size: 13px; color: var(--text-secondary); }
+.metric .value { font-size: 24px; font-weight: 500; margin-top: 2px; }
+
+/* Liste */
+.list { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.row { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 14px; }
+.row:last-child { border-bottom: none; }
+.row:hover { background: var(--surface-alt); }
+.row .main { flex: 1; min-width: 0; }
+.row .title { font-weight: 500; font-size: 14px; }
+.row .sub { font-size: 13px; color: var(--text-muted); }
+
+/* Avatar */
+.avatar {
+  width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
+  background: var(--accent-bg); color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 500; font-size: 13px;
+}
+
+/* Pill di stato */
+.pill { font-size: 12px; padding: 3px 10px; border-radius: 12px; white-space: nowrap; }
+.pill.neutral { border: 1px solid var(--border-strong); color: var(--text-secondary); }
+.pill.accent { background: var(--accent-bg); color: var(--accent); }
+.pill.success { background: var(--success-bg); color: var(--success); }
+.pill.warning { background: var(--warning-bg); color: var(--warning); }
+.pill.danger { background: var(--danger-bg); color: var(--danger); }
+
+/* Pulsanti */
+.btn {
+  font: inherit; font-size: 14px; padding: 8px 14px;
+  border: 1px solid var(--border-strong); background: var(--surface);
+  border-radius: var(--radius); cursor: pointer; color: var(--text);
+}
+.btn:hover { background: var(--surface-alt); }
+.btn.primary { background: var(--text); color: #fff; border-color: var(--text); }
+.btn.wide { width: 100%; }
+.actions { display: flex; gap: 10px; }
+.actions .btn { flex: 1; }
+
+/* Campi */
+label.field { display: block; font-size: 13px; color: var(--text-secondary); margin: 0 0 6px; }
+input[type=text], input[type=email], input[type=date], select, textarea {
+  width: 100%; font: inherit; font-size: 14px; padding: 8px 10px;
+  border: 1px solid var(--border-strong); border-radius: var(--radius);
+  background: var(--surface); color: var(--text); margin-bottom: 14px;
+}
+textarea { min-height: 70px; resize: vertical; }
+
+/* Tabella dati */
+table.data { width: 100%; border-collapse: collapse; font-size: 14px; }
+table.data td { padding: 7px 0; border-bottom: 1px solid var(--border); }
+table.data td:first-child { color: var(--text-secondary); }
+table.data td:last-child { text-align: right; }
+table.data tr:last-child td { border-bottom: none; }
+
+/* Segnaposto immagine */
+.shot {
+  border: 1px solid var(--border-strong); border-radius: var(--radius);
+  background: var(--surface-alt); min-height: 220px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted); font-size: 13px; text-align: center; padding: 16px;
+}
+
+/* Tag */
+.tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* Avviso */
+.note {
+  background: var(--surface-alt); border: 1px solid var(--border-strong);
+  border-radius: var(--radius); padding: 12px 14px;
+  font-size: 13px; color: var(--text-secondary);
+}
+
+/* Nota di lettura del mockup (non fa parte della UI) */
+.mockup-note {
+  max-width: 1100px; margin: 0 auto 20px;
+  font-size: 13px; color: var(--text-muted);
+  border-left: 3px solid var(--border-strong); padding-left: 12px;
+}
+
+/* ---- Aggiunte applicative (non presenti nei mockup statici) ---- */
+
+a { color: var(--accent); }
+
+.topbar .brand a { color: var(--text); text-decoration: none; }
+.topbar nav { display: flex; gap: 6px; }
+.topbar nav a {
+  font-size: 14px; color: var(--text-secondary); text-decoration: none;
+  padding: 6px 10px; border-radius: var(--radius);
+}
+.topbar nav a:hover { background: var(--surface-alt); }
+.topbar nav a.active { background: var(--accent-bg); color: var(--accent); }
+.topbar .user { display: flex; align-items: center; gap: 12px; }
+
+/* Login */
+.auth-wrap {
+  min-height: 80vh; display: flex; align-items: center; justify-content: center;
+}
+.auth-card {
+  width: 100%; max-width: 380px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 12px; padding: 28px;
+}
+.auth-card h1 { font-size: 20px; font-weight: 500; margin: 0 0 4px; }
+.auth-card p.lead { margin: 0 0 20px; color: var(--text-secondary); font-size: 14px; }
+
+/* Messaggi flash */
+.flash { border-radius: var(--radius); padding: 12px 14px; margin-bottom: 16px; font-size: 14px; }
+.flash.success { background: var(--success-bg); color: var(--success); border: 1px solid var(--success); }
+.flash.danger { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger); }
+
+/* Errori di validazione */
+.field-error { color: var(--danger); font-size: 13px; margin: -8px 0 12px; }
+input.invalid, select.invalid, textarea.invalid { border-color: var(--danger); }
+
+/* Griglia form a due colonne */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+.form-grid .full { grid-column: 1 / -1; }
+@media (max-width: 640px) { .form-grid { grid-template-columns: 1fr; } }
+
+/* Stato vuoto */
+.empty { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+
+/* Pastiglia colore d'accento del cliente */
+.swatch { display: inline-block; width: 14px; height: 14px; border-radius: 3px; border: 1px solid var(--border-strong); vertical-align: middle; }
+
+.btn.danger { color: var(--danger); border-color: var(--danger); }
+.btn.danger:hover { background: var(--danger-bg); }
+.btn.small { padding: 5px 10px; font-size: 13px; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+
+.muted { color: var(--text-muted); }
+.mt-0 { margin-top: 0; }
+.right { text-align: right; }
+.spread { display: flex; align-items: center; justify-content: space-between; gap: 12px; }

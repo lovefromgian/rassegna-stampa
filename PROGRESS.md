@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** fine intervista di progetto · repo non ancora inizializzato
+**Ultimo aggiornamento:** M1 completata (fondamenta) · 12 lug 2026 · 25 test verdi
 
 ## Come usare questo file
 
@@ -17,32 +17,52 @@ il processo e tiene aggiornato questo file. (Dettagli in CLAUDE.md.)
 
 ## Stato corrente
 
-Fase di progettazione conclusa: scope, ruoli, modello dati, regole di business, mockup e
-ordine di sviluppo sono definiti. **Codebase da costruire da zero.** Il collo di bottiglia
-immediato è il setup del progetto Laravel e la scrittura dei `docs/` (modello dati e regole
-di business) che diventeranno la fonte di verità.
+**M1 (Fondamenta) completata.** Il progetto Laravel 12 esiste, con schema completo,
+autenticazione a due ruoli applicati con Policy lato server, e CRUD Clienti/Rassegne su UI
+Livewire modellata sui mockup. `docs/` (modello dati, regole di business) restano la fonte
+di verità. Prossimo collo di bottiglia: la **cattura** (M2), che introduce Playwright e i
+job in coda.
 
 ## Completato di recente
 
+- **M1 — Fondamenta.** Scaffold Laravel 12 + Livewire 4 + Pest 4 (repo git inizializzato,
+  remote `lovefromgian/rassegna-stampa`). Schema completo (enum di dominio, migration per
+  clienti/testate/rassegne/uscite/documenti_generati/log_azioni + `users.ruolo`, soft
+  delete, deduplica `unique(rassegna_id,url)`, fulltext condizionale su MySQL). Modelli
+  Eloquent con relazioni e cast enum; **LogAzione immutabile**. Autenticazione a sessione
+  (niente auto-registrazione) e **Policy lato server** per i due ruoli. CRUD Clienti (solo
+  supervisore in scrittura) e Rassegne (entrambi), impostazioni cliente (logo su disco
+  Laravel, colore d'accento, destinatari). Precompilazione periodo dal comunicato (+14 gg).
+  Service `Audit` per il log. **25 test Pest verdi (59 asserzioni).**
+- **Verifica di M1 (punto 6):** l'operatore riceve 403 su `clienti/nuovo` e
+  `clienti/{c}/modifica` e non può montare né salvare il componente di modifica cliente —
+  vincolo applicato lato server (Policy), non solo in UI. Test:
+  `tests/Feature/ClientePolicyTest.php`.
 - Intervista di progetto conclusa: definiti scope v1, due ruoli, modello dati completo,
   regole di business, mockup delle schermate principali.
 
 ## In corso ora
 
--
+- Niente in corso: M1 chiusa. Prossimo avvio → M2 (cattura).
 
 ## Prossimi passi concreti
 
-### M1 — Fondamenta
-1. Setup Laravel 12 + Pest + Livewire, repo git, `.env.example`.
-2. Scrivere `docs/modello-dati.md` e `docs/regole-business.md` a partire da CLAUDE.md §7-8.
-3. Migration complete: `clienti`, `rassegne`, `uscite`, `testate`, `documenti_generati`,
+### M1 — Fondamenta ✅ (completata)
+1. ✅ Setup Laravel 12 + Pest + Livewire, repo git, `.env.example`.
+2. ✅ `docs/modello-dati.md` e `docs/regole-business.md` (firmate, fonte di verità).
+3. ✅ Migration complete: `clienti`, `rassegne`, `uscite`, `testate`, `documenti_generati`,
    `log_azioni`, `users` (con ruolo). Soft delete dove previsto.
-4. Autenticazione + i due ruoli (Policy lato server, non solo UI).
-5. CRUD Clienti (solo supervisore) e Rassegne. Impostazioni cliente: logo, colore
+4. ✅ Autenticazione + i due ruoli (Policy lato server, non solo UI).
+5. ✅ CRUD Clienti (solo supervisore) e Rassegne. Impostazioni cliente: logo, colore
    d'accento, destinatari.
-6. **Verifica:** creo un cliente e una rassegna dall'interfaccia; l'operatore non riesce a
-   modificare l'anagrafica nemmeno chiamando la rotta direttamente.
+6. ✅ **Verifica:** cliente/rassegna creabili dall'interfaccia; l'operatore riceve 403 sulle
+   rotte di modifica anagrafica (Policy lato server). Coperto dai test.
+
+Note tecniche M1:
+- Dev/test su **SQLite** (niente MySQL locale); produzione su MySQL 8 come da spec. Il
+  fulltext su `testo_estratto` è creato solo su MySQL (serve alla ricerca d'archivio, M5).
+- Auth senza auto-registrazione: gli utenti li crea l'agenzia. Seed demo: `supervisore@` e
+  `operatore@example.com` (password `password`).
 
 ### M2 — Cattura
 7. Integrazione Playwright + job in coda per la cattura di una URL.

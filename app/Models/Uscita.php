@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\Rilevanza;
 use App\Enums\StatoUscita;
 use App\Enums\TipoMedia;
+use Database\Factories\UscitaFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Uscita extends Model
 {
-    /** @use HasFactory<\Database\Factories\UscitaFactory> */
+    /** @use HasFactory<UscitaFactory> */
     use HasFactory, SoftDeletes;
 
     protected $table = 'uscite';

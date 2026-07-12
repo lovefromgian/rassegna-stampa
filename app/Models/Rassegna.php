@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\StatoRassegna;
+use Database\Factories\RassegnaFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Rassegna extends Model
 {
-    /** @use HasFactory<\Database\Factories\RassegnaFactory> */
+    /** @use HasFactory<RassegnaFactory> */
     use HasFactory, SoftDeletes;
 
     protected $table = 'rassegne';

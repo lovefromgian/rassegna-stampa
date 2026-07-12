@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\Enums\TipoMedia;
+use Database\Factories\TestataFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Testata extends Model
 {
-    /** @use HasFactory<\Database\Factories\TestataFactory> */
+    /** @use HasFactory<TestataFactory> */
     use HasFactory;
 
     protected $table = 'testate';

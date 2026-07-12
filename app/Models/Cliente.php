@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\StatoCliente;
+use Database\Factories\ClienteFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Cliente extends Model
 {
-    /** @use HasFactory<\Database\Factories\ClienteFactory> */
+    /** @use HasFactory<ClienteFactory> */
     use HasFactory, SoftDeletes;
 
     protected $table = 'clienti';
