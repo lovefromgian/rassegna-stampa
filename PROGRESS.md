@@ -55,9 +55,16 @@
   (95 test verdi). **Resta solo UX-06** (REVISIONE-UX.md, TECH-DEBT TD-006).
 - **Fix PDF (collaudo):** testo e foto ora **sulla stessa pagina** per ogni uscita. Prima
   l'immagine full-page (senza limite d'altezza) traboccava alla pagina successiva ("una
-  pagina di testo, poi una di foto"). Ora `.shot img { max-height: 650px }` + blocco `.uscita`
-  unico: intestazione + titolo + screenshot insieme. Verificato: uscita alta (3685px) sta in
-  una sola pagina. `resources/views/pdf/rassegna.blade.php`.
+  pagina di testo, poi una di foto"). Soluzione finale (commit `ed112be`): l'immagine resta a
+  **tutta larghezza** (`width:100%`) e viene **tagliata in alto** all'altezza della pagina.
+  dompdf non ritaglia con `overflow:hidden`, quindi il taglio è **lato server con GD**
+  (`GeneratorePdf::ritagliaInAlto()`): gli screenshot più alti di `larghezza × ratio` sono
+  ritagliati in alto prima dell'embedding. Rapporto configurabile `capture.pdf_crop_ratio`
+  (env `CAPTURE_PDF_CROP_RATIO`, default **1.1**). Blocco `.uscita` unico (intestazione +
+  titolo + screenshot insieme). Verificato: 3 uscite con screenshot alti (fino a 3685px) e
+  titoli/URL lunghi → 3 pagine, una ciascuna. `GeneratorePdf.php`, `pdf/rassegna.blade.php`,
+  `config/capture.php`. (Approccio intermedio `max-height:650px` del commit `e394c03`
+  superato: rimpiccioliva l'intera immagine invece di tagliarla.)
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file
