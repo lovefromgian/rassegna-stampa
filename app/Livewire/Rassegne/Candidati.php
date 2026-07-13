@@ -3,6 +3,7 @@
 namespace App\Livewire\Rassegne;
 
 use App\Enums\StatoUscita;
+use App\Livewire\Concerns\NotificaUtente;
 use App\Models\Rassegna;
 use App\Models\Uscita;
 use App\Services\Audit;
@@ -20,6 +21,8 @@ use Livewire\Component;
  */
 class Candidati extends Component
 {
+    use NotificaUtente;
+
     public Rassegna $rassegna;
 
     /** @var array<int, int> */
@@ -61,7 +64,7 @@ class Candidati extends Component
 
         $n = $uscite->count();
         $this->selezionati = [];
-        session()->flash('success', "{$n} ".($n === 1 ? 'candidato confermato' : 'candidati confermati').'.');
+        $this->notifica("{$n} ".($n === 1 ? 'candidato confermato' : 'candidati confermati').'.');
     }
 
     public function scartaSelezionati(): void
@@ -76,7 +79,7 @@ class Candidati extends Component
 
         $n = $uscite->count();
         $this->selezionati = [];
-        session()->flash('success', "{$n} ".($n === 1 ? 'candidato scartato' : 'candidati scartati').'.');
+        $this->notifica("{$n} ".($n === 1 ? 'candidato scartato' : 'candidati scartati').'.');
     }
 
     public function scansionaOra(ScansioneRassegna $scansione): void
@@ -84,9 +87,9 @@ class Candidati extends Component
         Gate::authorize('update', $this->rassegna);
 
         $nuovi = $scansione->scansiona($this->rassegna);
-        session()->flash('success', $nuovi > 0
+        $this->notifica($nuovi > 0
             ? "Scansione completata: {$nuovi} nuovi candidati."
-            : 'Scansione completata: nessun nuovo candidato.');
+            : 'Scansione completata: nessun nuovo candidato trovato nel periodo.');
     }
 
     /** @return Collection<int, Uscita> */

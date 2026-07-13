@@ -33,7 +33,7 @@ class Modifica extends Component
     #[Validate('nullable|string|max:255')]
     public string $comunicato_sottotitolo = '';
 
-    #[Validate('nullable|date')]
+    #[Validate('nullable|date|after_or_equal:2000-01-01')]
     public ?string $comunicato_data = null;
 
     #[Validate('nullable|string')]
@@ -46,7 +46,7 @@ class Modifica extends Component
     #[Validate('nullable|string')]
     public string $parole_escluse = '';
 
-    #[Validate('required|date')]
+    #[Validate('required|date|after_or_equal:2000-01-01')]
     public ?string $monitoraggio_inizio = null;
 
     #[Validate('required|date|after_or_equal:monitoraggio_inizio')]

@@ -3,6 +3,7 @@
 namespace App\Livewire\Rassegne;
 
 use App\Enums\StatoRassegna;
+use App\Livewire\Concerns\NotificaUtente;
 use App\Models\Rassegna;
 use App\Services\Audit;
 use Illuminate\Contracts\View\View;
@@ -11,6 +12,8 @@ use Livewire\Component;
 
 class Scheda extends Component
 {
+    use NotificaUtente;
+
     public Rassegna $rassegna;
 
     public function mount(Rassegna $rassegna): void
@@ -30,7 +33,7 @@ class Scheda extends Component
 
         $this->rassegna->update(['stato' => StatoRassegna::InRevisione]);
         Audit::registra('chiude_raccolta', $this->rassegna);
-        session()->flash('success', 'Raccolta chiusa: la rassegna è in revisione.');
+        $this->notifica('Raccolta chiusa: la rassegna è in revisione.');
     }
 
     /**
@@ -45,14 +48,14 @@ class Scheda extends Component
             return;
         }
         if ($this->rassegna->documentiGenerati()->count() === 0) {
-            session()->flash('error', 'Genera prima il PDF: la rassegna si chiude solo con una versione generata.');
+            $this->notifica('Genera prima il PDF: la rassegna si chiude solo con una versione generata.', 'error');
 
             return;
         }
 
         $this->rassegna->update(['stato' => StatoRassegna::Chiusa]);
         Audit::registra('chiude_rassegna', $this->rassegna);
-        session()->flash('success', 'Rassegna chiusa.');
+        $this->notifica('Rassegna chiusa.');
     }
 
     /**
@@ -69,7 +72,7 @@ class Scheda extends Component
 
         $this->rassegna->update(['stato' => StatoRassegna::Riaperta]);
         Audit::registra('riapre_rassegna', $this->rassegna);
-        session()->flash('success', 'Rassegna riaperta: aggiungi le uscite tardive e genera una nuova versione.');
+        $this->notifica('Rassegna riaperta: aggiungi le uscite tardive e genera una nuova versione.');
     }
 
     public function render(): View

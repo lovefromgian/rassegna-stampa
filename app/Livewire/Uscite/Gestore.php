@@ -5,6 +5,7 @@ namespace App\Livewire\Uscite;
 use App\Enums\StatoCattura;
 use App\Enums\StatoUscita;
 use App\Enums\TipoMedia;
+use App\Livewire\Concerns\NotificaUtente;
 use App\Models\Rassegna;
 use App\Models\Testata;
 use App\Models\Uscita;
@@ -23,7 +24,7 @@ use Livewire\WithFileUploads;
  */
 class Gestore extends Component
 {
-    use WithFileUploads;
+    use NotificaUtente, WithFileUploads;
 
     public Rassegna $rassegna;
 
@@ -128,7 +129,7 @@ class Gestore extends Component
 
         $this->mostraForm = false;
         $this->reset(['titolo', 'testata_nome', 'data_pubblicazione', 'url', 'pagina_giornale', 'fileRitaglio']);
-        session()->flash('success', 'Uscita aggiunta.');
+        $this->notifica('Uscita aggiunta.');
     }
 
     public function avviaCattura(int $uscitaId, GestioneCattura $cattura): void
@@ -137,7 +138,7 @@ class Gestore extends Component
         Gate::authorize('update', $uscita);
 
         if ($cattura->avvia($uscita)) {
-            session()->flash('success', 'Cattura accodata.');
+            $this->notifica('Cattura accodata.');
         }
     }
 
@@ -163,7 +164,7 @@ class Gestore extends Component
         ]);
 
         $this->reset(['uscitaFileId', 'fileSostitutivo']);
-        session()->flash('success', 'File sostituito.');
+        $this->notifica('File sostituito.');
     }
 
     public function scarta(int $uscitaId): void
@@ -172,7 +173,7 @@ class Gestore extends Component
         Gate::authorize('update', $uscita);
 
         $uscita->update(['stato' => StatoUscita::Scartato]);
-        session()->flash('success', 'Uscita scartata (resta archiviata e recuperabile).');
+        $this->notifica('Uscita scartata (resta archiviata e recuperabile).');
     }
 
     private function uscitaDellaRassegna(?int $id): Uscita

@@ -4,6 +4,7 @@ namespace App\Livewire\Rassegne;
 
 use App\Enums\StatoUscita;
 use App\Jobs\GeneraPdf;
+use App\Livewire\Concerns\NotificaUtente;
 use App\Models\DocumentoGenerato;
 use App\Models\Rassegna;
 use App\Models\Uscita;
@@ -20,6 +21,8 @@ use Livewire\Component;
  */
 class OrdinePdf extends Component
 {
+    use NotificaUtente;
+
     public Rassegna $rassegna;
 
     public function mount(Rassegna $rassegna): void
@@ -66,13 +69,13 @@ class OrdinePdf extends Component
 
         $motivi = $blocchi->motivi($this->rassegna);
         if ($motivi !== []) {
-            session()->flash('error', 'Impossibile generare il PDF: '.implode(' ', $motivi));
+            $this->notifica('Impossibile generare il PDF: '.implode(' ', $motivi), 'error');
 
             return;
         }
 
         GeneraPdf::dispatch($this->rassegna, auth()->user());
-        session()->flash('success', 'Generazione avviata: la nuova versione comparirà tra pochi istanti.');
+        $this->notifica('Generazione avviata: la nuova versione comparirà tra pochi istanti.');
     }
 
     public function render(): View

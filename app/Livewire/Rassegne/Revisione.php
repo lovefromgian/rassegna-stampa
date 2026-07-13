@@ -5,6 +5,7 @@ namespace App\Livewire\Rassegne;
 use App\Enums\Rilevanza;
 use App\Enums\StatoUscita;
 use App\Enums\TipoMedia;
+use App\Livewire\Concerns\NotificaUtente;
 use App\Models\Rassegna;
 use App\Models\Uscita;
 use App\Services\Audit;
@@ -22,6 +23,8 @@ use Livewire\Component;
  */
 class Revisione extends Component
 {
+    use NotificaUtente;
+
     public Rassegna $rassegna;
 
     public ?int $correnteId = null;
@@ -93,7 +96,7 @@ class Revisione extends Component
         ]);
 
         Audit::registra('approva_uscita', $uscita, ['rilevanza' => $this->rilevanza]);
-        session()->flash('success', 'Uscita approvata.');
+        $this->notifica('Uscita approvata.');
         $this->caricaProssima();
     }
 
@@ -109,7 +112,7 @@ class Revisione extends Component
         ]);
 
         Audit::registra('scarto_uscita', $uscita);
-        session()->flash('success', 'Uscita scartata (resta archiviata e recuperabile).');
+        $this->notifica('Uscita scartata (resta archiviata e recuperabile).');
         $this->caricaProssima();
     }
 
@@ -120,7 +123,7 @@ class Revisione extends Component
         Gate::authorize('update', $uscita);
 
         if ($cattura->avvia($uscita)) {
-            session()->flash('success', 'Ricattura accodata.');
+            $this->notifica('Ricattura accodata.');
             $this->caricaProssima();
         }
     }
