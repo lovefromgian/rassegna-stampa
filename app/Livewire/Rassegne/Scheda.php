@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Rassegne;
 
+use App\Enums\StatoRassegna;
 use App\Models\Rassegna;
+use App\Services\Audit;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
@@ -15,6 +17,59 @@ class Scheda extends Component
     {
         Gate::authorize('view', $rassegna);
         $this->rassegna = $rassegna;
+    }
+
+    /** Chiude la raccolta: in_raccolta → in_revisione. Ferma la scansione giornaliera. */
+    public function chiudiRaccolta(): void
+    {
+        Gate::authorize('update', $this->rassegna);
+
+        if ($this->rassegna->stato !== StatoRassegna::InRaccolta) {
+            return;
+        }
+
+        $this->rassegna->update(['stato' => StatoRassegna::InRevisione]);
+        Audit::registra('chiude_raccolta', $this->rassegna);
+        session()->flash('success', 'Raccolta chiusa: la rassegna è in revisione.');
+    }
+
+    /**
+     * Chiude la rassegna: in_revisione → chiusa. Solo se è stato generato almeno un PDF
+     * (regole-business.md §9: si chiude quando il PDF è generato e consegnato).
+     */
+    public function chiudiRassegna(): void
+    {
+        Gate::authorize('update', $this->rassegna);
+
+        if ($this->rassegna->stato !== StatoRassegna::InRevisione) {
+            return;
+        }
+        if ($this->rassegna->documentiGenerati()->count() === 0) {
+            session()->flash('error', 'Genera prima il PDF: la rassegna si chiude solo con una versione generata.');
+
+            return;
+        }
+
+        $this->rassegna->update(['stato' => StatoRassegna::Chiusa]);
+        Audit::registra('chiude_rassegna', $this->rassegna);
+        session()->flash('success', 'Rassegna chiusa.');
+    }
+
+    /**
+     * Riapre una rassegna chiusa: solo il supervisore (RassegnaPolicy::riapri). Non cancella
+     * il PDF già generato: si aggiungono uscite e si genera una nuova versione (§9).
+     */
+    public function riapri(): void
+    {
+        Gate::authorize('riapri', $this->rassegna);
+
+        if (! in_array($this->rassegna->stato, [StatoRassegna::Chiusa, StatoRassegna::Riaperta], true)) {
+            return;
+        }
+
+        $this->rassegna->update(['stato' => StatoRassegna::Riaperta]);
+        Audit::registra('riapre_rassegna', $this->rassegna);
+        session()->flash('success', 'Rassegna riaperta: aggiungi le uscite tardive e genera una nuova versione.');
     }
 
     public function render(): View

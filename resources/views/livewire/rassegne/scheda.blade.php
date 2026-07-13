@@ -17,10 +17,20 @@
                 monitoraggio {{ $rassegna->monitoraggio_inizio->format('d/m/Y') }} → {{ $rassegna->monitoraggio_fine->format('d/m/Y') }}
             </p>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;">
             <x-stato-rassegna :stato="$rassegna->stato" />
             @if ($puoModificare)
                 <a class="btn small" href="{{ route('rassegne.edit', $rassegna) }}" wire:navigate style="text-decoration:none;">Modifica</a>
+            @endif
+
+            @if ($rassegna->stato === \App\Enums\StatoRassegna::InRaccolta && $puoModificare)
+                <button class="btn small" wire:click="chiudiRaccolta" wire:confirm="Chiudere la raccolta? Si passa alla revisione e la scansione automatica si ferma.">Chiudi raccolta</button>
+            @endif
+            @if ($rassegna->stato === \App\Enums\StatoRassegna::InRevisione && $puoModificare)
+                <button class="btn small" wire:click="chiudiRassegna">Chiudi rassegna</button>
+            @endif
+            @if ($puoRiaprire && in_array($rassegna->stato, [\App\Enums\StatoRassegna::Chiusa, \App\Enums\StatoRassegna::Riaperta], true))
+                <button class="btn small" wire:click="riapri" wire:confirm="Riaprire la rassegna? Il PDF già generato resta; si genererà una nuova versione.">Riapri</button>
             @endif
         </div>
     </div>
