@@ -16,14 +16,14 @@
         <div class="card">
             <div class="empty">
                 <p><strong>Revisione completata.</strong> Nessuna uscita catturata in attesa.</p>
-                <a class="btn primary" href="{{ route('rassegne.pdf', $rassegna) }}" wire:navigate style="text-decoration:none;">Vai all'ordine e generazione PDF</a>
+                <a class="btn primary" href="{{ route('rassegne.pdf', $rassegna) }}" wire:navigate>Vai all'ordine e generazione PDF</a>
             </div>
         </div>
     @else
         <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:16px;align-items:start;">
             <div class="card">
-                <div class="spread" style="margin-bottom:12px;">
-                    <h2 style="margin:0;">Anteprima cattura</h2>
+                <div class="spread mb-2">
+                    <h2 class="m-0">Anteprima cattura</h2>
                     @if ($uscita->haMaterialeValido())
                         <span class="pill success">Materiale presente</span>
                     @else
@@ -44,13 +44,13 @@
                     <div class="flash danger" style="margin-top:10px;"><strong>Errore cattura:</strong> {{ $uscita->errore_cattura }}</div>
                 @endif
 
-                <div class="actions" style="margin-top:12px;">
+                <div class="actions mt-2">
                     @if ($uscita->richiedeCatturaWeb())
                         <button class="btn" wire:click="ricattura">Ricattura</button>
                     @endif
-                    <a class="btn" href="{{ route('rassegne.uscite', $rassegna) }}" wire:navigate style="text-decoration:none;text-align:center;">Gestisci file</a>
+                    <a class="btn" href="{{ route('rassegne.uscite', $rassegna) }}" wire:navigate>Gestisci file</a>
                 </div>
-                <div class="note" style="margin-top:12px;">Se il banner cookie copre l'articolo o il paywall lo tronca, ricattura oppure carica a mano un file dalla scheda uscite.</div>
+                <div class="note mt-2">Se il banner cookie copre l'articolo o il paywall lo tronca, ricattura oppure carica a mano un file dalla scheda uscite.</div>
             </div>
 
             <div>

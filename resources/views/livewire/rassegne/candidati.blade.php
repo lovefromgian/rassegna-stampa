@@ -21,7 +21,7 @@
     </div>
 
     <div class="card">
-        <div class="spread" style="margin-bottom:12px;">
+        <div class="spread mb-2">
             <label style="font-size:14px;color:var(--text-secondary);">
                 <input type="checkbox" style="width:auto;margin:0;"
                        wire:change="selezionaTutti($event.target.checked)"
@@ -45,7 +45,7 @@
                     <div class="main">
                         <div class="spread">
                             <span class="title">{{ $c->testata->nome }}</span>
-                            <span class="sub" style="white-space:nowrap;">{{ $c->data_pubblicazione->format('d/m/Y') }}</span>
+                            <span class="sub nowrap">{{ $c->data_pubblicazione->format('d/m/Y') }}</span>
                         </div>
                         <div style="margin:2px 0 6px;">{{ $c->titolo }}</div>
                         @if ($c->testo_estratto)
@@ -78,7 +78,7 @@
             + Aggiungi un'uscita manualmente (URL o ritaglio cartaceo)
         </a>
 
-        <div class="note" style="margin-top:14px;">
+        <div class="note mt-3">
             Il falso positivo è fisiologico: un articolo con "gradi" ma non su Grado è segnalato come debole, non escluso da solo. Allo stesso modo un'uscita può sfuggire alla scansione: l'aggiunta manuale è parte del flusso.
         </div>
     </div>

@@ -20,7 +20,7 @@
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;">
             <x-stato-rassegna :stato="$rassegna->stato" />
             @if ($puoModificare)
-                <a class="btn small" href="{{ route('rassegne.edit', $rassegna) }}" wire:navigate style="text-decoration:none;">Modifica</a>
+                <a class="btn small" href="{{ route('rassegne.edit', $rassegna) }}" wire:navigate>Modifica</a>
             @endif
 
             @if ($rassegna->stato === \App\Enums\StatoRassegna::InRaccolta && $puoModificare)
@@ -48,9 +48,9 @@
     {{-- Prossimo passo contestuale (UX-01): un solo primario con conteggio --}}
     <div class="card">
         <h2>Prossimo passo</h2>
-        <div class="actions" style="flex-direction:column;gap:10px;">
+        <div class="stack">
             <a class="btn wide {{ $prossimo === 'conferma' ? 'primary' : '' }}" @if ($prossimo === 'conferma') data-passo="conferma" @endif
-               href="{{ route('rassegne.candidati', $rassegna) }}" wire:navigate style="text-decoration:none;text-align:center;">
+               href="{{ route('rassegne.candidati', $rassegna) }}" wire:navigate>
                 @if ($metriche['candidati'] === 1)
                     Conferma 1 candidato proposto
                 @elseif ($metriche['candidati'] > 1)
@@ -60,7 +60,7 @@
                 @endif
             </a>
             <a class="btn wide {{ $prossimo === 'revisiona' ? 'primary' : '' }}" @if ($prossimo === 'revisiona') data-passo="revisiona" @endif
-               href="{{ route('rassegne.revisione', $rassegna) }}" wire:navigate style="text-decoration:none;text-align:center;">
+               href="{{ route('rassegne.revisione', $rassegna) }}" wire:navigate>
                 @if ($metriche['daRevisionare'] === 1)
                     Revisiona 1 uscita in attesa
                 @elseif ($metriche['daRevisionare'] > 1)
@@ -72,17 +72,17 @@
                 @endif
             </a>
             <a class="btn wide {{ in_array($prossimo, ['pdf', 'chiusa'], true) ? 'primary' : '' }}" @if (in_array($prossimo, ['pdf', 'chiusa'], true)) data-passo="pdf" @endif
-               href="{{ route('rassegne.pdf', $rassegna) }}" wire:navigate style="text-decoration:none;text-align:center;">
+               href="{{ route('rassegne.pdf', $rassegna) }}" wire:navigate>
                 {{ $prossimo === 'chiusa' ? 'Vedi e scarica il PDF' : 'Ordina e genera il PDF' }}
             </a>
         </div>
-        <div class="note" style="margin-top:14px;">{{ $nota }}</div>
+        <div class="note mt-3">{{ $nota }}</div>
     </div>
 
     <div class="card">
         <h2>Parole chiave</h2>
         <label class="field">Richieste</label>
-        <div class="tags" style="margin-bottom:12px;">
+        <div class="tags mb-2">
             @forelse ($rassegna->parole_chiave ?? [] as $kw)
                 <span class="pill accent">{{ $kw }}</span>
             @empty
@@ -101,16 +101,16 @@
 
     {{-- Elenco compatto in sola lettura (UX-03): nessuna azione di gestione qui --}}
     <div class="card">
-        <div class="spread" style="margin-bottom:12px;">
-            <h2 style="margin:0;">Uscite raccolte ({{ $uscite->count() }})</h2>
+        <div class="spread mb-2">
+            <h2 class="m-0">Uscite raccolte ({{ $uscite->count() }})</h2>
             @if ($puoAggiungere)
-                <a class="btn small" href="{{ route('rassegne.uscite', $rassegna) }}" wire:navigate style="text-decoration:none;">Aggiungi a mano</a>
+                <a class="btn small" href="{{ route('rassegne.uscite', $rassegna) }}" wire:navigate>Aggiungi a mano</a>
             @endif
         </div>
 
         <div class="list">
             @forelse ($uscite as $uscita)
-                <a class="row" href="{{ route('rassegne.uscite', $rassegna) }}" wire:navigate style="text-decoration:none;color:inherit;">
+                <a class="row plain" href="{{ route('rassegne.uscite', $rassegna) }}" wire:navigate>
                     @if ($uscita->screenshot_path)
                         <img src="{{ \Illuminate\Support\Facades\Storage::disk(config('capture.disk'))->url($uscita->screenshot_path) }}"
                              alt="" style="width:56px;height:42px;object-fit:cover;object-position:top;border:1px solid var(--border);border-radius:4px;flex-shrink:0;">

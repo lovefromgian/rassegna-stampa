@@ -33,7 +33,7 @@
                 @endforelse
             </div>
             @if ($uscite->count() > 1)
-                <div class="note" style="margin-top:14px;">L'ordine manuale prevale sulla proposta: è la scelta editoriale della rassegna.</div>
+                <div class="note mt-3">L'ordine manuale prevale sulla proposta: è la scelta editoriale della rassegna.</div>
             @endif
         </div>
 

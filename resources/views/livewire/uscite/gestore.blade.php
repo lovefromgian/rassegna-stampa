@@ -9,8 +9,8 @@
     </div>
 
     <div class="card">
-        <div class="spread" style="margin-bottom:12px;">
-            <h2 style="margin:0;">Uscite raccolte ({{ $uscite->count() }})</h2>
+        <div class="spread mb-2">
+            <h2 class="m-0">Uscite raccolte ({{ $uscite->count() }})</h2>
             @if ($puoAggiungere && ! $mostraForm)
                 <button class="btn primary small" wire:click="nuovaUscita">+ Aggiungi uscita</button>
             @endif
@@ -89,7 +89,7 @@
                         </div>
 
                         @if ($uscita->stato_cattura === $statiInCattura[0] || $uscita->stato_cattura === $statiInCattura[1])
-                            <div class="note" style="margin-top:8px;" wire:poll.3s>Cattura in corso… l'esito compare qui appena il worker la elabora.</div>
+                            <div class="note mt-1" wire:poll.3s>Cattura in corso… l'esito compare qui appena il worker la elabora.</div>
                         @endif
 
                         @if ($uscita->errore_cattura)

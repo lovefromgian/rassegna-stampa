@@ -5,10 +5,10 @@
     </div>
 
     <div class="card">
-        <div style="display:flex;gap:10px;margin-bottom:14px;">
+        <div class="toolbar">
             <input type="text" placeholder="Cerca cliente" wire:model.live.debounce.300ms="ricerca" style="margin:0;">
             @if ($puoCreare)
-                <a class="btn primary" href="{{ route('clienti.create') }}" wire:navigate style="white-space:nowrap;text-decoration:none;">+ Nuovo cliente</a>
+                <a class="btn primary nowrap" href="{{ route('clienti.create') }}" wire:navigate>+ Nuovo cliente</a>
             @endif
         </div>
 
@@ -18,7 +18,7 @@
                     $iniziali = \Illuminate\Support\Str::of($cliente->nome)->explode(' ')
                         ->filter()->take(2)->map(fn ($p) => mb_strtoupper(mb_substr($p, 0, 1)))->implode('');
                 @endphp
-                <a class="row" href="{{ route('clienti.show', $cliente) }}" wire:navigate style="text-decoration:none;color:inherit;">
+                <a class="row plain" href="{{ route('clienti.show', $cliente) }}" wire:navigate>
                     <div class="avatar">{{ $iniziali }}</div>
                     <div class="main">
                         <div class="title">{{ $cliente->nome }}</div>
@@ -39,6 +39,6 @@
             <p style="font-size:13px;color:var(--text-muted);margin:14px 0 0;">Solo il supervisore crea, modifica o elimina un cliente. Vedi l'elenco in sola lettura.</p>
         @endunless
 
-        <div style="margin-top:14px;">{{ $clienti->links() }}</div>
+        <div class="mt-3">{{ $clienti->links() }}</div>
     </div>
 </div>

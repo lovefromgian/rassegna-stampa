@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** scope v1 + revisione UX (UX-01/02/03/04) · 13 lug 2026 · 95 test verdi (247 asserzioni)
+**Ultimo aggiornamento:** scope v1 + revisione UX (UX-01→05) · 13 lug 2026 · 95 test verdi (247 asserzioni)
 
 ## ▶ RIPRENDI DA QUI
 
@@ -47,7 +47,12 @@
   ricattura, sostituzione file, scarto — vive nella schermata dedicata `rassegne.uscite`,
   non più sulla scheda). Conteggi centralizzati in `Rassegna::conteggiPerStato()`. Solo UI.
   Test `SchedaProssimoPassoTest` (5) + `FasiRassegnaTest` (5) + `UsciteGestoreTest` (scheda
-  senza azioni di gestione). **Restano UX-05/06** (REVISIONE-UX.md, TECH-DEBT TD-006).
+  senza azioni di gestione).
+- **UX-05** (consolidamento stili inline): estratte poche utility in `app.css`
+  (`.stack`, `.toolbar`, `.center`, `.nowrap`, `.plain`, `.hint`, scala `.mt-*`/`.mb-*`,
+  `.m-0`) e `.btn` ora ha `text-decoration:none`; rimossi ~44 `style=` inline su 12 viste
+  (app views 115 → 71). Refactor cosmetico a equivalenza, nessun cambio di comportamento
+  (95 test verdi). **Resta solo UX-06** (REVISIONE-UX.md, TECH-DEBT TD-006).
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file

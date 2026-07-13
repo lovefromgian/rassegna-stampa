@@ -5,16 +5,16 @@
     </div>
 
     <div class="card">
-        <div style="display:flex;gap:10px;margin-bottom:14px;">
+        <div class="toolbar">
             <input type="text" placeholder="Cerca rassegna" wire:model.live.debounce.300ms="ricerca" style="margin:0;">
             @if ($puoCreare)
-                <a class="btn primary" href="{{ route('rassegne.create') }}" wire:navigate style="white-space:nowrap;text-decoration:none;">+ Nuova rassegna</a>
+                <a class="btn primary nowrap" href="{{ route('rassegne.create') }}" wire:navigate>+ Nuova rassegna</a>
             @endif
         </div>
 
         <div class="list">
             @forelse ($rassegne as $rassegna)
-                <a class="row" href="{{ route('rassegne.show', $rassegna) }}" wire:navigate style="text-decoration:none;color:inherit;">
+                <a class="row plain" href="{{ route('rassegne.show', $rassegna) }}" wire:navigate>
                     <div class="main">
                         <div class="title">{{ $rassegna->titolo }}</div>
                         <div class="sub">
@@ -29,6 +29,6 @@
             @endforelse
         </div>
 
-        <div style="margin-top:14px;">{{ $rassegne->links() }}</div>
+        <div class="mt-3">{{ $rassegne->links() }}</div>
     </div>
 </div>

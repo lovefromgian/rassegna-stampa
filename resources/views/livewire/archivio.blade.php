@@ -15,7 +15,7 @@
                 <option value="">Tutte le testate</option>
                 @foreach ($testate as $t)<option value="{{ $t->id }}">{{ $t->nome }}</option>@endforeach
             </select>
-            <button type="submit" class="btn primary" style="white-space:nowrap;">Cerca</button>
+            <button type="submit" class="btn primary nowrap">Cerca</button>
         </form>
 
         @if ($risultati === null)
@@ -41,7 +41,7 @@
                     <div class="empty">Nessuna uscita trovata per "{{ $termine }}".</div>
                 @endforelse
             </div>
-            <div style="margin-top:14px;">{{ $risultati->links() }}</div>
+            <div class="mt-3">{{ $risultati->links() }}</div>
         @endif
     </div>
 </div>

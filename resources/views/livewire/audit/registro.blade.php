@@ -9,7 +9,7 @@
     </div>
 
     <div class="card">
-        <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+        <div class="toolbar">
             <select wire:model.live="azione" style="margin:0;max-width:220px;">
                 <option value="">Tutte le azioni</option>
                 @foreach ($azioniDisponibili as $a)
@@ -44,6 +44,6 @@
             @endforelse
         </div>
 
-        <div style="margin-top:14px;">{{ $voci->links() }}</div>
+        <div class="mt-3">{{ $voci->links() }}</div>
     </div>
 </div>

@@ -33,7 +33,7 @@
 
         <div class="card">
             <h2>Comunicato</h2>
-            <p style="font-size:13px;color:var(--text-secondary);margin:0 0 14px;">Facoltativo: una rassegna può monitorare anche solo un periodo. Se c'è, la data precompila il periodo di monitoraggio.</p>
+            <p class="hint m-0 mb-3">Facoltativo: una rassegna può monitorare anche solo un periodo. Se c'è, la data precompila il periodo di monitoraggio.</p>
             <label class="field" for="comunicato_titolo">Titolo del comunicato</label>
             <input type="text" id="comunicato_titolo" wire:model="comunicato_titolo">
             <label class="field" for="comunicato_sottotitolo">Sottotitolo</label>
@@ -73,7 +73,7 @@
         </div>
 
         <div class="actions" style="max-width:340px;">
-            <a class="btn" href="{{ $rassegna ? route('rassegne.show', $rassegna) : route('rassegne.index') }}" wire:navigate style="text-decoration:none;text-align:center;">Annulla</a>
+            <a class="btn" href="{{ $rassegna ? route('rassegne.show', $rassegna) : route('rassegne.index') }}" wire:navigate>Annulla</a>
             <button type="submit" class="btn primary">{{ $rassegna ? 'Salva' : 'Crea rassegna' }}</button>
         </div>
     </form>

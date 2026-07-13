@@ -8,10 +8,10 @@
         </div>
         <div class="actions" style="flex:0;">
             @if ($puoModificare)
-                <a class="btn" href="{{ route('clienti.edit', $cliente) }}" wire:navigate style="text-decoration:none;">Impostazioni</a>
+                <a class="btn" href="{{ route('clienti.edit', $cliente) }}" wire:navigate>Impostazioni</a>
             @endif
             @if (auth()->user()->can('create', \App\Models\Rassegna::class))
-                <a class="btn primary" href="{{ route('rassegne.create', ['cliente' => $cliente->id]) }}" wire:navigate style="text-decoration:none;">+ Nuova rassegna</a>
+                <a class="btn primary" href="{{ route('rassegne.create', ['cliente' => $cliente->id]) }}" wire:navigate>+ Nuova rassegna</a>
             @endif
         </div>
     </div>
@@ -34,7 +34,7 @@
         <h2>Rassegne</h2>
         <div class="list">
             @forelse ($cliente->rassegne as $rassegna)
-                <a class="row" href="{{ route('rassegne.show', $rassegna) }}" wire:navigate style="text-decoration:none;color:inherit;">
+                <a class="row plain" href="{{ route('rassegne.show', $rassegna) }}" wire:navigate>
                     <div class="main">
                         <div class="title">{{ $rassegna->titolo }}</div>
                         <div class="sub">

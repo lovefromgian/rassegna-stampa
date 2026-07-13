@@ -44,7 +44,7 @@
 
         <div class="card">
             <h2>Grafica del PDF</h2>
-            <p style="font-size:13px;color:var(--text-secondary);margin:0 0 14px;">L'impaginazione è fissa. Si personalizzano solo logo e colore d'accento.</p>
+            <p class="hint m-0 mb-3">L'impaginazione è fissa. Si personalizzano solo logo e colore d'accento.</p>
             <label class="field" for="logo">Logo (copertina)</label>
             <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
                 <div class="shot" style="width:120px;min-height:80px;padding:8px;">
@@ -69,7 +69,7 @@
 
         <div class="card">
             <h2>Destinatari della rassegna</h2>
-            <p style="font-size:13px;color:var(--text-secondary);margin:0 0 12px;">L'invio è manuale: il sistema produce il PDF, l'invio lo fa l'agenzia. Un indirizzo per riga.</p>
+            <p class="hint m-0 mb-2">L'invio è manuale: il sistema produce il PDF, l'invio lo fa l'agenzia. Un indirizzo per riga.</p>
             <textarea wire:model="destinatari_invio" placeholder="ufficio.stampa@esempio.it&#10;sindaco@esempio.it"></textarea>
         </div>
 
@@ -79,7 +79,7 @@
         </div>
 
         <div class="actions" style="max-width:340px;">
-            <a class="btn" href="{{ $cliente ? route('clienti.show', $cliente) : route('clienti.index') }}" wire:navigate style="text-decoration:none;text-align:center;">Annulla</a>
+            <a class="btn" href="{{ $cliente ? route('clienti.show', $cliente) : route('clienti.index') }}" wire:navigate>Annulla</a>
             <button type="submit" class="btn primary">Salva</button>
         </div>
     </form>

@@ -97,7 +97,9 @@ body {
   font: inherit; font-size: 14px; padding: 8px 14px;
   border: 1px solid var(--border-strong); background: var(--surface);
   border-radius: var(--radius); cursor: pointer; color: var(--text);
+  text-decoration: none; /* i .btn usati come <a> non vanno sottolineati */
 }
+.btn.wide { text-align: center; }
 .btn:hover { background: var(--surface-alt); }
 .btn.primary { background: var(--text); color: #fff; border-color: var(--text); }
 .btn.wide { width: 100%; }
@@ -196,9 +198,33 @@ input.invalid, select.invalid, textarea.invalid { border-color: var(--danger); }
 .btn:disabled { opacity: .5; cursor: not-allowed; }
 
 .muted { color: var(--text-muted); }
-.mt-0 { margin-top: 0; }
 .right { text-align: right; }
+.center { text-align: center; }
+.nowrap { white-space: nowrap; }
 .spread { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.wrap { flex-wrap: wrap; }
+
+/* Link "nudo": nessuna sottolineatura, eredita il colore (es. righe cliccabili) */
+.plain { text-decoration: none; color: inherit; }
+
+/* Testo di aiuto sotto un campo/una sezione */
+.hint { font-size: 13px; color: var(--text-secondary); }
+
+/* Colonna con spaziatura (azioni impilate, campi form) */
+.stack { display: flex; flex-direction: column; gap: 10px; }
+.gap-sm { gap: 8px; }
+
+/* Barra di ricerca/filtri sopra un elenco */
+.toolbar { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+
+/* Scala di spaziatura verticale (dal design system, non dal singolo file) */
+.m-0 { margin: 0; }
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: 8px; }
+.mt-2 { margin-top: 12px; }
+.mt-3 { margin-top: 14px; }
+.mb-2 { margin-bottom: 12px; }
+.mb-3 { margin-bottom: 14px; }
 
 /* Stepper delle fasi della rassegna (UX-04) — riusa i token del design system */
 .fasi { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
