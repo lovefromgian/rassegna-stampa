@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/rassegne/nuova', Rassegne\Modifica::class)->name('rassegne.create');
     Route::get('/rassegne/{rassegna}', Rassegne\Scheda::class)->name('rassegne.show');
     Route::get('/rassegne/{rassegna}/modifica', Rassegne\Modifica::class)->name('rassegne.edit');
+    Route::get('/rassegne/{rassegna}/candidati', Rassegne\Candidati::class)->name('rassegne.candidati');
     Route::get('/rassegne/{rassegna}/revisione', Rassegne\Revisione::class)->name('rassegne.revisione');
     Route::get('/rassegne/{rassegna}/pdf', Rassegne\OrdinePdf::class)->name('rassegne.pdf');
     Route::get('/documenti/{documento}/download', DocumentoDownloadController::class)->name('documenti.download');
