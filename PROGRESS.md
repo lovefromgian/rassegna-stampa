@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** M5 completata · scope v1 COMPLETO · 13 lug 2026 · 85 test verdi
+**Ultimo aggiornamento:** scope v1 COMPLETO + fix da collaudo · 13 lug 2026 · 85 test verdi (221 asserzioni)
 
 ## ▶ RIPRENDI DA QUI
 
@@ -13,7 +13,7 @@
 
 - **Stato:** **SCOPE v1 COMPLETO (M1–M5).** Il gestionale gira end-to-end: clienti/rassegne
   → scoperta automatica → cattura → revisione → PDF impaginato versionato → contorno (log,
-  archivio, statistiche, chiusura/riapertura). **85 test verdi (220 asserzioni).**
+  archivio, statistiche, chiusura/riapertura). **85 test verdi (221 asserzioni).**
 - **M5 (Contorno) completata:** log di audit consultabile globale e per rassegna
   (`Audit\Registro`, immutabile); archivio con ricerca full-text sul testo estratto
   (`Archivio`, MySQL fulltext / LIKE su SQLite); statistiche per cliente e testata
@@ -26,10 +26,19 @@
   drag&drop, TD-004 URL Google News, TD-005 snippet) e l'hardening pre-produzione.
 - **Decisioni M5:** log consultabile ma immutabile (nessuna UI di modifica); riapertura
   gated a supervisore lato server (Policy); chiusura rassegna richiede un PDF generato (§9).
-- **Aggiunta post-M5 (richiesta utente):** alla **creazione** di una rassegna parte
-  automaticamente la ricerca sul web (job `ScansionaRassegna` accodato) e si atterra sui
-  candidati, che si auto-aggiornano (`wire:poll`). Prima la scansione era solo manuale o
-  schedulata.
+- **Aggiunte/fix post-M5 (collaudo con l'utente):**
+  - **Scansione automatica alla creazione** rassegna (job `ScansionaRassegna` accodato) +
+    atterraggio sui candidati con `wire:poll`. (commit `ee218fa`)
+  - **Notifiche toast** per le azioni Livewire in place: i flash di sessione non si
+    mostravano (il layout non si ri-renderizza). Trait `NotificaUtente` + listener nel
+    layout; convertiti Candidati/Uscite·Gestore/Revisione/OrdinePdf/Scheda. **Guardia date:**
+    periodo/comunicato devono essere ≥ 2000-01-01 (evita anni assurdi che facevano fallire la
+    scansione in silenzio). (commit `8818438`)
+  - **Immagini catture via URL relativo** `/storage` (disco `public`, override
+    `FILESYSTEM_PUBLIC_URL`): prima usavano `APP_URL` e in dev non caricavano (host/porta
+    diversi). (commit `915042a`)
+  - **Nota di dominio:** la cattura è automatica **alla conferma** del candidato
+    (candidato→confermato→cattura), non alla scansione — verificato in collaudo.
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file
