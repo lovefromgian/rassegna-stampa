@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** M1 completata + push · 13 lug 2026 · 25 test verdi
+**Ultimo aggiornamento:** M2 completata + push · 13 lug 2026 · 41 test verdi
 
 ## ▶ RIPRENDI DA QUI
 
@@ -11,20 +11,19 @@
 > milestone), per riprendere senza perdite se una sessione si interrompe (es. soglia
 > token). Se leggi questo all'avvio: fai `git log --oneline -5`, poi continua da qui.
 
-- **Stato:** M2 quasi completa. Fatti: M2-A (stato_cattura), M2-B (motore dietro
-  interfaccia `PageCapturer` + `capture.cjs` + `FakeCapturer`), M2-C (job `CatturaUscita` +
-  `GestioneCattura`), M2-D (UI `Uscite\Gestore` annidata nella scheda rassegna: aggiunta
-  manuale online/media, elenco con pill stato, cattura/ricattura, sostituzione file, scarto).
-  **41 test verdi.**
-- **Bugfix importante (M2-D):** le pagine Livewire full-page non renderizzavano il corpo —
-  Livewire 4 usava `layouts::app` (il layout @yield del controller) mentre inietta via slot.
-  Fix: `config(['livewire.component_layout' => 'components.layouts.app'])` in
-  AppServiceProvider. Aggiunti smoke test di rendering (RenderPagineTest) per bloccarlo.
-- **Prossimo passo concreto:** **M2-E** — verifica reale: `npm i` (playwright) +
-  `npm run capture:install` (chromium) e cattura di un URL reale via il PlaywrightCapturer,
-  best-effort documentato (l'ambiente potrebbe non avere rete/chromium). Poi chiusura M2:
-  aggiornare TECH-DEBT se serve, commit+push finale.
-- **Decisione:** la cattura è automatica → NON scrive nel log di audit (§11 = azioni utente).
+- **Stato:** **M2 (Cattura) completata.** Motore Playwright dietro interfaccia, job in coda,
+  UI uscite (aggiunta manuale, cattura/ricattura, sostituzione file, scarto), stato cattura
+  esplicito. **41 test verdi** (FakeCapturer, niente rete). **Verifica reale eseguita:**
+  cattura end-to-end via job reale (example.com) e cattura de Il Goriziano (screenshot
+  full-page 1366×8581 + PDF 12MB + testo + metadati) → artefatti su disco, stato catturato.
+- **Prossimo passo concreto:** avviare **M3 — Revisione e PDF** (prima milestone concreta):
+  schermata di revisione uscita (rilevanza, tipo media, note, approva/scarta), ordine PDF
+  (drag&drop), generazione PDF impaginato versionato con blocchi §7, download. Vedi "M3".
+- **Bugfix M2:** pagine Livewire full-page non renderizzavano il corpo (layout @yield vs
+  slot). Fix in AppServiceProvider (`component_layout` → `components.layouts.app`) + smoke
+  test (RenderPagineTest).
+- **Decisioni M2:** cattura automatica → NON nel log di audit (§11 = azioni utente).
+  Deploy: `npm run capture:install` installa Chromium sul VPS. TD-002: cookie-banner euristico.
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file
@@ -65,7 +64,7 @@ job in coda.
 
 ## In corso ora
 
-- Niente in corso: M1 chiusa. Prossimo avvio → M2 (cattura).
+- Niente in corso: M1 e M2 chiuse e pushate. Prossimo avvio → M3 (revisione e PDF).
 
 ## Prossimi passi concreti
 
@@ -86,13 +85,19 @@ Note tecniche M1:
 - Auth senza auto-registrazione: gli utenti li crea l'agenzia. Seed demo: `supervisore@` e
   `operatore@example.com` (password `password`).
 
-### M2 — Cattura
-7. Integrazione Playwright + job in coda per la cattura di una URL.
-8. Screenshot full-page + PDF pagina + estrazione testo + metadati. Gestione cookie banner.
-9. Stati di cattura ed errori leggibili; ricattura; sostituzione manuale del file.
-10. Aggiunta manuale di un'uscita (URL) e caricamento di un ritaglio cartaceo.
-11. **Verifica:** incollo l'URL de Il Goriziano sull'articolo di Grado e ottengo screenshot
-    pulito, testo estratto e metadati corretti.
+### M2 — Cattura ✅ (completata)
+7. ✅ Integrazione Playwright + job in coda (`CatturaUscita`) dietro interfaccia `PageCapturer`.
+8. ✅ Screenshot full-page + PDF pagina + testo + metadati. Cookie banner (euristico, TD-002).
+9. ✅ `stato_cattura` esplicito ed errore leggibile; ricattura; sostituzione manuale del file.
+10. ✅ Aggiunta manuale di un'uscita (URL online) e caricamento di un ritaglio (media manuali).
+11. ✅ **Verifica reale:** cattura de Il Goriziano (screenshot full-page + PDF + testo +
+    metadati) e cattura end-to-end via job reale su example.com. (Usata la testata reale,
+    non l'URL specifico dell'articolo Grado, non disponibile.)
+
+Note M2:
+- Motore dietro interfaccia (`FakeCapturer` nei test → niente rete). `npm run capture:install`
+  installa Chromium sul VPS.
+- Bugfix layout Livewire full-page (slot vs @yield) → `component_layout` in AppServiceProvider.
 
 ### M3 — Revisione e PDF *(← prima milestone concreta)*
 12. Schermata di revisione uscita: anteprima cattura, metadati, tipo di media, rilevanza,

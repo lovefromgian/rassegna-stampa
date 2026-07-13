@@ -23,6 +23,20 @@ Formato voce: `TD-xxx` · titolo · motivo · rischio · azione prevista · file
   configurazione, non di codice.
 - **File:** `config/filesystems.php`, cartella storage del progetto.
 
+### TD-002 — Chiusura cookie banner euristica (cattura)
+- **Motivo:** `scripts/capture.cjs` chiude i consent manager con una lista di selettori noti
+  (Iubenda, OneTrust, generici "Accetta"/"Accept"). I consent manager non in lista, o quelli
+  dentro iframe/shadow DOM, possono NON venire chiusi: lo screenshot esce con mezzo articolo
+  coperto dal banner. La regola (regole-business.md §4) dice che uno screenshot così **non è
+  valido**.
+- **Rischio:** **medio** — non blocca il flusso (l'operatore vede il problema in revisione e
+  ricattura o carica il file a mano), ma peggiora la resa su alcune testate e aumenta il
+  lavoro manuale.
+- **Azione prevista:** ampliare la lista di selettori sulle testate FVG effettivamente usate;
+  valutare l'integrazione di una libreria di block-list consenso (es. `@cliqz/adblocker` o
+  regole EasyList/“I don't care about cookies”) nel contesto Playwright.
+- **File:** `scripts/capture.cjs` (array `SELETTORI_CONSENSO`).
+
 -
 
 ## Risolti
