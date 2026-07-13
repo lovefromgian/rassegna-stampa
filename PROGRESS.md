@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** M4 completata + push · 13 lug 2026 · 73 test verdi
+**Ultimo aggiornamento:** M5 completata · scope v1 COMPLETO · 13 lug 2026 · 85 test verdi
 
 ## ▶ RIPRENDI DA QUI
 
@@ -11,23 +11,21 @@
 > milestone), per riprendere senza perdite se una sessione si interrompe (es. soglia
 > token). Se leggi questo all'avvio: fai `git log --oneline -5`, poi continua da qui.
 
-- **Stato:** **M4 (Scoperta automatica) completata.** Fonte dietro interfaccia
-  `ArticleDiscoverySource` (Google News/RSS + `FakeDiscoverySource`), servizio
-  `ScansioneRassegna` (dedup su URL anche scartate, esclusioni, punteggio 0-100), job
-  `ScansionaRassegna`, comando `rassegne:scansiona` schedulato giornaliero + scansione
-  manuale, schermata `Candidati` (selezione multipla, conferma/scarto in blocco, debole
-  segnalata, sospetto duplicato). **73 test verdi.**
-- **Verifica reale eseguita:** scansione live Google News/RSS per "Grado cultura musei" →
-  articoli reali da testate FVG (UdineToday "Grado punta sulla cultura" = punteggio 100,
-  proprio l'articolo della specifica), con esclusioni e dedup applicati. Un falso positivo
-  (Gdoweek, 67) confermato: realtà attesa (§2), l'operatore decide.
-- **Prossimo passo concreto:** avviare **M5 — Contorno**: log di audit consultabile
-  (per rassegna e globale, immutabile), archivio con ricerca full-text sul testo estratto,
-  statistiche per cliente/testata, chiusura e riapertura rassegna (supervisore) con
-  versionamento PDF. Vedi "Prossimi passi → M5".
-- **Decisioni M4:** scansione manuale sincrona (feedback immediato); quella giornaliera in
-  coda. Esclusioni = hard (tagliano); punteggio basso = debole ma proposto (soft). Snippet
-  provvisorio in `testo_estratto` (TD-005). URL = redirect Google News (TD-004).
+- **Stato:** **SCOPE v1 COMPLETO (M1–M5).** Il gestionale gira end-to-end: clienti/rassegne
+  → scoperta automatica → cattura → revisione → PDF impaginato versionato → contorno (log,
+  archivio, statistiche, chiusura/riapertura). **85 test verdi (220 asserzioni).**
+- **M5 (Contorno) completata:** log di audit consultabile globale e per rassegna
+  (`Audit\Registro`, immutabile); archivio con ricerca full-text sul testo estratto
+  (`Archivio`, MySQL fulltext / LIKE su SQLite); statistiche per cliente e testata
+  (`Statistiche`); chiusura raccolta/rassegna e **riapertura solo supervisore** con
+  versionamento PDF.
+- **Verifica reale M5:** ciclo di vita completo — v1 generata → chiusa → riaperta → uscita
+  tardiva aggiunta → v2 generata, **entrambe le versioni conservate** (§9).
+- **Prossimo passo concreto:** nessuna milestone residua nello scope v1. Eventuale lavoro
+  successivo: saldare il debito tecnico (TD-001 backup, TD-002 cookie banner, TD-003
+  drag&drop, TD-004 URL Google News, TD-005 snippet) e l'hardening pre-produzione.
+- **Decisioni M5:** log consultabile ma immutabile (nessuna UI di modifica); riapertura
+  gated a supervisore lato server (Policy); chiusura rassegna richiede un PDF generato (§9).
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file
@@ -68,7 +66,8 @@ job in coda.
 
 ## In corso ora
 
-- Niente in corso: M1–M4 chiuse e pushate. Prossimo avvio → M5 (contorno).
+- Niente in corso: M1–M5 chiuse e pushate. **Scope v1 completo.** Eventuale seguito:
+  saldo del debito tecnico (TECH-DEBT.md) e hardening pre-produzione.
 
 ## Prossimi passi concreti
 
@@ -123,11 +122,11 @@ Note M2:
 21. ✅ **Verifica reale:** scansione live Google News/RSS su "Grado" → articoli reali FVG,
     UdineToday "Grado punta sulla cultura" a punteggio 100; falso positivo come debole/medio.
 
-### M5 — Contorno
-22. Log di audit consultabile (per rassegna e globale), immutabile.
-23. Archivio con ricerca full-text sul testo estratto, trasversale a clienti e anni.
-24. Statistiche per cliente e per testata.
-25. Chiusura e riapertura rassegna (supervisore), versionamento PDF.
+### M5 — Contorno ✅ (completata)
+22. ✅ Log di audit consultabile globale e per rassegna (`Audit\Registro`), immutabile.
+23. ✅ Archivio con ricerca full-text sul testo estratto (`Archivio`), trasversale a clienti/anni.
+24. ✅ Statistiche per cliente e per testata (`Statistiche`).
+25. ✅ Chiusura raccolta/rassegna e riapertura (supervisore) con versionamento PDF (§9 verificato).
 
 ## Checkpoint concordati
 

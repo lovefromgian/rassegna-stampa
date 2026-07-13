@@ -15,8 +15,10 @@ PDF impaginato** della rassegna che l'agenzia scarica e consegna al cliente.
 
 I clienti finali **non accedono** al sistema: ricevono solo il PDF.
 
-**Stato attuale**: specifica completata (intervista di progetto conclusa); codebase da
-costruire da zero.
+**Stato attuale**: **scope v1 completo (M1–M5)**. Gestionale funzionante end-to-end:
+clienti/rassegne, scoperta automatica (Google News/RSS), cattura (Playwright), revisione,
+PDF impaginato versionato (dompdf), log/archivio/statistiche, chiusura e riapertura.
+Debiti tecnici noti in TECH-DEBT.md. Stato vivo del lavoro in PROGRESS.md.
 
 Se esiste una cartella `docs/` con le specifiche, **quella è la fonte di verità**: il
 codice si conforma ai documenti, non viceversa. Se codice e `docs/` divergono, vince
