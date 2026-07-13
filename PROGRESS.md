@@ -11,14 +11,16 @@
 > milestone), per riprendere senza perdite se una sessione si interrompe (es. soglia
 > token). Se leggi questo all'avvio: fai `git log --oneline -5`, poi continua da qui.
 
-- **Stato:** M2 in corso. Fatti: M2-A (stato_cattura) e M2-B (motore di cattura dietro
-  interfaccia `PageCapturer`: `PlaywrightCapturer` + `scripts/capture.cjs` + `FakeCapturer`
-  per i test + binding in AppServiceProvider + config/capture.php).
-- **Prossimo passo concreto:** **M2-C** — job in coda `CatturaUscita` che usa l'interfaccia,
-  gestisce le transizioni di stato e salva gli artefatti via disco Laravel. Poi M2-D (UI
-  uscite: aggiunta manuale, cattura, ricattura, sostituzione file), M2-E (test + verifica).
-- **Nota:** `playwright` è in package.json; il browser si installa con `npm run
-  capture:install` (fatto sul VPS). I test useranno il FakeCapturer, niente rete.
+- **Stato:** M2 in corso. Fatti: M2-A (stato_cattura), M2-B (motore dietro interfaccia
+  `PageCapturer`: `PlaywrightCapturer` + `scripts/capture.cjs` + `FakeCapturer` + binding +
+  config), M2-C (job in coda `CatturaUscita` + service `GestioneCattura`; 30 test verdi).
+- **Prossimo passo concreto:** **M2-D** — UI uscite sulla scheda rassegna: aggiunta manuale
+  (URL online + media manuale con ritaglio), elenco con pill di stato cattura, trigger
+  cattura, ricattura, sostituzione manuale del file. Poi M2-E (test UI + verifica reale).
+- **Decisione:** la cattura è un evento automatico → NON scrive nel log di audit (§11 =
+  azioni utente con un "chi"). L'esito vive sull'uscita (stato_cattura/errore_cattura).
+- **Nota:** `playwright` è in package.json; browser via `npm run capture:install` (sul VPS).
+  I test usano il FakeCapturer, niente rete.
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file
