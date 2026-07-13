@@ -80,7 +80,10 @@
   (cascata cliente→rassegne→uscite + pulizia file, in transazione), bottone "Elimina
   definitivamente" nel cestino con conferma, audit `elimina_definitiva_*` (il log resta).
   Specifica aggiornata (regole §10, CLAUDE §6) + **TECH-DEBT TD-007** (rischio alto:
-  irreversibile, no backup file). Test in `CestinoTest` (9 totali).
+  irreversibile, no backup file).
+- **Cestino — selezione multipla:** checkbox per riga + "seleziona tutti", azioni in blocco
+  (ripristina / elimina definitivamente i selezionati) e **"Svuota cestino"**. La cascata che
+  rimuove record già selezionati è gestita (skip dei mancanti). Test `CestinoTest` (13 totali).
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file

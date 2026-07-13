@@ -95,6 +95,67 @@ test('l\'operatore non può eliminare definitivamente', function () {
     expect(User::factory()->supervisore()->create()->can('forceDelete', $cliente))->toBeTrue();
 });
 
+test('seleziona tutti raccoglie ogni record del cestino', function () {
+    Livewire::actingAs(User::factory()->supervisore()->create());
+    Cliente::factory()->create()->delete();
+    Rassegna::factory()->create()->delete();
+    Uscita::factory()->create()->delete();
+
+    Livewire::test(Cestino::class)
+        ->call('selezionaTutti', true)
+        ->assertCount('selezionati', 3);
+});
+
+test('eliminazione in blocco dei selezionati (con cascata sovrapposta)', function () {
+    Livewire::actingAs(User::factory()->supervisore()->create());
+    $cliente = Cliente::factory()->create();
+    $rassegna = Rassegna::factory()->for($cliente)->create();
+    $uscita = Uscita::factory()->for($rassegna)->create();
+    $cliente->delete();
+    $rassegna->delete();
+    $uscitaAltrove = Uscita::factory()->create();
+    $uscitaAltrove->delete();
+
+    // Seleziono cliente + la sua rassegna (che verrà rimossa a cascata) + un'uscita altrove.
+    Livewire::test(Cestino::class)
+        ->set('selezionati', ["cliente:{$cliente->id}", "rassegna:{$rassegna->id}", "uscita:{$uscitaAltrove->id}"])
+        ->call('eliminaSelezionati');
+
+    $this->assertDatabaseMissing('clienti', ['id' => $cliente->id]);
+    $this->assertDatabaseMissing('rassegne', ['id' => $rassegna->id]);
+    $this->assertDatabaseMissing('uscite', ['id' => $uscita->id]); // cascata
+    $this->assertDatabaseMissing('uscite', ['id' => $uscitaAltrove->id]);
+});
+
+test('ripristino in blocco dei selezionati', function () {
+    Livewire::actingAs(User::factory()->supervisore()->create());
+    $c = Cliente::factory()->create();
+    $c->delete();
+    $r = Rassegna::factory()->create();
+    $r->delete();
+
+    Livewire::test(Cestino::class)
+        ->set('selezionati', ["cliente:{$c->id}", "rassegna:{$r->id}"])
+        ->call('ripristinaSelezionati');
+
+    $this->assertDatabaseHas('clienti', ['id' => $c->id, 'deleted_at' => null]);
+    $this->assertDatabaseHas('rassegne', ['id' => $r->id, 'deleted_at' => null]);
+});
+
+test('svuota cestino elimina definitivamente tutto', function () {
+    Livewire::actingAs(User::factory()->supervisore()->create());
+    Cliente::factory()->create()->delete();
+    Rassegna::factory()->create()->delete();
+    $u = Uscita::factory()->create();
+    $u->delete();
+
+    Livewire::test(Cestino::class)->call('svuotaCestino');
+
+    expect(Cliente::onlyTrashed()->count())->toBe(0)
+        ->and(Rassegna::onlyTrashed()->count())->toBe(0)
+        ->and(Uscita::onlyTrashed()->count())->toBe(0);
+});
+
 test('il log di audit resta anche dopo la cancellazione definitiva', function () {
     Livewire::actingAs(User::factory()->supervisore()->create());
     $uscita = Uscita::factory()->create();
