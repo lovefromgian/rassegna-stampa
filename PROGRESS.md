@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** scope v1 COMPLETO + fix da collaudo · 13 lug 2026 · 85 test verdi (221 asserzioni)
+**Ultimo aggiornamento:** scope v1 + revisione UX (UX-01/02) · 13 lug 2026 · 90 test verdi (229 asserzioni)
 
 ## ▶ RIPRENDI DA QUI
 
@@ -39,6 +39,12 @@
     diversi). (commit `915042a`)
   - **Nota di dominio:** la cattura è automatica **alla conferma** del candidato
     (candidato→confermato→cattura), non alla scansione — verificato in collaudo.
+- **Revisione UX (REVISIONE-UX.md, handoff Cowork):** fatti **UX-01** (prossimo passo
+  contestuale con conteggi: primario = Conferma N / Revisiona N / Genera PDF secondo lo stato;
+  nota col motivo reale via `BlocchiGenerazione`) e **UX-02** (metriche a colpo d'occhio sulla
+  scheda — Candidati/Da revisionare/Approvate/Scartate, un solo `groupBy`), riallineati al
+  mockup 05. Test `SchedaProssimoPassoTest` (5). **Restano UX-03/04/05/06** per una sessione
+  successiva (tracciati in REVISIONE-UX.md e TECH-DEBT TD-006).
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file

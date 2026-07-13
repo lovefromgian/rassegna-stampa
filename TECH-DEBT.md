@@ -59,6 +59,19 @@ Formato voce: `TD-xxx` · titolo · motivo · rischio · azione prevista · file
   restituisce l'URL diretto (API a pagamento), essendo la fonte dietro interfaccia.
 - **File:** `app/Support/Discovery/GoogleNewsRss.php`, `app/Jobs/CatturaUscita.php`.
 
+### TD-006 — Ticket UX residui (UX-03/04/05/06)
+- **Motivo:** la revisione UX di Cowork (`REVISIONE-UX.md`) elenca 6 interventi. Fatti i due
+  ad alta priorità (UX-01 prossimo passo contestuale, UX-02 metriche). Restano scostamenti
+  noti dai mockup: **UX-03** la scheda incorpora ancora il gestore uscite completo invece di
+  una lista compatta in sola lettura; **UX-04** manca lo stepper/mappa delle fasi in cima alle
+  schermate; **UX-05** stili inline da consolidare in utility; **UX-06** riga del gestore
+  troppo densa.
+- **Rischio:** **basso** — solo UI/UX; funzionalità e permessi invariati.
+- **Azione prevista:** implementare UX-03→06 in una sessione successiva seguendo l'ordine
+  consigliato in `REVISIONE-UX.md` (UX-04 → UX-03 → UX-05 → UX-06).
+- **File:** `resources/views/livewire/rassegne/scheda.blade.php`,
+  `resources/views/livewire/uscite/gestore.blade.php`, nuovo `partials/fasi-rassegna.blade.php`.
+
 ### TD-005 — Snippet di scoperta salvato in testo_estratto
 - **Motivo:** in scansione lo snippet del feed è salvato provvisoriamente in
   `uscite.testo_estratto` (per mostrarlo tra i candidati). La cattura lo sovrascrive col

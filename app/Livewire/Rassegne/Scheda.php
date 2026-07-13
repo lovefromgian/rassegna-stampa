@@ -3,9 +3,11 @@
 namespace App\Livewire\Rassegne;
 
 use App\Enums\StatoRassegna;
+use App\Enums\StatoUscita;
 use App\Livewire\Concerns\NotificaUtente;
 use App\Models\Rassegna;
 use App\Services\Audit;
+use App\Services\BlocchiGenerazione;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
@@ -79,10 +81,50 @@ class Scheda extends Component
     {
         $this->rassegna->load('cliente');
 
+        // Conteggi per stato in una sola query (UX-02: metriche a colpo d'occhio).
+        $conteggi = $this->rassegna->uscite()
+            ->selectRaw('stato, count(*) as n')
+            ->groupBy('stato')
+            ->pluck('n', 'stato');
+
+        $candidati = (int) ($conteggi[StatoUscita::Candidato->value] ?? 0);
+        $catturato = (int) ($conteggi[StatoUscita::Catturato->value] ?? 0);
+        $confermato = (int) ($conteggi[StatoUscita::Confermato->value] ?? 0); // in cattura
+        $approvate = (int) ($conteggi[StatoUscita::Approvato->value] ?? 0);
+        $scartate = (int) ($conteggi[StatoUscita::Scartato->value] ?? 0);
+
+        // Passo consigliato contestuale (UX-01): un solo primario, con conteggio.
+        $daLavorare = $catturato + $confermato;
+        $prossimo = match (true) {
+            $this->rassegna->stato === StatoRassegna::Chiusa => 'chiusa',
+            $candidati > 0 => 'conferma',
+            $daLavorare > 0 => 'revisiona',
+            default => 'pdf',
+        };
+
+        // Nota con il motivo reale di blocco del PDF (riusa BlocchiGenerazione).
+        $motivi = app(BlocchiGenerazione::class)->motivi($this->rassegna);
+        if ($this->rassegna->stato === StatoRassegna::Chiusa) {
+            $nota = 'Rassegna chiusa. Per aggiungere uscite tardive, riaprila (supervisore) e genera una nuova versione.';
+        } elseif ($confermato > 0 && $catturato === 0 && $candidati === 0) {
+            $nota = "Cattura in corso: {$confermato} ".($confermato === 1 ? 'uscita' : 'uscite').'. Attendi il completamento, poi revisiona.';
+        } else {
+            $nota = $motivi !== [] ? implode(' ', $motivi) : 'Tutto pronto: nessun blocco alla generazione del PDF.';
+        }
+
         return view('livewire.rassegne.scheda', [
             'puoModificare' => Gate::allows('update', $this->rassegna),
             'puoEliminare' => Gate::allows('delete', $this->rassegna),
             'puoRiaprire' => Gate::allows('riapri', $this->rassegna),
+            'metriche' => [
+                'candidati' => $candidati,
+                'daRevisionare' => $catturato,
+                'approvate' => $approvate,
+                'scartate' => $scartate,
+            ],
+            'inCattura' => $confermato,
+            'prossimo' => $prossimo,
+            'nota' => $nota,
         ]);
     }
 }

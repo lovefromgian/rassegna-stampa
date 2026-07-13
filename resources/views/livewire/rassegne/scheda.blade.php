@@ -35,6 +35,48 @@
         </div>
     </div>
 
+    {{-- Metriche a colpo d'occhio (UX-02, mockup 05): dagli stati delle uscite --}}
+    <div class="metrics">
+        <div class="metric"><div class="label">Candidati da decidere</div><div class="value">{{ $metriche['candidati'] }}</div></div>
+        <div class="metric"><div class="label">Da revisionare</div><div class="value">{{ $metriche['daRevisionare'] }}</div></div>
+        <div class="metric"><div class="label">Approvate</div><div class="value">{{ $metriche['approvate'] }}</div></div>
+        <div class="metric"><div class="label">Scartate</div><div class="value">{{ $metriche['scartate'] }}</div></div>
+    </div>
+
+    {{-- Prossimo passo contestuale (UX-01): un solo primario con conteggio --}}
+    <div class="card">
+        <h2>Prossimo passo</h2>
+        <div class="actions" style="flex-direction:column;gap:10px;">
+            <a class="btn wide {{ $prossimo === 'conferma' ? 'primary' : '' }}" @if ($prossimo === 'conferma') data-passo="conferma" @endif
+               href="{{ route('rassegne.candidati', $rassegna) }}" wire:navigate style="text-decoration:none;text-align:center;">
+                @if ($metriche['candidati'] === 1)
+                    Conferma 1 candidato proposto
+                @elseif ($metriche['candidati'] > 1)
+                    Conferma i {{ $metriche['candidati'] }} candidati proposti
+                @else
+                    Candidati
+                @endif
+            </a>
+            <a class="btn wide {{ $prossimo === 'revisiona' ? 'primary' : '' }}" @if ($prossimo === 'revisiona') data-passo="revisiona" @endif
+               href="{{ route('rassegne.revisione', $rassegna) }}" wire:navigate style="text-decoration:none;text-align:center;">
+                @if ($metriche['daRevisionare'] === 1)
+                    Revisiona 1 uscita in attesa
+                @elseif ($metriche['daRevisionare'] > 1)
+                    Revisiona le {{ $metriche['daRevisionare'] }} uscite in attesa
+                @elseif ($inCattura > 0)
+                    Cattura in corso ({{ $inCattura }})
+                @else
+                    Revisiona le uscite catturate
+                @endif
+            </a>
+            <a class="btn wide {{ in_array($prossimo, ['pdf', 'chiusa'], true) ? 'primary' : '' }}" @if (in_array($prossimo, ['pdf', 'chiusa'], true)) data-passo="pdf" @endif
+               href="{{ route('rassegne.pdf', $rassegna) }}" wire:navigate style="text-decoration:none;text-align:center;">
+                {{ $prossimo === 'chiusa' ? 'Vedi e scarica il PDF' : 'Ordina e genera il PDF' }}
+            </a>
+        </div>
+        <div class="note" style="margin-top:14px;">{{ $nota }}</div>
+    </div>
+
     <div class="card">
         <h2>Parole chiave</h2>
         <label class="field">Richieste</label>
@@ -53,16 +95,6 @@
                 <span class="muted">nessuna</span>
             @endforelse
         </div>
-    </div>
-
-    <div class="card">
-        <h2>Prossimo passo</h2>
-        <div class="actions" style="flex-direction:column;gap:10px;">
-            <a class="btn wide" href="{{ route('rassegne.candidati', $rassegna) }}" wire:navigate style="text-decoration:none;text-align:center;">Conferma i candidati proposti</a>
-            <a class="btn wide" href="{{ route('rassegne.revisione', $rassegna) }}" wire:navigate style="text-decoration:none;text-align:center;">Revisiona le uscite catturate</a>
-            <a class="btn primary wide" href="{{ route('rassegne.pdf', $rassegna) }}" wire:navigate style="text-decoration:none;text-align:center;">Ordina e genera il PDF</a>
-        </div>
-        <div class="note" style="margin-top:14px;">Il PDF si genera solo quando nessuna uscita resta in stato "candidato" e ogni uscita approvata ha uno screenshot valido.</div>
     </div>
 
     <div id="uscite"></div>
