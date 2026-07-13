@@ -33,10 +33,10 @@
         .uscita-head .riga { font-size: 12px; color: #66655f; }
         .uscita-head .link { font-size: 11px; word-break: break-all; }
         .titolo-art { font-size: 14px; margin: 6px 0 10px; }
-        /* Altezza limitata: l'immagine scende sotto il testo senza traboccare a pagina nuova.
-           Uno screenshot molto alto viene rimpicciolito (scelta accettata, regole §8). */
-        .shot { text-align: center; }
-        .shot img { max-width: 100%; max-height: 650px; border: 1px solid #cfcec8; }
+        /* Immagine a tutta larghezza. Gli screenshot molto alti sono già ritagliati in alto
+           lato server all'aspect ratio della pagina (App\Services\GeneratorePdf), così qui
+           bastano larghezza piena e altezza proporzionale: testo e foto stanno insieme. */
+        .shot img { width: 100%; display: block; border: 1px solid #cfcec8; }
         .badge { display: inline-block; font-size: 10px; padding: 2px 8px; border: 1px solid #cfcec8; border-radius: 10px; color: #66655f; }
     </style>
 </head>

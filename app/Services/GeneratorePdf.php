@@ -96,7 +96,54 @@ class GeneratorePdf
             return null;
         }
 
+        $disk = Storage::disk(config('capture.disk'));
+        if (! $disk->exists($path)) {
+            return null;
+        }
+
+        // Ritaglio in alto gli screenshot molto alti: restano a tutta larghezza e stanno
+        // con il testo in una pagina (dompdf non ritaglia con overflow:hidden).
+        $ritagliata = $this->ritagliaInAlto($disk->get($path), (float) config('capture.pdf_crop_ratio', 1.3));
+        if ($ritagliata !== null) {
+            return 'data:image/png;base64,'.base64_encode($ritagliata);
+        }
+
         return $this->fileDataUri($path);
+    }
+
+    /**
+     * Se l'immagine è più alta di larghezza×$ratio, la ritaglia in alto a quel rapporto
+     * (mostra la parte iniziale dell'articolo). Ritorna i byte PNG ritagliati, oppure null
+     * se non serve ritagliare o GD non è disponibile.
+     */
+    private function ritagliaInAlto(string $binario, float $ratio): ?string
+    {
+        if (! function_exists('imagecreatefromstring')) {
+            return null;
+        }
+
+        $img = @imagecreatefromstring($binario);
+        if ($img === false) {
+            return null;
+        }
+
+        $larghezza = imagesx($img);
+        $altezza = imagesy($img);
+        $altezzaMax = (int) round($larghezza * $ratio);
+
+        if ($altezza <= $altezzaMax) {
+            return null; // già proporzionata: nessun ritaglio
+        }
+
+        $ritaglio = imagecrop($img, ['x' => 0, 'y' => 0, 'width' => $larghezza, 'height' => $altezzaMax]);
+        if ($ritaglio === false) {
+            return null;
+        }
+
+        ob_start();
+        imagepng($ritaglio);
+
+        return ob_get_clean() ?: null;
     }
 
     private function fileDataUri(string $path): ?string

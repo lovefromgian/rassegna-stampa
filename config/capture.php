@@ -26,4 +26,9 @@ return [
     'path_screenshot' => 'catture/screenshot',
     'path_pdf' => 'catture/pdf',
 
+    // Impaginazione PDF: gli screenshot più alti di (larghezza × questo rapporto) vengono
+    // ritagliati in alto, così restano a tutta larghezza ma stanno con il testo in una
+    // pagina. ~1.3 = altezza utile / larghezza utile di una pagina A4 sotto l'intestazione.
+    'pdf_crop_ratio' => (float) env('CAPTURE_PDF_CROP_RATIO', 1.1),
+
 ];
