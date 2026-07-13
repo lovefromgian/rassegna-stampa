@@ -3,8 +3,11 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentoDownloadController;
+use App\Livewire\Archivio;
+use App\Livewire\Audit;
 use App\Livewire\Clienti;
 use App\Livewire\Rassegne;
+use App\Livewire\Statistiche;
 use Illuminate\Support\Facades\Route;
 
 // Ospiti: login
@@ -34,4 +37,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/rassegne/{rassegna}/revisione', Rassegne\Revisione::class)->name('rassegne.revisione');
     Route::get('/rassegne/{rassegna}/pdf', Rassegne\OrdinePdf::class)->name('rassegne.pdf');
     Route::get('/documenti/{documento}/download', DocumentoDownloadController::class)->name('documenti.download');
+
+    // M5 — contorno
+    Route::get('/log', Audit\Registro::class)->name('log.index');
+    Route::get('/rassegne/{rassegna}/log', Audit\Registro::class)->name('rassegne.log');
+    Route::get('/archivio', Archivio::class)->name('archivio.index');
+    Route::get('/statistiche', Statistiche::class)->name('statistiche.index');
 });

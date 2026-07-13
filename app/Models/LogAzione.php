@@ -54,4 +54,36 @@ class LogAzione extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /** Etichetta leggibile dell'azione. */
+    public function etichetta(): string
+    {
+        return match ($this->azione) {
+            'crea_cliente' => 'Creazione cliente',
+            'modifica_cliente' => 'Modifica cliente',
+            'crea_rassegna' => 'Creazione rassegna',
+            'modifica_rassegna' => 'Modifica rassegna',
+            'chiude_raccolta' => 'Chiusura raccolta',
+            'chiude_rassegna' => 'Chiusura rassegna',
+            'riapre_rassegna' => 'Riapertura rassegna',
+            'conferma_candidato' => 'Conferma candidato',
+            'approva_uscita' => 'Approvazione uscita',
+            'scarto_uscita' => 'Scarto uscita',
+            'genera_pdf' => 'Generazione PDF',
+            'scarica_pdf' => 'Download PDF',
+            default => ucfirst(str_replace('_', ' ', $this->azione)),
+        };
+    }
+
+    /** Categoria per la pill di stato nella UI. */
+    public function categoria(): string
+    {
+        return match ($this->azione) {
+            'genera_pdf', 'scarica_pdf' => 'accent',
+            'approva_uscita' => 'success',
+            'scarto_uscita' => 'warning',
+            'riapre_rassegna', 'chiude_rassegna', 'chiude_raccolta' => 'neutral',
+            default => 'neutral',
+        };
+    }
 }
