@@ -26,13 +26,17 @@
         table.index td { padding: 7px 4px; border-bottom: 1px solid #e3e2dd; vertical-align: top; }
         .num { color: #93928b; width: 24px; }
 
-        /* Pagina uscita */
-        .uscita-head { border-left: 4px solid {{ $coloreAccento }}; padding-left: 12px; margin-bottom: 12px; }
+        /* Pagina uscita: testata/data/link + titolo + immagine, tutto sulla STESSA pagina */
+        .uscita { page-break-before: always; }
+        .uscita-head { border-left: 4px solid {{ $coloreAccento }}; padding-left: 12px; margin-bottom: 10px; }
         .uscita-head .testata { font-size: 17px; font-weight: bold; }
         .uscita-head .riga { font-size: 12px; color: #66655f; }
         .uscita-head .link { font-size: 11px; word-break: break-all; }
-        .titolo-art { font-size: 14px; margin: 6px 0 12px; }
-        .shot img { max-width: 100%; border: 1px solid #cfcec8; }
+        .titolo-art { font-size: 14px; margin: 6px 0 10px; }
+        /* Altezza limitata: l'immagine scende sotto il testo senza traboccare a pagina nuova.
+           Uno screenshot molto alto viene rimpicciolito (scelta accettata, regole §8). */
+        .shot { text-align: center; }
+        .shot img { max-width: 100%; max-height: 650px; border: 1px solid #cfcec8; }
         .badge { display: inline-block; font-size: 10px; padding: 2px 8px; border: 1px solid #cfcec8; border-radius: 10px; color: #66655f; }
     </style>
 </head>
@@ -81,26 +85,27 @@
 </table>
 <p style="margin-top:14px;color:#66655f;font-size:11px;">{{ count($voci) }} uscite · {{ $cliente->nome }}</p>
 
-{{-- 3. Una pagina per uscita --}}
+{{-- 3. Una pagina per uscita: testo e foto insieme --}}
 @foreach ($voci as $i => $voce)
     @php $u = $voce['uscita']; @endphp
-    <div class="page-break"></div>
-    <div class="uscita-head">
-        <div class="testata">{{ $u->testata->nome }}@if ($u->pagina_giornale), {{ $u->pagina_giornale }}@endif</div>
-        <div class="riga">{{ $u->data_pubblicazione->format('d/m/Y') }} · {{ $u->tipo_media->etichetta() }} · {{ $u->rilevanza?->etichetta() }}</div>
-        @if ($u->url)
-            <div class="link accent">{{ $u->url }}</div>
-        @endif
-    </div>
-    <div class="titolo-art">{{ $u->titolo }}</div>
-    <div class="shot">
-        @if ($voce['immagine'])
-            <img src="{{ $voce['immagine'] }}" alt="Cattura">
-        @elseif ($u->file_caricato_path)
-            <p style="color:#66655f;">Materiale allegato a parte: {{ basename($u->file_caricato_path) }}</p>
-        @else
-            <p style="color:#66655f;">Nessuna immagine disponibile.</p>
-        @endif
+    <div class="uscita">
+        <div class="uscita-head">
+            <div class="testata">{{ $u->testata->nome }}@if ($u->pagina_giornale), {{ $u->pagina_giornale }}@endif</div>
+            <div class="riga">{{ $u->data_pubblicazione->format('d/m/Y') }} · {{ $u->tipo_media->etichetta() }} · {{ $u->rilevanza?->etichetta() }}</div>
+            @if ($u->url)
+                <div class="link accent">{{ $u->url }}</div>
+            @endif
+        </div>
+        <div class="titolo-art">{{ $u->titolo }}</div>
+        <div class="shot">
+            @if ($voce['immagine'])
+                <img src="{{ $voce['immagine'] }}" alt="Cattura">
+            @elseif ($u->file_caricato_path)
+                <p style="color:#66655f;">Materiale allegato a parte: {{ basename($u->file_caricato_path) }}</p>
+            @else
+                <p style="color:#66655f;">Nessuna immagine disponibile.</p>
+            @endif
+        </div>
     </div>
 @endforeach
 

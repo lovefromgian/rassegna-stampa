@@ -53,6 +53,11 @@
   `.m-0`) e `.btn` ora ha `text-decoration:none`; rimossi ~44 `style=` inline su 12 viste
   (app views 115 → 71). Refactor cosmetico a equivalenza, nessun cambio di comportamento
   (95 test verdi). **Resta solo UX-06** (REVISIONE-UX.md, TECH-DEBT TD-006).
+- **Fix PDF (collaudo):** testo e foto ora **sulla stessa pagina** per ogni uscita. Prima
+  l'immagine full-page (senza limite d'altezza) traboccava alla pagina successiva ("una
+  pagina di testo, poi una di foto"). Ora `.shot img { max-height: 650px }` + blocco `.uscita`
+  unico: intestazione + titolo + screenshot insieme. Verificato: uscita alta (3685px) sta in
+  una sola pagina. `resources/views/pdf/rassegna.blade.php`.
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file
