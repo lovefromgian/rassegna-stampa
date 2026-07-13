@@ -47,6 +47,29 @@ Formato voce: `TD-xxx` · titolo · motivo · rischio · azione prevista · file
   un metodo Livewire che riceve il nuovo ordine e riscrive `posizione_pdf` in blocco.
 - **File:** `app/Livewire/Rassegne/OrdinePdf.php`, `resources/views/livewire/rassegne/ordine-pdf.blade.php`.
 
+### TD-004 — Google News/RSS restituisce URL di redirect, non l'articolo
+- **Motivo:** il feed di Google News dà link `news.google.com/rss/articles/…` che rimandano
+  all'articolo reale solo aprendoli. L'URL salvato su `uscite.url` è quindi il redirect, non
+  l'URL canonico dell'editore. La cattura Playwright segue il redirect (lo screenshot è
+  corretto), ma la deduplica lavora sul link di Google: lo stesso articolo raggiunto con due
+  redirect diversi potrebbe sfuggire alla dedup, e l'URL mostrato non è quello dell'editore.
+- **Rischio:** **basso/medio** — dedup imperfetta tra scansioni, URL poco leggibile nel PDF.
+- **Azione prevista:** risolvere il redirect al `urlFinale` dopo la cattura e salvarlo come
+  `url` canonico (la cattura già conosce `urlFinale`); oppure passare a una fonte che
+  restituisce l'URL diretto (API a pagamento), essendo la fonte dietro interfaccia.
+- **File:** `app/Support/Discovery/GoogleNewsRss.php`, `app/Jobs/CatturaUscita.php`.
+
+### TD-005 — Snippet di scoperta salvato in testo_estratto
+- **Motivo:** in scansione lo snippet del feed è salvato provvisoriamente in
+  `uscite.testo_estratto` (per mostrarlo tra i candidati). La cattura lo sovrascrive col
+  testo completo, ma finché il candidato non è catturato l'indice full-text (M5) contiene
+  solo lo snippet.
+- **Rischio:** **basso** — la ricerca d'archivio (M5, ancora da fare) su candidati non
+  catturati troverebbe solo lo snippet.
+- **Azione prevista:** valutare una colonna dedicata `estratto_scoperta`, oppure indicizzare
+  solo le uscite `catturato`/`approvato`.
+- **File:** `app/Services/ScansioneRassegna.php`.
+
 -
 
 ## Risolti

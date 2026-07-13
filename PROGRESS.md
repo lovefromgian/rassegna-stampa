@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** M3 completata + push · 13 lug 2026 · 56 test verdi
+**Ultimo aggiornamento:** M4 completata + push · 13 lug 2026 · 73 test verdi
 
 ## ▶ RIPRENDI DA QUI
 
@@ -11,22 +11,23 @@
 > milestone), per riprendere senza perdite se una sessione si interrompe (es. soglia
 > token). Se leggi questo all'avvio: fai `git log --oneline -5`, poi continua da qui.
 
-- **Stato:** **M3 (Revisione e PDF) completata.** Revisione uscita (rilevanza/tipo/note,
-  approva/scarta, una alla volta), ordine PDF (proposto rilevanza→data + riordino manuale
-  persistito in `posizione_pdf`), generazione PDF impaginato **versionato** (dompdf, template
-  Blade: copertina logo/colore, indice, una pagina per uscita) in coda, blocchi §7 con motivo
-  esplicito, download con audit. **56 test verdi.**
-- **Verifica reale eseguita:** rassegna "Grado punta sulla cultura" ricostruita, catture reali
-  (Il Goriziano + Example), approvazione, **PDF v1 generato** (5.6MB, snapshot uscite [6,7]) —
-  copertina + indice + pagine per uscita con screenshot reali. PDF condiviso.
-- **Prossimo passo concreto:** avviare **M4 — Scoperta automatica**: interfaccia
-  `ArticleDiscoverySource` + Google News/RSS, parole chiave richieste/escluse, punteggio,
-  deduplica, scansione giornaliera schedulata + manuale, schermata candidati (conferma/scarto
-  in blocco). Vedi "Prossimi passi → M4".
-- **Decisioni M3:** generazione in coda (job `GeneraPdf`) → audit `genera_pdf` con autore
-  esplicito. Solo le uscite `approvato` entrano nel PDF; §7 blocca su `candidato` pendenti e
-  approvate senza materiale (le `catturato` non revisionate non bloccano, restano fuori).
-  Riordino con frecce, non drag&drop (TD-003). dompdf per PDF puro-PHP testabile.
+- **Stato:** **M4 (Scoperta automatica) completata.** Fonte dietro interfaccia
+  `ArticleDiscoverySource` (Google News/RSS + `FakeDiscoverySource`), servizio
+  `ScansioneRassegna` (dedup su URL anche scartate, esclusioni, punteggio 0-100), job
+  `ScansionaRassegna`, comando `rassegne:scansiona` schedulato giornaliero + scansione
+  manuale, schermata `Candidati` (selezione multipla, conferma/scarto in blocco, debole
+  segnalata, sospetto duplicato). **73 test verdi.**
+- **Verifica reale eseguita:** scansione live Google News/RSS per "Grado cultura musei" →
+  articoli reali da testate FVG (UdineToday "Grado punta sulla cultura" = punteggio 100,
+  proprio l'articolo della specifica), con esclusioni e dedup applicati. Un falso positivo
+  (Gdoweek, 67) confermato: realtà attesa (§2), l'operatore decide.
+- **Prossimo passo concreto:** avviare **M5 — Contorno**: log di audit consultabile
+  (per rassegna e globale, immutabile), archivio con ricerca full-text sul testo estratto,
+  statistiche per cliente/testata, chiusura e riapertura rassegna (supervisore) con
+  versionamento PDF. Vedi "Prossimi passi → M5".
+- **Decisioni M4:** scansione manuale sincrona (feedback immediato); quella giornaliera in
+  coda. Esclusioni = hard (tagliano); punteggio basso = debole ma proposto (soft). Snippet
+  provvisorio in `testo_estratto` (TD-005). URL = redirect Google News (TD-004).
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file
@@ -67,7 +68,7 @@ job in coda.
 
 ## In corso ora
 
-- Niente in corso: M1, M2, M3 chiuse e pushate. Prossimo avvio → M4 (scoperta automatica).
+- Niente in corso: M1–M4 chiuse e pushate. Prossimo avvio → M5 (contorno).
 
 ## Prossimi passi concreti
 
@@ -114,13 +115,13 @@ Note M2:
     PDF v1 generato e ispezionato. (Confronto col PDF originale del cliente: non disponibile
     in questo ambiente; impianto grafico modellato sui mockup e su regole §8.)
 
-### M4 — Scoperta automatica
-17. Interfaccia `ArticleDiscoverySource` + implementazione Google News/RSS.
-18. Parole chiave richieste ed escluse; punteggio di corrispondenza; deduplica su URL.
-19. Scansione giornaliera schedulata sulle rassegne con periodo attivo + scansione manuale.
-20. Schermata candidati con selezione multipla, conferma/scarto in blocco.
-21. **Verifica:** su un comunicato reale il sistema propone da solo le uscite, con falsi
-    positivi segnalati come corrispondenza debole.
+### M4 — Scoperta automatica ✅ (completata)
+17. ✅ Interfaccia `ArticleDiscoverySource` + impl `GoogleNewsRss` (+ `FakeDiscoverySource`).
+18. ✅ Parole chiave richieste/escluse; punteggio 0-100; deduplica su URL (`ScansioneRassegna`).
+19. ✅ Comando `rassegne:scansiona` schedulato giornaliero + scansione manuale (`scansionaOra`).
+20. ✅ Schermata `Candidati`: selezione multipla, conferma/scarto in blocco, debole segnalata.
+21. ✅ **Verifica reale:** scansione live Google News/RSS su "Grado" → articoli reali FVG,
+    UdineToday "Grado punta sulla cultura" a punteggio 100; falso positivo come debole/medio.
 
 ### M5 — Contorno
 22. Log di audit consultabile (per rassegna e globale), immutabile.
