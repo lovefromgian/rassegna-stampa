@@ -78,6 +78,23 @@ class Scheda extends Component
         $this->notifica('Rassegna riaperta: aggiungi le uscite tardive e genera una nuova versione.');
     }
 
+    /**
+     * Elimina la rassegna (anche se già inviata): solo supervisore (RassegnaPolicy::delete).
+     * Soft delete — è recuperabile, il PDF già generato resta nello storico (regole §10).
+     */
+    public function elimina()
+    {
+        Gate::authorize('delete', $this->rassegna);
+
+        $clienteId = $this->rassegna->cliente_id;
+        $this->rassegna->delete();
+        Audit::registra('elimina_rassegna', $this->rassegna);
+
+        session()->flash('success', 'Rassegna eliminata (archiviata, recuperabile).');
+
+        return $this->redirectRoute('clienti.show', $clienteId, navigate: true);
+    }
+
     public function render(): View
     {
         $this->rassegna->load('cliente');

@@ -65,6 +65,13 @@
   titoli/URL lunghi → 3 pagine, una ciascuna. `GeneratorePdf.php`, `pdf/rassegna.blade.php`,
   `config/capture.php`. (Approccio intermedio `max-height:650px` del commit `e394c03`
   superato: rimpiccioliva l'intera immagine invece di tagliarla.)
+- **UI eliminazione (collaudo):** le Policy consentivano già l'eliminazione (solo
+  supervisore, soft delete) ma mancava il bottone nell'interfaccia. Aggiunti "Elimina" sulla
+  scheda **cliente** e sulla scheda **rassegna** (visibili solo al supervisore via
+  `puoEliminare`), con conferma; azione `elimina()` che ri-autorizza lato server
+  (`Gate::authorize('delete')`), fa soft delete, registra l'audit (`elimina_cliente` /
+  `elimina_rassegna`) e reindirizza. Test `EliminazioneTest` (6): supervisore elimina,
+  operatore riceve 403, bottone assente per l'operatore. Uscite: resta lo "scarto" (§10).
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file

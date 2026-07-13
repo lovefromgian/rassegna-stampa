@@ -32,6 +32,9 @@
             @if ($puoRiaprire && in_array($rassegna->stato, [\App\Enums\StatoRassegna::Chiusa, \App\Enums\StatoRassegna::Riaperta], true))
                 <button class="btn small" wire:click="riapri" wire:confirm="Riaprire la rassegna? Il PDF già generato resta; si genererà una nuova versione.">Riapri</button>
             @endif
+            @if ($puoEliminare)
+                <button class="btn small danger" wire:click="elimina" wire:confirm="Eliminare questa rassegna? Resta archiviata e recuperabile.">Elimina</button>
+            @endif
         </div>
     </div>
 

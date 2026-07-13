@@ -13,6 +13,9 @@
             @if (auth()->user()->can('create', \App\Models\Rassegna::class))
                 <a class="btn primary" href="{{ route('rassegne.create', ['cliente' => $cliente->id]) }}" wire:navigate>+ Nuova rassegna</a>
             @endif
+            @if ($puoEliminare)
+                <button class="btn danger" wire:click="elimina" wire:confirm="Eliminare il cliente «{{ $cliente->nome }}»? Resta archiviato e recuperabile.">Elimina</button>
+            @endif
         </div>
     </div>
 
