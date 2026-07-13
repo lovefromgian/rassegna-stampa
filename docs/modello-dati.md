@@ -148,7 +148,8 @@ Soft delete (un'uscita scartata resta archiviata e recuperabile).
 | `url` | string | | solo per `online`; **unique per rassegna** (deduplica) |
 | `tipo_media` | enum | ✅ | `online` \| `carta` \| `radio` \| `tv` \| `agenzia` \| `social_blog` |
 | `rilevanza` | enum | | `principale` \| `secondaria` \| `citazione` — assegnata in revisione |
-| `stato` | enum | ✅ | vedi sotto |
+| `stato` | enum | ✅ | ciclo di vita di business, vedi sotto |
+| `stato_cattura` | enum | | stato tecnico della cattura web, vedi sotto (null = media manuale) |
 | `punteggio_corrispondenza` | tinyint | | 0-100, calcolato in scoperta; guida l'ordinamento dei candidati |
 | `screenshot_path` | string | | full-page: è l'immagine che finisce nel PDF |
 | `pdf_pagina_path` | string | | versione multipagina leggibile |
@@ -156,6 +157,7 @@ Soft delete (un'uscita scartata resta archiviata e recuperabile).
 | `file_caricato_path` | string | | ritaglio cartaceo / file sostituito a mano |
 | `pagina_giornale` | string | | es. "pag 55" (solo carta) |
 | `errore_cattura` | text | | messaggio leggibile se la cattura fallisce |
+| `cattura_completata_il` | datetime | | quando la cattura web è andata a buon fine |
 | `posizione_pdf` | integer | | ordine manuale nel PDF |
 | `note` | text | | interne, visibili solo al team |
 | `data_rilevamento` | datetime | ✅ | quando il sistema l'ha trovata |
@@ -176,6 +178,23 @@ candidato ──> confermato ──> catturato ──> approvato
 | `catturato` | il job Playwright ha prodotto screenshot + testo |
 | `approvato` | l'operatore ha validato la cattura e assegnato la rilevanza |
 | `scartato` | fuori dalla rassegna, ma archiviato e recuperabile |
+
+**Stato della cattura** (`stato_cattura`, solo per le uscite `online` con URL). È il sotto-
+processo tecnico che gira mentre l'uscita è `confermato`; al successo la porta a
+`catturato`. Resta `null` per i media manuali (carta, radio, TV, agenzia).
+
+```
+in_attesa ──> in_corso ──> completata
+                  │
+                  └────────> errore   (errore_cattura contiene il messaggio leggibile)
+```
+
+| Stato cattura | Significato |
+|---|---|
+| `in_attesa` | job accodato, non ancora partito |
+| `in_corso` | il job Playwright sta lavorando |
+| `completata` | screenshot + PDF + testo prodotti; l'uscita passa a `catturato` |
+| `errore` | cattura fallita; `errore_cattura` spiega perché. Da risolvere (ricattura / caricamento manuale) o scartare, non ignorare |
 
 **Vincoli:**
 - `url` unique nell'ambito della rassegna → deduplica automatica.

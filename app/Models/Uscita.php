@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Rilevanza;
+use App\Enums\StatoCattura;
 use App\Enums\StatoUscita;
 use App\Enums\TipoMedia;
 use Database\Factories\UscitaFactory;
@@ -27,6 +28,7 @@ class Uscita extends Model
         'tipo_media',
         'rilevanza',
         'stato',
+        'stato_cattura',
         'punteggio_corrispondenza',
         'screenshot_path',
         'pdf_pagina_path',
@@ -34,6 +36,7 @@ class Uscita extends Model
         'file_caricato_path',
         'pagina_giornale',
         'errore_cattura',
+        'cattura_completata_il',
         'posizione_pdf',
         'note',
         'data_rilevamento',
@@ -46,8 +49,10 @@ class Uscita extends Model
             'tipo_media' => TipoMedia::class,
             'rilevanza' => Rilevanza::class,
             'stato' => StatoUscita::class,
+            'stato_cattura' => StatoCattura::class,
             'punteggio_corrispondenza' => 'integer',
             'posizione_pdf' => 'integer',
+            'cattura_completata_il' => 'datetime',
             'data_rilevamento' => 'datetime',
         ];
     }
@@ -71,5 +76,14 @@ class Uscita extends Model
     public function haMaterialeValido(): bool
     {
         return ! empty($this->screenshot_path) || ! empty($this->file_caricato_path);
+    }
+
+    /**
+     * Ha una pagina web da fotografare: solo `online` con URL. Gli altri media
+     * (carta, radio, TV, agenzia) nascono da materiale caricato a mano.
+     */
+    public function richiedeCatturaWeb(): bool
+    {
+        return $this->tipo_media === TipoMedia::Online && ! empty($this->url);
     }
 }
