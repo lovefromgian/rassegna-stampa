@@ -3,7 +3,18 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** M1 completata (fondamenta) · 12 lug 2026 · 25 test verdi
+**Ultimo aggiornamento:** M1 completata + push · 13 lug 2026 · 25 test verdi
+
+## ▶ RIPRENDI DA QUI
+
+> Blocco di ripresa rapida: aggiornato dopo **ogni sotto-passo** (non solo a fine
+> milestone), per riprendere senza perdite se una sessione si interrompe (es. soglia
+> token). Se leggi questo all'avvio: fai `git log --oneline -5`, poi continua da qui.
+
+- **Stato:** M1 chiusa, committata e pushata su `origin/main` (ultimo commit: guard hook).
+- **Prossimo passo concreto:** avviare **M2 — Cattura** → punto 7 (integrazione Playwright
+  + job in coda per la cattura di una URL). Vedi "Prossimi passi concreti → M2".
+- **Nessun lavoro in sospeso / niente da recuperare.** Working tree pulito.
 
 ## Come usare questo file
 
