@@ -1,13 +1,16 @@
 <?php
 
 use App\Enums\StatoRassegna;
+use App\Jobs\ScansionaRassegna;
 use App\Livewire\Rassegne\Modifica;
 use App\Models\Cliente;
 use App\Models\Rassegna;
 use App\Models\User;
+use Illuminate\Support\Facades\Queue;
 use Livewire\Livewire;
 
-test('l\'operatore può creare una rassegna', function () {
+test('creare una rassegna avvia subito la ricerca automatica sul web', function () {
+    Queue::fake();
     $cliente = Cliente::factory()->create();
 
     Livewire::actingAs(User::factory()->operatore()->create());
@@ -25,6 +28,9 @@ test('l\'operatore può creare una rassegna', function () {
     $rassegna = Rassegna::where('titolo', 'Grado punta sulla cultura')->firstOrFail();
     expect($rassegna->parole_chiave)->toBe(['Grado', 'musei'])
         ->and($rassegna->stato)->toBe(StatoRassegna::InRaccolta);
+
+    // La creazione accoda la scansione della nuova rassegna.
+    Queue::assertPushed(ScansionaRassegna::class, fn ($job) => $job->rassegna->is($rassegna));
 });
 
 test('la data del comunicato precompila il periodo di monitoraggio (+14 giorni)', function () {

@@ -26,6 +26,10 @@
   drag&drop, TD-004 URL Google News, TD-005 snippet) e l'hardening pre-produzione.
 - **Decisioni M5:** log consultabile ma immutabile (nessuna UI di modifica); riapertura
   gated a supervisore lato server (Policy); chiusura rassegna richiede un PDF generato (§9).
+- **Aggiunta post-M5 (richiesta utente):** alla **creazione** di una rassegna parte
+  automaticamente la ricerca sul web (job `ScansionaRassegna` accodato) e si atterra sui
+  candidati, che si auto-aggiornano (`wire:poll`). Prima la scansione era solo manuale o
+  schedulata.
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file

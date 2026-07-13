@@ -1,4 +1,4 @@
-<div>
+<div wire:poll.8s>
     <p class="crumbs">
         <a href="{{ route('rassegne.show', $rassegna) }}" wire:navigate>{{ $rassegna->titolo }}</a> / Candidati
     </p>

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Rassegne;
 
+use App\Jobs\ScansionaRassegna;
 use App\Models\Cliente;
 use App\Models\Rassegna;
 use App\Services\Audit;
@@ -119,15 +120,22 @@ class Modifica extends Component
         if ($this->rassegna) {
             $this->rassegna->update($payload);
             Audit::registra('modifica_rassegna', $this->rassegna);
-            $messaggio = 'Rassegna aggiornata.';
-        } else {
-            $this->rassegna = Rassegna::create($payload);
-            Audit::registra('crea_rassegna', $this->rassegna);
-            $messaggio = 'Rassegna creata.';
+            session()->flash('success', 'Rassegna aggiornata.');
+            $this->redirectRoute('rassegne.show', $this->rassegna, navigate: true);
+
+            return;
         }
 
-        session()->flash('success', $messaggio);
-        $this->redirectRoute('rassegne.show', $this->rassegna, navigate: true);
+        $this->rassegna = Rassegna::create($payload);
+        Audit::registra('crea_rassegna', $this->rassegna);
+
+        // Alla creazione parte subito la ricerca automatica sul web (in coda: il
+        // salvataggio resta istantaneo). L'operatore atterra sui candidati, che si
+        // popolano man mano che il worker trova gli articoli.
+        ScansionaRassegna::dispatch($this->rassegna);
+
+        session()->flash('success', 'Rassegna creata. Sto cercando gli articoli sul web…');
+        $this->redirectRoute('rassegne.candidati', $this->rassegna, navigate: true);
     }
 
     /**
