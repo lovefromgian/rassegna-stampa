@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DocumentoDownloadController;
 use App\Livewire\Clienti;
 use App\Livewire\Rassegne;
 use Illuminate\Support\Facades\Route;
@@ -29,4 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/rassegne/nuova', Rassegne\Modifica::class)->name('rassegne.create');
     Route::get('/rassegne/{rassegna}', Rassegne\Scheda::class)->name('rassegne.show');
     Route::get('/rassegne/{rassegna}/modifica', Rassegne\Modifica::class)->name('rassegne.edit');
+    Route::get('/rassegne/{rassegna}/revisione', Rassegne\Revisione::class)->name('rassegne.revisione');
+    Route::get('/rassegne/{rassegna}/pdf', Rassegne\OrdinePdf::class)->name('rassegne.pdf');
+    Route::get('/documenti/{documento}/download', DocumentoDownloadController::class)->name('documenti.download');
 });

@@ -29,6 +29,7 @@ codice si conforma ai documenti, non viceversa. Se codice e `docs/` divergono, v
 - **Frontend:** Blade + Livewire
 - **Test:** Pest
 - **Cattura pagine:** Playwright (Chromium headless), invocato da un job in coda
+- **Generazione PDF:** dompdf (`barryvdh/laravel-dompdf`), da template Blade, in coda
 - **Coda:** queue worker Laravel (database o Redis)
 - **Scheduler:** `schedule:run` per le scansioni giornaliere
 - **Deploy:** VPS dedicato Hetzner (deve poter installare Chromium ed eseguire processi

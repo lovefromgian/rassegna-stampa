@@ -45,5 +45,15 @@
         </div>
     </div>
 
+    <div class="card">
+        <h2>Prossimo passo</h2>
+        <div class="actions" style="flex-direction:column;gap:10px;">
+            <a class="btn wide" href="{{ route('rassegne.revisione', $rassegna) }}" wire:navigate style="text-decoration:none;text-align:center;">Revisiona le uscite catturate</a>
+            <a class="btn primary wide" href="{{ route('rassegne.pdf', $rassegna) }}" wire:navigate style="text-decoration:none;text-align:center;">Ordina e genera il PDF</a>
+        </div>
+        <div class="note" style="margin-top:14px;">Il PDF si genera solo quando nessuna uscita resta in stato "candidato" e ogni uscita approvata ha uno screenshot valido.</div>
+    </div>
+
+    <div id="uscite"></div>
     <livewire:uscite.gestore :rassegna="$rassegna" :key="'uscite-'.$rassegna->id" />
 </div>

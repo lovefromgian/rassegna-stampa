@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** M2 completata + push · 13 lug 2026 · 41 test verdi
+**Ultimo aggiornamento:** M3 completata + push · 13 lug 2026 · 56 test verdi
 
 ## ▶ RIPRENDI DA QUI
 
@@ -11,19 +11,22 @@
 > milestone), per riprendere senza perdite se una sessione si interrompe (es. soglia
 > token). Se leggi questo all'avvio: fai `git log --oneline -5`, poi continua da qui.
 
-- **Stato:** **M2 (Cattura) completata.** Motore Playwright dietro interfaccia, job in coda,
-  UI uscite (aggiunta manuale, cattura/ricattura, sostituzione file, scarto), stato cattura
-  esplicito. **41 test verdi** (FakeCapturer, niente rete). **Verifica reale eseguita:**
-  cattura end-to-end via job reale (example.com) e cattura de Il Goriziano (screenshot
-  full-page 1366×8581 + PDF 12MB + testo + metadati) → artefatti su disco, stato catturato.
-- **Prossimo passo concreto:** avviare **M3 — Revisione e PDF** (prima milestone concreta):
-  schermata di revisione uscita (rilevanza, tipo media, note, approva/scarta), ordine PDF
-  (drag&drop), generazione PDF impaginato versionato con blocchi §7, download. Vedi "M3".
-- **Bugfix M2:** pagine Livewire full-page non renderizzavano il corpo (layout @yield vs
-  slot). Fix in AppServiceProvider (`component_layout` → `components.layouts.app`) + smoke
-  test (RenderPagineTest).
-- **Decisioni M2:** cattura automatica → NON nel log di audit (§11 = azioni utente).
-  Deploy: `npm run capture:install` installa Chromium sul VPS. TD-002: cookie-banner euristico.
+- **Stato:** **M3 (Revisione e PDF) completata.** Revisione uscita (rilevanza/tipo/note,
+  approva/scarta, una alla volta), ordine PDF (proposto rilevanza→data + riordino manuale
+  persistito in `posizione_pdf`), generazione PDF impaginato **versionato** (dompdf, template
+  Blade: copertina logo/colore, indice, una pagina per uscita) in coda, blocchi §7 con motivo
+  esplicito, download con audit. **56 test verdi.**
+- **Verifica reale eseguita:** rassegna "Grado punta sulla cultura" ricostruita, catture reali
+  (Il Goriziano + Example), approvazione, **PDF v1 generato** (5.6MB, snapshot uscite [6,7]) —
+  copertina + indice + pagine per uscita con screenshot reali. PDF condiviso.
+- **Prossimo passo concreto:** avviare **M4 — Scoperta automatica**: interfaccia
+  `ArticleDiscoverySource` + Google News/RSS, parole chiave richieste/escluse, punteggio,
+  deduplica, scansione giornaliera schedulata + manuale, schermata candidati (conferma/scarto
+  in blocco). Vedi "Prossimi passi → M4".
+- **Decisioni M3:** generazione in coda (job `GeneraPdf`) → audit `genera_pdf` con autore
+  esplicito. Solo le uscite `approvato` entrano nel PDF; §7 blocca su `candidato` pendenti e
+  approvate senza materiale (le `catturato` non revisionate non bloccano, restano fuori).
+  Riordino con frecce, non drag&drop (TD-003). dompdf per PDF puro-PHP testabile.
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file
@@ -64,7 +67,7 @@ job in coda.
 
 ## In corso ora
 
-- Niente in corso: M1 e M2 chiuse e pushate. Prossimo avvio → M3 (revisione e PDF).
+- Niente in corso: M1, M2, M3 chiuse e pushate. Prossimo avvio → M4 (scoperta automatica).
 
 ## Prossimi passi concreti
 
@@ -99,16 +102,17 @@ Note M2:
   installa Chromium sul VPS.
 - Bugfix layout Livewire full-page (slot vs @yield) → `component_layout` in AppServiceProvider.
 
-### M3 — Revisione e PDF *(← prima milestone concreta)*
-12. Schermata di revisione uscita: anteprima cattura, metadati, tipo di media, rilevanza,
-    note, approva/scarta.
-13. Vista ordine nel PDF: ordinamento proposto (rilevanza, poi data) + riordino manuale.
-14. Generazione del PDF impaginato: copertina con logo e colore del cliente, indice delle
-    uscite, una pagina per uscita con testata/data/link. Versionato.
-15. Blocchi alla generazione (nessun candidato pendente, screenshot valido su ogni
-    approvata). Download del PDF.
-16. **Verifica di verità:** rigenero la rassegna "Grado punta sulla cultura" partendo dagli
-    URL e confronto il risultato col PDF originale fornito dal cliente.
+### M3 — Revisione e PDF ✅ (completata)
+12. ✅ Revisione uscita (`Rassegne\Revisione`): anteprima, metadati, tipo media, rilevanza,
+    note, approva/scarta, una alla volta.
+13. ✅ Ordine PDF (`Rassegne\OrdinePdf`): proposto (rilevanza poi data) + riordino manuale
+    persistito in `posizione_pdf` che prevale. (Frecce su/giù; drag&drop → TD-003.)
+14. ✅ Generazione PDF impaginato versionato (dompdf, `GeneratorePdf` + job `GeneraPdf`,
+    template `pdf/rassegna`): copertina logo/colore, indice, una pagina per uscita.
+15. ✅ Blocchi §7 (`BlocchiGenerazione`) con motivo esplicito. Download (`DocumentoDownloadController`) con audit.
+16. ✅ **Verifica di verità:** rassegna "Grado punta sulla cultura" ricostruita da URL reali,
+    PDF v1 generato e ispezionato. (Confronto col PDF originale del cliente: non disponibile
+    in questo ambiente; impianto grafico modellato sui mockup e su regole §8.)
 
 ### M4 — Scoperta automatica
 17. Interfaccia `ArticleDiscoverySource` + implementazione Google News/RSS.

@@ -37,6 +37,16 @@ Formato voce: `TD-xxx` · titolo · motivo · rischio · azione prevista · file
   regole EasyList/“I don't care about cookies”) nel contesto Playwright.
 - **File:** `scripts/capture.cjs` (array `SELETTORI_CONSENSO`).
 
+### TD-003 — Riordino uscite con frecce, non drag&drop
+- **Motivo:** la specifica (regole-business.md §6, mockup 08) prevede il riordino delle
+  uscite nel PDF via **drag&drop**. È implementato con pulsanti su/giù (`OrdinePdf`): il
+  requisito funzionale — riordino manuale che persiste in `posizione_pdf` e prevale sulla
+  proposta — è pienamente soddisfatto e testato; manca solo l'affordance del trascinamento.
+- **Rischio:** **basso** — solo ergonomia. Con molte uscite il riordino a frecce è più lento.
+- **Azione prevista:** integrare una libreria sortable (es. SortableJS + Alpine) collegata a
+  un metodo Livewire che riceve il nuovo ordine e riscrive `posizione_pdf` in blocco.
+- **File:** `app/Livewire/Rassegne/OrdinePdf.php`, `resources/views/livewire/rassegne/ordine-pdf.blade.php`.
+
 -
 
 ## Risolti
