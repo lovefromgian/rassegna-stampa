@@ -45,8 +45,5 @@
         </div>
     </div>
 
-    <div class="card">
-        <h2>Uscite raccolte</h2>
-        <div class="note">La raccolta candidati, la revisione e la generazione del PDF arrivano nelle milestone successive (M2–M4).</div>
-    </div>
+    <livewire:uscite.gestore :rassegna="$rassegna" :key="'uscite-'.$rassegna->id" />
 </div>

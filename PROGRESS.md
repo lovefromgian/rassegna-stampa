@@ -11,16 +11,20 @@
 > milestone), per riprendere senza perdite se una sessione si interrompe (es. soglia
 > token). Se leggi questo all'avvio: fai `git log --oneline -5`, poi continua da qui.
 
-- **Stato:** M2 in corso. Fatti: M2-A (stato_cattura), M2-B (motore dietro interfaccia
-  `PageCapturer`: `PlaywrightCapturer` + `scripts/capture.cjs` + `FakeCapturer` + binding +
-  config), M2-C (job in coda `CatturaUscita` + service `GestioneCattura`; 30 test verdi).
-- **Prossimo passo concreto:** **M2-D** — UI uscite sulla scheda rassegna: aggiunta manuale
-  (URL online + media manuale con ritaglio), elenco con pill di stato cattura, trigger
-  cattura, ricattura, sostituzione manuale del file. Poi M2-E (test UI + verifica reale).
-- **Decisione:** la cattura è un evento automatico → NON scrive nel log di audit (§11 =
-  azioni utente con un "chi"). L'esito vive sull'uscita (stato_cattura/errore_cattura).
-- **Nota:** `playwright` è in package.json; browser via `npm run capture:install` (sul VPS).
-  I test usano il FakeCapturer, niente rete.
+- **Stato:** M2 quasi completa. Fatti: M2-A (stato_cattura), M2-B (motore dietro
+  interfaccia `PageCapturer` + `capture.cjs` + `FakeCapturer`), M2-C (job `CatturaUscita` +
+  `GestioneCattura`), M2-D (UI `Uscite\Gestore` annidata nella scheda rassegna: aggiunta
+  manuale online/media, elenco con pill stato, cattura/ricattura, sostituzione file, scarto).
+  **41 test verdi.**
+- **Bugfix importante (M2-D):** le pagine Livewire full-page non renderizzavano il corpo —
+  Livewire 4 usava `layouts::app` (il layout @yield del controller) mentre inietta via slot.
+  Fix: `config(['livewire.component_layout' => 'components.layouts.app'])` in
+  AppServiceProvider. Aggiunti smoke test di rendering (RenderPagineTest) per bloccarlo.
+- **Prossimo passo concreto:** **M2-E** — verifica reale: `npm i` (playwright) +
+  `npm run capture:install` (chromium) e cattura di un URL reale via il PlaywrightCapturer,
+  best-effort documentato (l'ambiente potrebbe non avere rete/chromium). Poi chiusura M2:
+  aggiornare TECH-DEBT se serve, commit+push finale.
+- **Decisione:** la cattura è automatica → NON scrive nel log di audit (§11 = azioni utente).
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file

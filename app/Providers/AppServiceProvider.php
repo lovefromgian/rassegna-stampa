@@ -29,6 +29,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // I componenti Livewire full-page usano il layout slot-based dedicato.
+        // (Il default di Livewire 4 è `layouts::app`, che qui risolve al layout del
+        // controller basato su @yield: incompatibile con l'iniezione via slot.)
+        config(['livewire.component_layout' => 'components.layouts.app']);
     }
 }
