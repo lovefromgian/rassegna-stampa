@@ -45,8 +45,9 @@ class UscitaPolicy
         return true; // recuperare un'uscita scartata è parte del flusso
     }
 
+    /** Cancellazione definitiva dal cestino: solo supervisore (deroga §10). Irreversibile. */
     public function forceDelete(User $user, Uscita $uscita): bool
     {
-        return false;
+        return $user->isSupervisore();
     }
 }

@@ -42,9 +42,13 @@ class ClientePolicy
         return $user->isSupervisore();
     }
 
-    /** Nessuno cancella fisicamente: solo soft delete (CLAUDE.md §6). */
+    /**
+     * Cancellazione definitiva dal cestino: solo supervisore (deroga autorizzata alla
+     * regola "nulla si cancella fisicamente", vedi regole-business.md §10 e TECH-DEBT).
+     * Irreversibile: rimuove il cliente e, a cascata, le sue rassegne/uscite e i relativi file.
+     */
     public function forceDelete(User $user, Cliente $cliente): bool
     {
-        return false;
+        return $user->isSupervisore();
     }
 }

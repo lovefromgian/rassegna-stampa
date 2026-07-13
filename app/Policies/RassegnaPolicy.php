@@ -42,9 +42,10 @@ class RassegnaPolicy
         return $user->isSupervisore();
     }
 
+    /** Cancellazione definitiva dal cestino: solo supervisore (deroga §10). Irreversibile. */
     public function forceDelete(User $user, Rassegna $rassegna): bool
     {
-        return false;
+        return $user->isSupervisore();
     }
 
     /** Riapertura di una rassegna chiusa: solo supervisore (regole-business.md §9). */

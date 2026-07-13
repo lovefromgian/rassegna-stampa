@@ -82,6 +82,21 @@ Formato voce: `TD-xxx` · titolo · motivo · rischio · azione prevista · file
 
 -
 
+### TD-007 — Cancellazione definitiva: deroga a "nulla si cancella fisicamente"
+- **Motivo:** su richiesta esplicita del committente è stata abilitata la cancellazione
+  definitiva (fisica) dei record dal cestino (solo supervisore, con conferma), in deroga alla
+  regola storica del progetto. Agisce a cascata (cliente → rassegne → uscite) e rimuove anche
+  i file su disco.
+- **Rischio:** **alto** — irreversibile e, senza backup dei file (TD-001), i dati eliminati
+  non si recuperano. Aggravato dalla cascata: eliminare un cliente distrugge tutto il suo
+  storico.
+- **Azione prevista:** prima della produzione, mettere in sicurezza con (a) backup/versioning
+  dello storage (vedi TD-001) e possibilmente (b) una "trattenuta" (es. cancellazione
+  definitiva consentita solo dopo N giorni nel cestino) o un doppio conferma/2FA. Valutare se
+  restringere ulteriormente (es. solo record senza PDF consegnati).
+- **File:** `app/Services/EliminazioneDefinitiva.php`, `app/Livewire/Cestino.php`,
+  Policy `forceDelete` di Cliente/Rassegna/Uscita.
+
 ## Risolti
 
 _(Sposta qui con la data quando il debito è saldato.)_

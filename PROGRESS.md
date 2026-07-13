@@ -75,8 +75,12 @@
 - **Cestino (collaudo):** schermata `Cestino` (rotta `cestino.index`, solo supervisore, voce
   in topbar) che elenca clienti/rassegne/uscite in soft delete e permette il **ripristino**
   (Policy `restore` + audit `ripristina_*`). Test `CestinoTest` (6). **Cancellazione
-  definitiva NON implementata**: vietata dalla specifica (§6/§10, `forceDelete → false`);
-  in attesa di decisione dell'utente se derogare (richiederebbe update spec + Policy + TD).
+  definitiva**: l'utente ha scelto di **abilitarla** (deroga a §6/§10). Implementata:
+  `forceDelete → supervisore` (Cliente/Rassegna/Uscita), service `EliminazioneDefinitiva`
+  (cascata cliente→rassegne→uscite + pulizia file, in transazione), bottone "Elimina
+  definitivamente" nel cestino con conferma, audit `elimina_definitiva_*` (il log resta).
+  Specifica aggiornata (regole §10, CLAUDE §6) + **TECH-DEBT TD-007** (rischio alto:
+  irreversibile, no backup file). Test in `CestinoTest` (9 totali).
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file

@@ -158,10 +158,20 @@ multipagina): se in futuro si vuole privilegiare la leggibilità, il materiale c
 
 ## 10. Cancellazioni
 
-- **Nulla si cancella fisicamente.** Soft delete su Cliente, Rassegna, Uscita.
+- **Cancellazione normale = soft delete** su Cliente, Rassegna, Uscita: il record finisce nel
+  **cestino** e resta **recuperabile**. È il comportamento di default: nell'uso quotidiano
+  nulla si perde.
 - L'operatore può **scartare** un'uscita (resta archiviata, recuperabile).
-- **Eliminare** un cliente, una rassegna, o una rassegna già inviata: **solo supervisore**.
-- Il **log di audit non si tocca**: né modifica né cancellazione, da nessun ruolo.
+- **Eliminare** (soft) un cliente, una rassegna, o una rassegna già inviata: **solo supervisore**.
+- **Ripristino** dal cestino: **solo supervisore**.
+- **Cancellazione definitiva (fisica)** dal cestino: **solo supervisore**, con conferma
+  esplicita. È **irreversibile** e agisce **a cascata** (cliente → rassegne → uscite) e
+  rimuove anche i **file** su disco (screenshot, PDF pagina, ritagli, PDF generati).
+  *Deroga* alla regola storica "nulla si cancella fisicamente*, decisa esplicitamente dal
+  committente. Da usare con cautela: senza backup dei file (TECH-DEBT TD-001) i dati non si
+  recuperano.
+- Il **log di audit non si tocca**: né modifica né cancellazione, da nessun ruolo. Resta
+  intatto anche dopo una cancellazione definitiva (registra chi ha eliminato cosa e quando).
 
 ---
 

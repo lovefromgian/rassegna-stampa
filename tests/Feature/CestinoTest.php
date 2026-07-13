@@ -4,7 +4,9 @@ use App\Livewire\Cestino;
 use App\Models\Cliente;
 use App\Models\LogAzione;
 use App\Models\Rassegna;
+use App\Models\Uscita;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 
 test('il cestino elenca i record eliminati', function () {
@@ -54,10 +56,52 @@ test('il cestino è raggiungibile dal supervisore', function () {
         ->assertSee('Cestino');
 });
 
-test('il cestino non offre la cancellazione definitiva (spec §6/§10)', function () {
+test('il supervisore elimina definitivamente un\'uscita e i suoi file', function () {
+    Storage::fake('public');
     Livewire::actingAs(User::factory()->supervisore()->create());
 
-    Livewire::test(Cestino::class)
-        ->assertDontSee('Elimina definitivamente')
-        ->assertSee('non è prevista');
+    Storage::disk('public')->put('catture/screenshot/x.png', 'png');
+    $uscita = Uscita::factory()->create(['screenshot_path' => 'catture/screenshot/x.png']);
+    $uscita->delete();
+
+    Livewire::test(Cestino::class)->call('eliminaDefinitivo', 'uscita', $uscita->id);
+
+    $this->assertDatabaseMissing('uscite', ['id' => $uscita->id]); // sparita per davvero
+    Storage::disk('public')->assertMissing('catture/screenshot/x.png');
+    expect(LogAzione::where('azione', 'elimina_definitiva_uscita')->exists())->toBeTrue();
+});
+
+test('eliminare definitivamente una rassegna rimuove a cascata le sue uscite', function () {
+    Livewire::actingAs(User::factory()->supervisore()->create());
+    $rassegna = Rassegna::factory()->create();
+    $u1 = Uscita::factory()->for($rassegna)->create();
+    $u2 = Uscita::factory()->for($rassegna)->scartato()->create();
+    $rassegna->delete();
+
+    Livewire::test(Cestino::class)->call('eliminaDefinitivo', 'rassegna', $rassegna->id);
+
+    $this->assertDatabaseMissing('rassegne', ['id' => $rassegna->id]);
+    $this->assertDatabaseMissing('uscite', ['id' => $u1->id]);
+    $this->assertDatabaseMissing('uscite', ['id' => $u2->id]);
+});
+
+test('l\'operatore non può eliminare definitivamente', function () {
+    $cliente = Cliente::factory()->create();
+    $cliente->delete();
+
+    Livewire::actingAs(User::factory()->operatore()->create());
+    // L'operatore non accede nemmeno al cestino, ma verifichiamo anche il blocco lato server:
+    expect(User::factory()->operatore()->create()->can('forceDelete', $cliente))->toBeFalse();
+    expect(User::factory()->supervisore()->create()->can('forceDelete', $cliente))->toBeTrue();
+});
+
+test('il log di audit resta anche dopo la cancellazione definitiva', function () {
+    Livewire::actingAs(User::factory()->supervisore()->create());
+    $uscita = Uscita::factory()->create();
+    $uscita->delete();
+
+    Livewire::test(Cestino::class)->call('eliminaDefinitivo', 'uscita', $uscita->id);
+
+    // L'entità è sparita, ma la registrazione dell'azione resta (log immutabile).
+    expect(LogAzione::where('azione', 'elimina_definitiva_uscita')->where('entita_id', $uscita->id)->exists())->toBeTrue();
 });

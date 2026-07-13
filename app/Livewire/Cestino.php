@@ -7,6 +7,7 @@ use App\Models\Cliente;
 use App\Models\Rassegna;
 use App\Models\Uscita;
 use App\Services\Audit;
+use App\Services\EliminazioneDefinitiva;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
@@ -35,6 +36,21 @@ class Cestino extends Component
         Audit::registra('ripristina_'.$tipo, $model);
 
         $this->notifica(ucfirst($tipo).' ripristinato.');
+    }
+
+    /**
+     * Cancellazione DEFINITIVA (fisica), irreversibile: solo supervisore (Gate forceDelete),
+     * deroga autorizzata a §10. Registra l'audit PRIMA di distruggere il record.
+     */
+    public function eliminaDefinitivo(string $tipo, int $id, EliminazioneDefinitiva $servizio): void
+    {
+        $model = $this->trovato($tipo, $id);
+        Gate::authorize('forceDelete', $model);
+
+        Audit::registra('elimina_definitiva_'.$tipo, $model, ['id' => $id]);
+        $servizio->elimina($model);
+
+        $this->notifica(ucfirst($tipo).' eliminato definitivamente.', 'error');
     }
 
     private function trovato(string $tipo, int $id): Model

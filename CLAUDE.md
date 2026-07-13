@@ -65,8 +65,10 @@ Mantieni questa tabella con lo **stato** di ogni documento (bozza/firmata/stabil
   Request, relazioni Eloquent invece di query manuali.
 - Ogni modifica allo schema passa da una **migration** + aggiornamento dei `docs/` del
   modello dati nello stesso commit. Mai modifiche manuali al DB.
-- **Soft delete** su Cliente, Rassegna, Uscita: nulla si cancella fisicamente. Un'uscita
-  scartata resta archiviata e recuperabile.
+- **Soft delete** su Cliente, Rassegna, Uscita: la cancellazione normale è soft, il record va
+  nel **cestino** ed è recuperabile. Un'uscita scartata resta archiviata e recuperabile. La
+  **cancellazione definitiva** (fisica, a cascata + file) esiste ma è **solo del supervisore**,
+  dal cestino, con conferma: deroga autorizzata, irreversibile (vedi regole §10, TECH-DEBT).
 - **Storage astratto**: i file (screenshot, PDF pagina, ritagli caricati, rassegne
   generate) si scrivono SEMPRE tramite il filesystem di Laravel (`Storage::disk(...)`),
   mai con percorsi assoluti nel codice. Oggi il disco è locale (cartella dedicata del
@@ -95,7 +97,9 @@ distinzione va nominata apertamente nei verdetti, non ammorbidita.
 
 ## 6. Cosa NON fare
 
-- **Non cancellare fisicamente** clienti, rassegne o uscite: si usa il soft delete.
+- **Non cancellare fisicamente** clienti, rassegne o uscite nell'uso normale: si usa il soft
+  delete (cestino, recuperabile). La cancellazione definitiva è un'eccezione riservata al
+  supervisore, dal cestino, con conferma (deroga autorizzata — regole §10).
 - **Non modificare né cancellare il log di audit**, nemmeno da supervisore. È immutabile.
 - **Non generare il PDF** se restano uscite in stato `candidato` o se un'uscita approvata
   non ha uno screenshot valido (vedi §8, regole di business).
