@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Support\Capture\PageCapturer;
 use App\Support\Capture\PlaywrightCapturer;
+use App\Support\Discovery\ArticleDiscoverySource;
+use App\Support\Discovery\GoogleNewsRss;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -22,6 +24,10 @@ class AppServiceProvider extends ServiceProvider
                 timeoutSecondi: config('capture.timeout'),
             );
         });
+
+        // Fonte di scoperta dietro interfaccia: default Google News/RSS, sostituibile.
+        // I test sostituiscono il binding con un FakeDiscoverySource.
+        $this->app->bind(ArticleDiscoverySource::class, GoogleNewsRss::class);
     }
 
     /**
