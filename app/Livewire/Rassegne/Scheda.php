@@ -81,17 +81,14 @@ class Scheda extends Component
     {
         $this->rassegna->load('cliente');
 
-        // Conteggi per stato in una sola query (UX-02: metriche a colpo d'occhio).
-        $conteggi = $this->rassegna->uscite()
-            ->selectRaw('stato, count(*) as n')
-            ->groupBy('stato')
-            ->pluck('n', 'stato');
+        // Conteggi per stato (fonte unica sul modello: usata anche dalla mappa fasi UX-04).
+        $conteggi = $this->rassegna->conteggiPerStato();
 
-        $candidati = (int) ($conteggi[StatoUscita::Candidato->value] ?? 0);
-        $catturato = (int) ($conteggi[StatoUscita::Catturato->value] ?? 0);
-        $confermato = (int) ($conteggi[StatoUscita::Confermato->value] ?? 0); // in cattura
-        $approvate = (int) ($conteggi[StatoUscita::Approvato->value] ?? 0);
-        $scartate = (int) ($conteggi[StatoUscita::Scartato->value] ?? 0);
+        $candidati = $conteggi[StatoUscita::Candidato->value] ?? 0;
+        $catturato = $conteggi[StatoUscita::Catturato->value] ?? 0;
+        $confermato = $conteggi[StatoUscita::Confermato->value] ?? 0; // in cattura
+        $approvate = $conteggi[StatoUscita::Approvato->value] ?? 0;
+        $scartate = $conteggi[StatoUscita::Scartato->value] ?? 0;
 
         // Passo consigliato contestuale (UX-01): un solo primario, con conteggio.
         $daLavorare = $catturato + $confermato;
@@ -125,6 +122,12 @@ class Scheda extends Component
             'inCattura' => $confermato,
             'prossimo' => $prossimo,
             'nota' => $nota,
+            // Fase evidenziata nello stepper della scheda = quella consigliata.
+            'faseCorrente' => match ($prossimo) {
+                'conferma' => 'candidati',
+                'revisiona' => 'revisione',
+                default => 'pdf',
+            },
         ]);
     }
 }

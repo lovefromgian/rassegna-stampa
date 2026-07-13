@@ -3,6 +3,8 @@
         <a href="{{ route('rassegne.show', $rassegna) }}" wire:navigate>{{ $rassegna->titolo }}</a> / Candidati
     </p>
 
+    @include('partials.fasi-rassegna', ['rassegna' => $rassegna, 'corrente' => 'candidati'])
+
     <div class="page-head spread">
         <div>
             <h1 class="mt-0">Candidati da confermare</h1>

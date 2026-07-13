@@ -3,6 +3,8 @@
         <a href="{{ route('rassegne.show', $rassegna) }}" wire:navigate>{{ $rassegna->titolo }}</a> / Genera PDF
     </p>
 
+    @include('partials.fasi-rassegna', ['rassegna' => $rassegna, 'corrente' => 'pdf'])
+
     <div class="page-head">
         <h1 class="mt-0">Ordine delle uscite e generazione</h1>
         <p>Ordinamento proposto: rilevanza, poi data. Usa le frecce per riordinare — l'ordine è una scelta editoriale.</p>

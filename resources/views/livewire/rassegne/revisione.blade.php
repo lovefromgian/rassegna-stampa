@@ -3,6 +3,8 @@
         <a href="{{ route('rassegne.show', $rassegna) }}" wire:navigate>{{ $rassegna->titolo }}</a> / Revisione
     </p>
 
+    @include('partials.fasi-rassegna', ['rassegna' => $rassegna, 'corrente' => 'revisione'])
+
     <div class="page-head">
         <h1 class="mt-0">Revisione uscita
             @if ($uscita)<span class="muted" style="font-size:15px;font-weight:400;">— {{ $indice }} di {{ $totale }}</span>@endif

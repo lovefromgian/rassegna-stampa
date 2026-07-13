@@ -199,3 +199,25 @@ input.invalid, select.invalid, textarea.invalid { border-color: var(--danger); }
 .mt-0 { margin-top: 0; }
 .right { text-align: right; }
 .spread { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+
+/* Stepper delle fasi della rassegna (UX-04) — riusa i token del design system */
+.fasi { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.fase {
+  display: flex; align-items: center; gap: 8px; text-decoration: none;
+  padding: 8px 14px; border: 1px solid var(--border); border-radius: 999px;
+  background: var(--surface); color: var(--text-secondary); font-size: 14px;
+}
+.fase:hover { background: var(--surface-alt); }
+.fase-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: 50%; font-size: 12px; font-weight: 500;
+  background: var(--border); color: var(--text-secondary);
+}
+.fase.corrente { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
+.fase.corrente .fase-num { background: var(--accent); color: #fff; }
+.fase.completata { color: var(--success); border-color: var(--success); }
+.fase.completata .fase-num { background: var(--success); color: #fff; }
+.fase.attesa { color: var(--text-muted); }
+.fase-badge { font-size: 11px; padding: 1px 7px; border-radius: 10px; background: var(--accent-bg); color: var(--accent); }
+.fase-sep { color: var(--text-muted); }
+@media (max-width: 640px) { .fase-nome { display: none; } }

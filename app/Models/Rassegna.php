@@ -64,6 +64,22 @@ class Rassegna extends Model
     }
 
     /**
+     * Conteggi delle uscite per stato, in una sola query. Fonte unica per le metriche
+     * della scheda (UX-02) e per la mappa delle fasi (UX-04): non si duplica il conteggio.
+     *
+     * @return array<string, int> stato (valore enum) => numero
+     */
+    public function conteggiPerStato(): array
+    {
+        return $this->uscite()
+            ->selectRaw('stato, count(*) as n')
+            ->groupBy('stato')
+            ->pluck('n', 'stato')
+            ->map(fn ($n) => (int) $n)
+            ->all();
+    }
+
+    /**
      * Rassegne con periodo di monitoraggio attivo: inizio ≤ oggi ≤ fine.
      * Usato dallo scheduler per la scansione giornaliera (regole-business.md §2).
      *

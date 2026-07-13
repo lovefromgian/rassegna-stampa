@@ -35,6 +35,8 @@
         </div>
     </div>
 
+    @include('partials.fasi-rassegna', ['rassegna' => $rassegna, 'corrente' => $faseCorrente])
+
     {{-- Metriche a colpo d'occhio (UX-02, mockup 05): dagli stati delle uscite --}}
     <div class="metrics">
         <div class="metric"><div class="label">Candidati da decidere</div><div class="value">{{ $metriche['candidati'] }}</div></div>
