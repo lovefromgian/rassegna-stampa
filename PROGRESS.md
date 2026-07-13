@@ -72,6 +72,11 @@
   (`Gate::authorize('delete')`), fa soft delete, registra l'audit (`elimina_cliente` /
   `elimina_rassegna`) e reindirizza. Test `EliminazioneTest` (6): supervisore elimina,
   operatore riceve 403, bottone assente per l'operatore. Uscite: resta lo "scarto" (§10).
+- **Cestino (collaudo):** schermata `Cestino` (rotta `cestino.index`, solo supervisore, voce
+  in topbar) che elenca clienti/rassegne/uscite in soft delete e permette il **ripristino**
+  (Policy `restore` + audit `ripristina_*`). Test `CestinoTest` (6). **Cancellazione
+  definitiva NON implementata**: vietata dalla specifica (§6/§10, `forceDelete → false`);
+  in attesa di decisione dell'utente se derogare (richiederebbe update spec + Policy + TD).
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file

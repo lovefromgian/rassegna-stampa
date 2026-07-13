@@ -6,6 +6,9 @@
         <a href="{{ route('archivio.index') }}" class="{{ request()->routeIs('archivio.*') ? 'active' : '' }}">Archivio</a>
         <a href="{{ route('statistiche.index') }}" class="{{ request()->routeIs('statistiche.*') ? 'active' : '' }}">Statistiche</a>
         <a href="{{ route('log.index') }}" class="{{ request()->routeIs('log.*') ? 'active' : '' }}">Log</a>
+        @if (auth()->user()->isSupervisore())
+            <a href="{{ route('cestino.index') }}" class="{{ request()->routeIs('cestino.*') ? 'active' : '' }}">Cestino</a>
+        @endif
     </nav>
     <div class="user">
         <span>{{ auth()->user()->name }} · {{ auth()->user()->ruolo->etichetta() }}</span>

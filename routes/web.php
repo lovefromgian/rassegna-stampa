@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentoDownloadController;
 use App\Livewire\Archivio;
 use App\Livewire\Audit;
+use App\Livewire\Cestino;
 use App\Livewire\Clienti;
 use App\Livewire\Rassegne;
 use App\Livewire\Statistiche;
@@ -45,4 +46,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/rassegne/{rassegna}/log', Audit\Registro::class)->name('rassegne.log');
     Route::get('/archivio', Archivio::class)->name('archivio.index');
     Route::get('/statistiche', Statistiche::class)->name('statistiche.index');
+    Route::get('/cestino', Cestino::class)->name('cestino.index');
 });
