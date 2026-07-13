@@ -22,3 +22,7 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Cattura pagine (artefatti temporanei e durevoli locali)
+/storage/app/capture-tmp
+/storage/app/public/catture
