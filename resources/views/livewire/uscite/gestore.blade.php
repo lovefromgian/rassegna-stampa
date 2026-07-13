@@ -1,4 +1,13 @@
 <div>
+    <p class="crumbs">
+        <a href="{{ route('rassegne.show', $rassegna) }}" wire:navigate>{{ $rassegna->titolo }}</a> / Uscite
+    </p>
+
+    <div class="page-head">
+        <h1 class="mt-0">Gestione uscite</h1>
+        <p>Aggiungi uscite a mano, cattura, ricattura, sostituisci il file o scarta. Il riepilogo è sulla scheda della rassegna.</p>
+    </div>
+
     <div class="card">
         <div class="spread" style="margin-bottom:12px;">
             <h2 style="margin:0;">Uscite raccolte ({{ $uscite->count() }})</h2>

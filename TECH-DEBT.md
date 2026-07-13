@@ -59,17 +59,15 @@ Formato voce: `TD-xxx` · titolo · motivo · rischio · azione prevista · file
   restituisce l'URL diretto (API a pagamento), essendo la fonte dietro interfaccia.
 - **File:** `app/Support/Discovery/GoogleNewsRss.php`, `app/Jobs/CatturaUscita.php`.
 
-### TD-006 — Ticket UX residui (UX-03/05/06)
-- **Motivo:** la revisione UX di Cowork (`REVISIONE-UX.md`) elenca 6 interventi. Fatti i tre
-  a maggior impatto (UX-01 prossimo passo contestuale, UX-02 metriche, UX-04 stepper delle
-  fasi). Restano scostamenti noti dai mockup: **UX-03** la scheda incorpora ancora il gestore
-  uscite completo invece di una lista compatta in sola lettura; **UX-05** stili inline da
+### TD-006 — Ticket UX residui (UX-05/06)
+- **Motivo:** la revisione UX di Cowork (`REVISIONE-UX.md`) elenca 6 interventi. Fatti i
+  quattro a maggior impatto (UX-01 prossimo passo, UX-02 metriche, UX-04 stepper, UX-03
+  alleggerimento scheda). Restano scostamenti noti dai mockup: **UX-05** stili inline da
   consolidare in utility; **UX-06** riga del gestore troppo densa.
 - **Rischio:** **basso** — solo UI/UX; funzionalità e permessi invariati.
-- **Azione prevista:** implementare UX-03/05/06 in una sessione successiva seguendo l'ordine
-  consigliato in `REVISIONE-UX.md` (UX-03 → UX-05 → UX-06).
-- **File:** `resources/views/livewire/rassegne/scheda.blade.php`,
-  `resources/views/livewire/uscite/gestore.blade.php`.
+- **Azione prevista:** implementare UX-05/06 in una sessione successiva seguendo l'ordine
+  consigliato in `REVISIONE-UX.md` (UX-05 → UX-06).
+- **File:** `resources/views/livewire/uscite/gestore.blade.php`, viste con `style=` inline.
 
 ### TD-005 — Snippet di scoperta salvato in testo_estratto
 - **Motivo:** in scansione lo snippet del feed è salvato provvisoriamente in

@@ -6,6 +6,7 @@ use App\Enums\StatoRassegna;
 use App\Enums\StatoUscita;
 use App\Livewire\Concerns\NotificaUtente;
 use App\Models\Rassegna;
+use App\Models\Uscita;
 use App\Services\Audit;
 use App\Services\BlocchiGenerazione;
 use Illuminate\Contracts\View\View;
@@ -128,6 +129,12 @@ class Scheda extends Component
                 'revisiona' => 'revisione',
                 default => 'pdf',
             },
+            // Elenco compatto in sola lettura (UX-03): la gestione pesante vive altrove.
+            'uscite' => $this->rassegna->uscite()
+                ->with('testata')
+                ->orderByDesc('data_pubblicazione')
+                ->get(),
+            'puoAggiungere' => Gate::allows('create', Uscita::class),
         ]);
     }
 }

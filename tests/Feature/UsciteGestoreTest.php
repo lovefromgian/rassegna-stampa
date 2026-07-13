@@ -18,13 +18,28 @@ beforeEach(function () {
     Livewire::actingAs(User::factory()->operatore()->create());
 });
 
-test('la scheda rassegna monta il gestore uscite', function () {
+test('la gestione uscite vive nella schermata dedicata, non nella scheda', function () {
     $rassegna = Rassegna::factory()->create();
+    Uscita::factory()->for($rassegna)->catturato()->create();
 
-    $this->actingAs(User::factory()->operatore()->create())
-        ->get(route('rassegne.show', $rassegna))
+    $utente = User::factory()->operatore()->create();
+
+    // La scheda mostra il riepilogo compatto e SOLO il link "Aggiungi a mano",
+    // senza le azioni di gestione (aggiunta form, ricattura, sostituzione, scarto).
+    $scheda = $this->actingAs($utente)->get(route('rassegne.show', $rassegna));
+    $scheda->assertOk()
+        ->assertSee('Uscite raccolte')
+        ->assertSee('Aggiungi a mano')
+        ->assertDontSee('Ricattura')
+        ->assertDontSee('Sostituisci file')
+        ->assertDontSee('>Scarta<', false)
+        ->assertDontSee('+ Aggiungi uscita');
+
+    // La schermata dedicata monta il gestore con le sue azioni.
+    $this->actingAs($utente)->get(route('rassegne.uscite', $rassegna))
         ->assertOk()
-        ->assertSee('Uscite raccolte');
+        ->assertSee('Gestione uscite')
+        ->assertSee('+ Aggiungi uscita');
 });
 
 test('aggiunta manuale di un\'uscita online: crea testata, uscita confermata e accoda la cattura', function () {

@@ -99,6 +99,31 @@
         </div>
     </div>
 
-    <div id="uscite"></div>
-    <livewire:uscite.gestore :rassegna="$rassegna" :key="'uscite-'.$rassegna->id" />
+    {{-- Elenco compatto in sola lettura (UX-03): nessuna azione di gestione qui --}}
+    <div class="card">
+        <div class="spread" style="margin-bottom:12px;">
+            <h2 style="margin:0;">Uscite raccolte ({{ $uscite->count() }})</h2>
+            @if ($puoAggiungere)
+                <a class="btn small" href="{{ route('rassegne.uscite', $rassegna) }}" wire:navigate style="text-decoration:none;">Aggiungi a mano</a>
+            @endif
+        </div>
+
+        <div class="list">
+            @forelse ($uscite as $uscita)
+                <a class="row" href="{{ route('rassegne.uscite', $rassegna) }}" wire:navigate style="text-decoration:none;color:inherit;">
+                    @if ($uscita->screenshot_path)
+                        <img src="{{ \Illuminate\Support\Facades\Storage::disk(config('capture.disk'))->url($uscita->screenshot_path) }}"
+                             alt="" style="width:56px;height:42px;object-fit:cover;object-position:top;border:1px solid var(--border);border-radius:4px;flex-shrink:0;">
+                    @endif
+                    <div class="main">
+                        <div class="title">{{ $uscita->testata->nome }}@if ($uscita->pagina_giornale) · {{ $uscita->pagina_giornale }}@endif</div>
+                        <div class="sub">{{ \Illuminate\Support\Str::limit($uscita->titolo, 80) }} · {{ $uscita->data_pubblicazione->format('d/m/Y') }}</div>
+                    </div>
+                    <x-stato-uscita :uscita="$uscita" />
+                </a>
+            @empty
+                <div class="empty">Nessuna uscita raccolta. Attendi le scansioni automatiche oppure <a href="{{ route('rassegne.uscite', $rassegna) }}" wire:navigate>aggiungine una a mano</a>.</div>
+            @endforelse
+        </div>
+    </div>
 </div>

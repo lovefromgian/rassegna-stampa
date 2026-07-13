@@ -48,7 +48,7 @@
                     @if ($uscita->richiedeCatturaWeb())
                         <button class="btn" wire:click="ricattura">Ricattura</button>
                     @endif
-                    <a class="btn" href="{{ route('rassegne.show', $rassegna) }}#uscite" wire:navigate style="text-decoration:none;text-align:center;">Gestisci file</a>
+                    <a class="btn" href="{{ route('rassegne.uscite', $rassegna) }}" wire:navigate style="text-decoration:none;text-align:center;">Gestisci file</a>
                 </div>
                 <div class="note" style="margin-top:12px;">Se il banner cookie copre l'articolo o il paywall lo tronca, ricattura oppure carica a mano un file dalla scheda uscite.</div>
             </div>

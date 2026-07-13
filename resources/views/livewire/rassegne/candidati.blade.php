@@ -74,7 +74,7 @@
             </div>
         @endif
 
-        <a class="btn wide" href="{{ route('rassegne.show', $rassegna) }}#uscite" wire:navigate style="margin-top:10px;text-decoration:none;text-align:center;">
+        <a class="btn wide" href="{{ route('rassegne.uscite', $rassegna) }}" wire:navigate style="margin-top:10px;text-decoration:none;text-align:center;">
             + Aggiungi un'uscita manualmente (URL o ritaglio cartaceo)
         </a>
 
