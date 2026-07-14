@@ -161,8 +161,11 @@ class Gestore extends Component
             Storage::disk(config('capture.disk'))->delete($uscita->file_caricato_path);
         }
 
+        // Il file caricato a mano diventa IL materiale: azzero lo screenshot automatico.
         $uscita->update([
             'file_caricato_path' => $this->fileSostitutivo->store('ritagli', config('capture.disk')),
+            'screenshot_path' => null,
+            'pdf_pagina_path' => null,
             'stato' => StatoUscita::Catturato,
             'stato_cattura' => null,
             'errore_cattura' => null,

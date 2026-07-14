@@ -73,6 +73,7 @@ test('si può sostituire il file direttamente dalla revisione, restando sull\'us
 
     $uscita->refresh();
     expect($uscita->file_caricato_path)->not->toBeNull()
+        ->and($uscita->screenshot_path)->toBeNull() // il vecchio screenshot è sostituito
         ->and($uscita->errore_cattura)->toBeNull();
     Storage::disk('public')->assertExists($uscita->file_caricato_path);
 });

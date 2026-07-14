@@ -109,8 +109,11 @@
 - **Revisione: sostituzione file in-place (collaudo):** il pulsante "Gestisci file" portava
   al gestore (altra schermata). Ora la Revisione ha l'**upload del file sostitutivo lì
   dentro** (accanto a "Ricattura"): si carica screenshot/ritaglio e si **resta sulla stessa
-  uscita** per poi approvare, senza cambiare finestra. Rimosso il link "Gestisci file". Test
-  in `RevisioneTest`.
+  uscita** per poi approvare, senza cambiare finestra. Rimosso il link "Gestisci file".
+  **Fix anteprima:** la sostituzione manuale ora **azzera lo screenshot automatico** (vecchio/
+  rovinato) e diventa IL materiale, così l'anteprima e il PDF usano il nuovo file (prima
+  l'anteprima mostrava ancora il vecchio screenshot). Vale anche per la sostituzione dal
+  gestore. Test in `RevisioneTest`.
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file

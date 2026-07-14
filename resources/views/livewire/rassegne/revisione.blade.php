@@ -37,13 +37,21 @@
                     @endif
                 </div>
 
-                @if ($uscita->screenshot_path)
-                    <img src="{{ \Illuminate\Support\Facades\Storage::disk(config('capture.disk'))->url($uscita->screenshot_path) }}"
-                         alt="Screenshot" style="width:100%;border:1px solid var(--border);border-radius:6px;max-height:520px;object-fit:cover;object-position:top;">
-                @elseif ($uscita->file_caricato_path)
-                    <div class="note">File caricato a mano: {{ basename($uscita->file_caricato_path) }}</div>
+                @php
+                    $materiale = $uscita->screenshot_path ?: $uscita->file_caricato_path;
+                    $isImmagine = $materiale && \Illuminate\Support\Str::endsWith(
+                        \Illuminate\Support\Str::lower($materiale), ['.png', '.jpg', '.jpeg', '.gif', '.webp']
+                    );
+                @endphp
+                @if ($isImmagine)
+                    {{-- key col path: forza il refresh dell'<img> quando il file cambia --}}
+                    <img wire:key="materiale-{{ $materiale }}"
+                         src="{{ \Illuminate\Support\Facades\Storage::disk(config('capture.disk'))->url($materiale) }}"
+                         alt="Anteprima" style="width:100%;border:1px solid var(--border);border-radius:6px;max-height:520px;object-fit:cover;object-position:top;">
+                @elseif ($materiale)
+                    <div class="note">File allegato: {{ basename($materiale) }} (anteprima non disponibile per i PDF).</div>
                 @else
-                    <div class="shot" style="min-height:200px;">Nessuno screenshot né file. Ricattura o carica un file dalla scheda uscite.</div>
+                    <div class="shot" style="min-height:200px;">Nessuno screenshot né file. Usa Ricattura o carica un file qui sotto.</div>
                 @endif
 
                 @if ($uscita->errore_cattura)
