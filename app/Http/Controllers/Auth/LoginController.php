@@ -36,6 +36,14 @@ class LoginController extends Controller
             ]);
         }
 
+        // Accesso revocato: utente disattivato dal supervisore.
+        if (! Auth::user()->attivo) {
+            Auth::logout();
+            throw ValidationException::withMessages([
+                'email' => 'Questo account è disattivato. Contatta un supervisore.',
+            ]);
+        }
+
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard'));

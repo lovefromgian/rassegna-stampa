@@ -29,7 +29,12 @@ User — supervisore | operatore
 | `email` | string, unique | |
 | `password` | string | hash |
 | `ruolo` | enum | `supervisore` \| `operatore` |
+| `attivo` | bool | default `true`; se `false` l'accesso è revocato (utente non cancellato) |
 | timestamps | | |
+
+Gli utenti li gestisce il **supervisore** (crea, modifica, attiva/disattiva). Nessuna
+auto-registrazione. Non si cancellano fisicamente: si **disattivano** (`attivo = false`),
+così il log di audit che li referenzia resta integro.
 
 Nessuna segmentazione per cliente: ogni utente vede tutti i clienti dell'agenzia.
 

@@ -116,9 +116,9 @@ versionato.
 
 **Ruoli (due):**
 - **Supervisore** — tutto: anagrafica clienti e impostazioni, eliminazioni, riapertura di
-  una rassegna chiusa.
+  una rassegna chiusa, **gestione utenti** (crea/modifica, attiva/disattiva l'accesso).
 - **Operatore** — crea rassegne, conferma/scarta candidati, revisiona catture, genera il
-  PDF. Non tocca l'anagrafica clienti, non elimina.
+  PDF. Non tocca l'anagrafica clienti, non elimina, non gestisce utenti.
 
 Nessuna segmentazione per cliente: ogni utente vede tutti i clienti dell'agenzia.
 

@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + stepper 5 voci + eliminazione uscite · 15 lug 2026 · 120 test verdi (319 asserzioni)
+**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + gestione utenti · 15 lug 2026 · 129 test verdi (347 asserzioni)
 
 ## ▶ RIPRENDI DA QUI
 

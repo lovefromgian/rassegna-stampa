@@ -10,6 +10,7 @@ use App\Livewire\Clienti;
 use App\Livewire\Rassegne;
 use App\Livewire\Statistiche;
 use App\Livewire\Uscite;
+use App\Livewire\Utenti;
 use Illuminate\Support\Facades\Route;
 
 // Ospiti: login
@@ -47,4 +48,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/archivio', Archivio::class)->name('archivio.index');
     Route::get('/statistiche', Statistiche::class)->name('statistiche.index');
     Route::get('/cestino', Cestino::class)->name('cestino.index');
+
+    // Gestione utenti (solo supervisore, filtrato dalle Policy nei componenti)
+    Route::get('/utenti', Utenti\Elenco::class)->name('utenti.index');
+    Route::get('/utenti/nuovo', Utenti\Modifica::class)->name('utenti.create');
+    Route::get('/utenti/{utente}/modifica', Utenti\Modifica::class)->name('utenti.edit');
 });
