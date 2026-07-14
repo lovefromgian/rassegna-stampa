@@ -105,15 +105,12 @@ class Scheda extends Component
         $candidati = $conteggi[StatoUscita::Candidato->value] ?? 0;
         $catturato = $conteggi[StatoUscita::Catturato->value] ?? 0;
         $confermato = $conteggi[StatoUscita::Confermato->value] ?? 0; // in cattura
-        $approvate = $conteggi[StatoUscita::Approvato->value] ?? 0;
-        $scartate = $conteggi[StatoUscita::Scartato->value] ?? 0;
 
-        // Passo consigliato contestuale (UX-01): un solo primario, con conteggio.
-        $daLavorare = $catturato + $confermato;
-        $prossimo = match (true) {
-            $this->rassegna->stato === StatoRassegna::Chiusa => 'chiusa',
-            $candidati > 0 => 'conferma',
-            $daLavorare > 0 => 'revisiona',
+        // Voce dello stepper evidenziata sulla scheda = fase consigliata dallo stato.
+        $faseCorrente = match (true) {
+            $this->rassegna->stato === StatoRassegna::Chiusa => 'pdf',
+            $candidati > 0 => 'candidati',
+            $catturato + $confermato > 0 => 'revisione',
             default => 'pdf',
         };
 
@@ -131,21 +128,8 @@ class Scheda extends Component
             'puoModificare' => Gate::allows('update', $this->rassegna),
             'puoEliminare' => Gate::allows('delete', $this->rassegna),
             'puoRiaprire' => Gate::allows('riapri', $this->rassegna),
-            'metriche' => [
-                'candidati' => $candidati,
-                'daRevisionare' => $catturato,
-                'approvate' => $approvate,
-                'scartate' => $scartate,
-            ],
-            'inCattura' => $confermato,
-            'prossimo' => $prossimo,
             'nota' => $nota,
-            // Fase evidenziata nello stepper della scheda = quella consigliata.
-            'faseCorrente' => match ($prossimo) {
-                'conferma' => 'candidati',
-                'revisiona' => 'revisione',
-                default => 'pdf',
-            },
+            'faseCorrente' => $faseCorrente,
             // Elenco compatto in sola lettura (UX-03): la gestione pesante vive altrove.
             'uscite' => $this->rassegna->uscite()
                 ->with('testata')

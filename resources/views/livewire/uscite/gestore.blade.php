@@ -3,6 +3,8 @@
         <a href="{{ route('rassegne.show', $rassegna) }}" wire:navigate>{{ $rassegna->titolo }}</a> / Uscite
     </p>
 
+    @include('partials.fasi-rassegna', ['rassegna' => $rassegna, 'corrente' => $faseCorrente])
+
     <div class="page-head">
         <h1 class="mt-0">Gestione uscite</h1>
         <p>Aggiungi uscite a mano, cattura, ricattura, sostituisci il file o scarta. Il riepilogo è sulla scheda della rassegna.</p>

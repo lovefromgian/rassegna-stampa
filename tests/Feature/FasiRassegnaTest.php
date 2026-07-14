@@ -5,6 +5,7 @@ use App\Livewire\Rassegne\Candidati;
 use App\Livewire\Rassegne\OrdinePdf;
 use App\Livewire\Rassegne\Revisione;
 use App\Livewire\Rassegne\Scheda;
+use App\Livewire\Uscite\Gestore;
 use App\Models\DocumentoGenerato;
 use App\Models\Rassegna;
 use App\Models\Uscita;
@@ -61,4 +62,28 @@ test('sulla scheda la fase corrente dello stepper è quella consigliata', functi
 
     Livewire::test(Scheda::class, ['rassegna' => $rassegna])
         ->assertSeeHtml('data-fase="candidati" data-stato="corrente"');
+});
+
+test('lo stepper ha le voci Approvate e Scartate, coi loro conteggi e link filtrati', function () {
+    $rassegna = Rassegna::factory()->create();
+    Uscita::factory()->count(3)->for($rassegna)->approvato()->create();
+    Uscita::factory()->count(2)->for($rassegna)->scartato()->create();
+
+    Livewire::test(Scheda::class, ['rassegna' => $rassegna])
+        ->assertSeeHtml('data-fase="approvate" data-stato="vista"')
+        ->assertSeeHtml('data-fase="scartate" data-stato="vista"')
+        // Le voci portano all'elenco filtrato delle uscite.
+        ->assertSeeHtml('href="'.route('rassegne.uscite', ['rassegna' => $rassegna, 'stato' => 'approvato']).'"')
+        ->assertSeeHtml('href="'.route('rassegne.uscite', ['rassegna' => $rassegna, 'stato' => 'scartato']).'"')
+        ->assertSee('Approvate')
+        ->assertSee('Scartate');
+});
+
+test('nel gestore filtrato la voce corrispondente dello stepper è evidenziata', function () {
+    $rassegna = Rassegna::factory()->create();
+    Uscita::factory()->for($rassegna)->scartato()->create();
+
+    Livewire::test(Gestore::class, ['rassegna' => $rassegna])
+        ->set('filtroStato', StatoUscita::Scartato->value)
+        ->assertSeeHtml('data-fase="scartate" data-stato="corrente"');
 });

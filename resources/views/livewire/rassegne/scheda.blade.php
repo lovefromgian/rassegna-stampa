@@ -38,29 +38,13 @@
         </div>
     </div>
 
+    {{-- Le fasi in alto sono la navigazione: Candidati → Revisione → Approvate →
+         Ordine/PDF → Scartate, ognuna col suo conteggio. Niente quadrati/pulsanti sotto. --}}
     @include('partials.fasi-rassegna', ['rassegna' => $rassegna, 'corrente' => $faseCorrente])
 
-    {{-- Metriche a colpo d'occhio, CLICCABILI: ognuna porta alla sua schermata --}}
-    <div class="metrics">
-        <a class="metric plain" href="{{ route('rassegne.candidati', $rassegna) }}" wire:navigate>
-            <div class="label">Candidati da decidere</div><div class="value">{{ $metriche['candidati'] }}</div>
-        </a>
-        <a class="metric plain" href="{{ route('rassegne.revisione', $rassegna) }}" wire:navigate>
-            <div class="label">Da revisionare</div><div class="value">{{ $metriche['daRevisionare'] }}</div>
-        </a>
-        <a class="metric plain" href="{{ route('rassegne.pdf', $rassegna) }}" wire:navigate>
-            <div class="label">Approvate</div><div class="value">{{ $metriche['approvate'] }}</div>
-        </a>
-        <a class="metric plain" href="{{ route('rassegne.uscite', ['rassegna' => $rassegna, 'stato' => \App\Enums\StatoUscita::Scartato->value]) }}" wire:navigate>
-            <div class="label">Scartate</div><div class="value">{{ $metriche['scartate'] }}</div>
-        </a>
-    </div>
-
-    {{-- Un solo pulsante: ordina e genera il PDF --}}
-    <div class="card">
-        <a class="btn primary wide" href="{{ route('rassegne.pdf', $rassegna) }}" wire:navigate>Ordina e genera il PDF</a>
-        <div class="note mt-3">{{ $nota }}</div>
-    </div>
+    @if ($nota)
+        <div class="note mb-3">{{ $nota }}</div>
+    @endif
 
     <div class="card">
         <h2>Parole chiave</h2>

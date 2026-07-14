@@ -246,6 +246,7 @@ input.invalid, select.invalid, textarea.invalid { border-color: var(--danger); }
 .fase.completata { color: var(--success); border-color: var(--success); }
 .fase.completata .fase-num { background: var(--success); color: #fff; }
 .fase.attesa { color: var(--text-muted); }
+.fase.vista { color: var(--text-secondary); } /* Approvate/Scartate: elenchi navigabili */
 .fase-badge { font-size: 11px; padding: 1px 7px; border-radius: 10px; background: var(--accent-bg); color: var(--accent); }
 .fase-sep { color: var(--text-muted); }
 @media (max-width: 640px) { .fase-nome { display: none; } }

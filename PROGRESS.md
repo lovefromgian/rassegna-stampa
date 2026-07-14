@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + metriche cliccabili + filtro uscite · 15 lug 2026 · 115 test verdi (297 asserzioni)
+**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + stepper a 5 voci come navigazione · 15 lug 2026 · 115 test verdi (303 asserzioni)
 
 ## ▶ RIPRENDI DA QUI
 
@@ -97,9 +97,15 @@
   (con la nota che spiega l'eventuale blocco). Supera la UI a bottoni contestuali di UX-01
   (la logica dei conteggi e lo stepper UX-04 restano). Test `SchedaProssimoPassoTest`
   aggiornati (metriche-link, pulsante unico, nota, conteggi).
-- **Gestore uscite: filtro per stato (collaudo):** menu a tendina + `#[Url] filtroStato`, e
-  il quadrato "Scartate" arriva già filtrato (`?stato=scartato`) → mostra solo le scartate.
-  Test in `UsciteGestoreTest`.
+- **Gestore uscite: filtro per stato (collaudo):** menu a tendina + `#[Url] filtroStato`.
+- **Stepper a 5 voci come navigazione unica (collaudo):** su richiesta utente lo stepper in
+  alto è ora la navigazione principale: **Candidati → Revisione → Approvate → Ordine/PDF →
+  Scartate**, ognuna col suo conteggio; Approvate/Scartate portano all'elenco filtrato delle
+  uscite (`?stato=approvato|scartato`); lo stepper compare anche nel gestore. **Rimossi** i
+  quadrati-metriche e il pulsante "Genera PDF" sulla scheda (tutto gestito dalle voci in alto;
+  la nota di blocco resta). Supera la UI metriche+bottoni di UX-01/02. Test
+  `SchedaProssimoPassoTest` + `FasiRassegnaTest` aggiornati (voci, conteggi, link filtrati,
+  evidenziazione nel gestore).
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file

@@ -201,6 +201,12 @@ class Gestore extends Component
             'isOnline' => $this->tipo_media === TipoMedia::Online->value,
             'puoAggiungere' => Gate::allows('create', Uscita::class),
             'statiInCattura' => [StatoCattura::InAttesa, StatoCattura::InCorso],
+            // Voce evidenziata nello stepper quando si arriva filtrati da Approvate/Scartate.
+            'faseCorrente' => match ($this->filtroStato) {
+                StatoUscita::Approvato->value => 'approvate',
+                StatoUscita::Scartato->value => 'scartate',
+                default => null,
+            },
         ]);
     }
 }

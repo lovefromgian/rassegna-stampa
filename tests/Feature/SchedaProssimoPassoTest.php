@@ -11,26 +11,18 @@ beforeEach(function () {
     Livewire::actingAs(User::factory()->operatore()->create());
 });
 
-test('le metriche sono cliccabili e portano alle rispettive schermate', function () {
+test('la scheda usa lo stepper a 5 voci come navigazione (niente quadrati/pulsanti sotto)', function () {
     $rassegna = Rassegna::factory()->create();
 
     Livewire::test(Scheda::class, ['rassegna' => $rassegna])
-        ->assertSeeHtml('href="'.route('rassegne.candidati', $rassegna).'"')
-        ->assertSeeHtml('href="'.route('rassegne.revisione', $rassegna).'"')
-        ->assertSeeHtml('href="'.route('rassegne.pdf', $rassegna).'"')
-        // "Scartate" arriva al gestore già filtrato sulle scartate.
-        ->assertSeeHtml('href="'.route('rassegne.uscite', ['rassegna' => $rassegna, 'stato' => 'scartato']).'"');
-});
-
-test('sotto le metriche c\'è un solo pulsante per generare il PDF', function () {
-    $rassegna = Rassegna::factory()->create();
-    Uscita::factory()->for($rassegna)->approvato()->create();
-
-    Livewire::test(Scheda::class, ['rassegna' => $rassegna])
-        ->assertSee('Ordina e genera il PDF')
-        // I vecchi bottoni contestuali non ci sono più: la navigazione è nelle metriche.
-        ->assertDontSee('Conferma i')
-        ->assertDontSee('Revisiona le');
+        ->assertSeeHtml('data-fase="candidati"')
+        ->assertSeeHtml('data-fase="revisione"')
+        ->assertSeeHtml('data-fase="approvate"')
+        ->assertSeeHtml('data-fase="pdf"')
+        ->assertSeeHtml('data-fase="scartate"')
+        // I vecchi quadrati e il pulsante contestuale non ci sono più.
+        ->assertDontSee('Candidati da decidere')
+        ->assertDontSee('Ordina e genera il PDF');
 });
 
 test('la nota mostra il motivo reale di blocco del PDF', function () {
@@ -39,20 +31,4 @@ test('la nota mostra il motivo reale di blocco del PDF', function () {
 
     Livewire::test(Scheda::class, ['rassegna' => $rassegna])
         ->assertSee('4 uscite ancora da confermare o scartare');
-});
-
-test('le metriche mostrano i conteggi per stato (UX-02)', function () {
-    $rassegna = Rassegna::factory()->create();
-    Uscita::factory()->count(2)->for($rassegna)->create(['stato' => StatoUscita::Candidato]);
-    Uscita::factory()->count(1)->for($rassegna)->catturato()->create();
-    Uscita::factory()->count(3)->for($rassegna)->approvato()->create();
-    Uscita::factory()->count(4)->for($rassegna)->scartato()->create();
-
-    Livewire::test(Scheda::class, ['rassegna' => $rassegna])
-        ->assertSeeInOrder([
-            'Candidati da decidere', '2',
-            'Da revisionare', '1',
-            'Approvate', '3',
-            'Scartate', '4',
-        ]);
 });
