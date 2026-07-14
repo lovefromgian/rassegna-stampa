@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + stepper a 5 voci come navigazione · 15 lug 2026 · 115 test verdi (303 asserzioni)
+**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + stepper 5 voci + sostituzione file in-place · 15 lug 2026 · 116 test verdi (309 asserzioni)
 
 ## ▶ RIPRENDI DA QUI
 
@@ -106,6 +106,11 @@
   la nota di blocco resta). Supera la UI metriche+bottoni di UX-01/02. Test
   `SchedaProssimoPassoTest` + `FasiRassegnaTest` aggiornati (voci, conteggi, link filtrati,
   evidenziazione nel gestore).
+- **Revisione: sostituzione file in-place (collaudo):** il pulsante "Gestisci file" portava
+  al gestore (altra schermata). Ora la Revisione ha l'**upload del file sostitutivo lì
+  dentro** (accanto a "Ricattura"): si carica screenshot/ritaglio e si **resta sulla stessa
+  uscita** per poi approvare, senza cambiare finestra. Rimosso il link "Gestisci file". Test
+  in `RevisioneTest`.
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file

@@ -9,6 +9,8 @@ use App\Models\LogAzione;
 use App\Models\Rassegna;
 use App\Models\Uscita;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 
 beforeEach(function () {
@@ -53,6 +55,26 @@ test('scartare un\'uscita in revisione la porta a scartato e avanza', function (
 
     expect($uscita->fresh()->stato)->toBe(StatoUscita::Scartato);
     expect(LogAzione::where('azione', 'scarto_uscita')->exists())->toBeTrue();
+});
+
+test('si può sostituire il file direttamente dalla revisione, restando sull\'uscita', function () {
+    Storage::fake('public');
+    $rassegna = Rassegna::factory()->create();
+    $uscita = Uscita::factory()->for($rassegna)->catturato()->create([
+        'errore_cattura' => 'Paywall', 'stato_cattura' => StatoCattura::Errore,
+    ]);
+
+    Livewire::test(Revisione::class, ['rassegna' => $rassegna])
+        ->assertSet('correnteId', $uscita->id)
+        ->set('fileSostitutivo', UploadedFile::fake()->image('mio-screenshot.png'))
+        ->call('sostituisciFile')
+        ->assertHasNoErrors()
+        ->assertSet('correnteId', $uscita->id); // resta sulla stessa uscita
+
+    $uscita->refresh();
+    expect($uscita->file_caricato_path)->not->toBeNull()
+        ->and($uscita->errore_cattura)->toBeNull();
+    Storage::disk('public')->assertExists($uscita->file_caricato_path);
 });
 
 test('senza uscite catturate la revisione è completata', function () {

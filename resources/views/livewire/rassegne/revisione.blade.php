@@ -50,13 +50,25 @@
                     <div class="flash danger" style="margin-top:10px;"><strong>Errore cattura:</strong> {{ $uscita->errore_cattura }}</div>
                 @endif
 
-                <div class="actions mt-2">
-                    @if ($uscita->richiedeCatturaWeb())
+                @if ($uscita->richiedeCatturaWeb())
+                    <div class="actions mt-2">
                         <button class="btn" wire:click="ricattura">Ricattura</button>
-                    @endif
-                    <a class="btn" href="{{ route('rassegne.uscite', $rassegna) }}" wire:navigate>Gestisci file</a>
+                    </div>
+                @endif
+
+                {{-- Sostituzione file direttamente qui: niente cambio schermata --}}
+                <div class="mt-2">
+                    <label class="field" for="fileSostitutivo">Sostituisci il file (screenshot o ritaglio: jpg, png, pdf)</label>
+                    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                        <input type="file" id="fileSostitutivo" wire:model="fileSostitutivo" accept="image/*,application/pdf">
+                        <button class="btn small primary" wire:click="sostituisciFile" wire:loading.attr="disabled" wire:target="sostituisciFile,fileSostitutivo">
+                            <span wire:loading.remove wire:target="fileSostitutivo">Carica</span>
+                            <span wire:loading wire:target="fileSostitutivo">Caricamento…</span>
+                        </button>
+                    </div>
+                    @error('fileSostitutivo') <div class="field-error">{{ $message }}</div> @enderror
                 </div>
-                <div class="note mt-2">Se il banner cookie copre l'articolo o il paywall lo tronca, ricattura oppure carica a mano un file dalla scheda uscite.</div>
+                <div class="note mt-2">Se il banner cookie copre l'articolo o il paywall lo tronca: <strong>Ricattura</strong> (rifà lo screenshot dal web) oppure carica qui un file tuo.</div>
             </div>
 
             <div>

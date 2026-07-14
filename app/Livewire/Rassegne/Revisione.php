@@ -13,9 +13,11 @@ use App\Services\Audit;
 use App\Services\GestioneCattura;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 /**
  * Revisione delle uscite catturate (mockup 07): l'operatore verifica la cattura, corregge
@@ -24,7 +26,7 @@ use Livewire\Component;
  */
 class Revisione extends Component
 {
-    use NotificaUtente;
+    use NotificaUtente, WithFileUploads;
 
     public Rassegna $rassegna;
 
@@ -38,6 +40,9 @@ class Revisione extends Component
 
     #[Validate('nullable|string')]
     public string $note = '';
+
+    /** File di sostituzione (screenshot/ritaglio) caricato a mano durante la revisione. */
+    public $fileSostitutivo = null;
 
     public function mount(Rassegna $rassegna): void
     {
@@ -127,6 +132,35 @@ class Revisione extends Component
             $this->notifica('Ricattura accodata.');
             $this->caricaProssima();
         }
+    }
+
+    /**
+     * Sostituisce a mano il materiale dell'uscita in revisione (screenshot rovinato dal
+     * banner cookie o paywall, oppure ritaglio cartaceo). Resta sulla stessa uscita così
+     * l'operatore vede il nuovo file e poi approva — senza cambiare schermata.
+     */
+    public function sostituisciFile(): void
+    {
+        $uscita = $this->corrente();
+        abort_if(! $uscita, 404);
+        Gate::authorize('update', $uscita);
+
+        $this->validate([
+            'fileSostitutivo' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:8192'],
+        ]);
+
+        if ($uscita->file_caricato_path) {
+            Storage::disk(config('capture.disk'))->delete($uscita->file_caricato_path);
+        }
+
+        $uscita->update([
+            'file_caricato_path' => $this->fileSostitutivo->store('ritagli', config('capture.disk')),
+            'stato_cattura' => null,
+            'errore_cattura' => null,
+        ]);
+
+        $this->reset('fileSostitutivo');
+        $this->notifica('File sostituito.');
     }
 
     public function render(): View
