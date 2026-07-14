@@ -13,10 +13,16 @@
     </div>
 
     @if (! $uscita)
-        <div class="card">
+        {{-- Stato vuoto: si auto-aggiorna (wire:poll) SOLO qui, così le uscite appena
+             catturate compaiono da sole; nessun poll mentre si revisiona un'uscita. --}}
+        <div class="card" wire:poll.5s>
             <div class="empty">
-                <p><strong>Revisione completata.</strong> Nessuna uscita catturata in attesa.</p>
-                <a class="btn primary" href="{{ route('rassegne.pdf', $rassegna) }}" wire:navigate>Vai all'ordine e generazione PDF</a>
+                @if ($inCattura > 0)
+                    <p><strong>Cattura in corso…</strong> {{ $inCattura }} {{ $inCattura === 1 ? 'uscita' : 'uscite' }} in lavorazione. Compariranno qui appena pronte (aggiornamento automatico).</p>
+                @else
+                    <p><strong>Revisione completata.</strong> Nessuna uscita catturata in attesa.</p>
+                    <a class="btn primary" href="{{ route('rassegne.pdf', $rassegna) }}" wire:navigate>Vai all'ordine e generazione PDF</a>
+                @endif
             </div>
         </div>
     @else

@@ -84,6 +84,12 @@
 - **Cestino — selezione multipla:** checkbox per riga + "seleziona tutti", azioni in blocco
   (ripristina / elimina definitivamente i selezionati) e **"Svuota cestino"**. La cascata che
   rimuove record già selezionati è gestita (skip dei mancanti). Test `CestinoTest` (13 totali).
+- **UX Revisione (collaudo):** risolta la confusione "clicco Revisiona ma è vuoto". Non era
+  un bug (verificato: il server mostra le uscite catturate), ma una **pagina stantia** vista
+  durante la cattura in coda. La schermata Revisione ora si **auto-aggiorna solo quando è
+  vuota** (`wire:poll` nello stato vuoto), così le uscite appena catturate compaiono da sole;
+  **nessun poll mentre si revisiona** (i campi non si azzerano). Lo stato vuoto distingue
+  "Cattura in corso (N)" da "Revisione completata". Test `RevisioneTest` (5).
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file

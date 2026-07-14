@@ -3,6 +3,7 @@
 namespace App\Livewire\Rassegne;
 
 use App\Enums\Rilevanza;
+use App\Enums\StatoCattura;
 use App\Enums\StatoUscita;
 use App\Enums\TipoMedia;
 use App\Livewire\Concerns\NotificaUtente;
@@ -137,11 +138,19 @@ class Revisione extends Component
             ->count();
         $rimanenti = $this->daRevisionare()->count();
 
+        // Uscite confermate ancora in cattura: quando il worker finisce diventano
+        // "catturato" e compaiono qui. Serve a distinguere "attendi" da "finito".
+        $inCattura = $this->rassegna->uscite()
+            ->where('stato', StatoUscita::Confermato)
+            ->whereIn('stato_cattura', [StatoCattura::InAttesa, StatoCattura::InCorso])
+            ->count();
+
         return view('livewire.rassegne.revisione', [
             'uscita' => $corrente,
             'indice' => $totale - $rimanenti + 1,
             'totale' => $totale,
             'rimanenti' => $rimanenti,
+            'inCattura' => $inCattura,
             'tipiMedia' => TipoMedia::cases(),
             'rilevanze' => Rilevanza::cases(),
         ]);

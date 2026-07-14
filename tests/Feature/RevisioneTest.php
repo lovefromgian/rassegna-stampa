@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Rilevanza;
+use App\Enums\StatoCattura;
 use App\Enums\StatoUscita;
 use App\Enums\TipoMedia;
 use App\Livewire\Rassegne\Revisione;
@@ -60,4 +61,19 @@ test('senza uscite catturate la revisione è completata', function () {
     Livewire::test(Revisione::class, ['rassegna' => $rassegna])
         ->assertSet('correnteId', null)
         ->assertSee('Revisione completata');
+});
+
+test('con catture ancora in corso la revisione lo segnala (invece di "completata")', function () {
+    $rassegna = Rassegna::factory()->create();
+    // Confermata e in cattura: non ancora catturata, quindi niente da revisionare ADESSO.
+    Uscita::factory()->for($rassegna)->confermato()->create([
+        'tipo_media' => TipoMedia::Online,
+        'url' => 'https://x.it/a',
+        'stato_cattura' => StatoCattura::InAttesa,
+    ]);
+
+    Livewire::test(Revisione::class, ['rassegna' => $rassegna])
+        ->assertSet('correnteId', null)
+        ->assertSee('Cattura in corso')
+        ->assertDontSee('Revisione completata');
 });
