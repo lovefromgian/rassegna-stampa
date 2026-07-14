@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + stepper 5 voci + sostituzione file in-place · 15 lug 2026 · 116 test verdi (309 asserzioni)
+**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + stepper 5 voci + anteprime robuste · 15 lug 2026 · 117 test verdi (312 asserzioni)
 
 ## ▶ RIPRENDI DA QUI
 
@@ -114,6 +114,11 @@
   rovinato) e diventa IL materiale, così l'anteprima e il PDF usano il nuovo file (prima
   l'anteprima mostrava ancora il vecchio screenshot). Vale anche per la sostituzione dal
   gestore. Test in `RevisioneTest`.
+- **Anteprime robuste nel gestore/revisione (collaudo):** la riga del gestore mostrava la
+  miniatura solo per `screenshot_path` (non per il file caricato) e non gestiva i file
+  mancanti (immagine rotta → "sembra non ci sia niente"). Ora mostra il **materiale corrente**
+  (screenshot o file caricato) come miniatura, un **segnaposto** chiaro se il file manca, e una
+  nota per i PDF. Stesso controllo nell'anteprima della Revisione. Test in `UsciteGestoreTest`.
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file

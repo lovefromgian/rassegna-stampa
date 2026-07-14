@@ -108,11 +108,21 @@
                             </div>
                         @endif
 
-                        @if ($uscita->screenshot_path)
+                        @php
+                            $materiale = $uscita->screenshot_path ?: $uscita->file_caricato_path;
+                            $isImg = $materiale && \Illuminate\Support\Str::endsWith(\Illuminate\Support\Str::lower($materiale), ['.png', '.jpg', '.jpeg', '.gif', '.webp']);
+                            $esiste = $materiale && \Illuminate\Support\Facades\Storage::disk(config('capture.disk'))->exists($materiale);
+                        @endphp
+                        @if ($isImg && $esiste)
                             <div style="margin-top:8px;">
-                                <img src="{{ \Illuminate\Support\Facades\Storage::disk(config('capture.disk'))->url($uscita->screenshot_path) }}"
-                                     alt="Screenshot" style="max-width:220px;max-height:160px;border:1px solid var(--border);border-radius:6px;">
+                                <img wire:key="mat-{{ $uscita->id }}-{{ $materiale }}"
+                                     src="{{ \Illuminate\Support\Facades\Storage::disk(config('capture.disk'))->url($materiale) }}"
+                                     alt="Anteprima" style="max-width:220px;max-height:160px;border:1px solid var(--border);border-radius:6px;">
                             </div>
+                        @elseif ($materiale && ! $esiste)
+                            <div class="note mt-1">Anteprima non disponibile (file mancante). Ricattura o sostituisci il file.</div>
+                        @elseif ($materiale)
+                            <div class="note mt-1">File allegato: {{ basename($materiale) }} (PDF, nessuna anteprima).</div>
                         @endif
 
                         {{-- Sostituzione manuale del file --}}

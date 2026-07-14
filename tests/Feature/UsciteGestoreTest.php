@@ -152,6 +152,20 @@ test('sostituzione manuale del file: salva il file e porta a catturato', functio
     Storage::disk('public')->assertExists($uscita->file_caricato_path);
 });
 
+test('il gestore mostra la miniatura del materiale, e un segnaposto se il file manca', function () {
+    Storage::fake('public');
+    $rassegna = Rassegna::factory()->create();
+    // Con file esistente → miniatura.
+    Storage::disk('public')->put('catture/screenshot/ok.png', 'png');
+    Uscita::factory()->for($rassegna)->approvato()->create(['screenshot_path' => 'catture/screenshot/ok.png']);
+    // Con path ma file mancante → segnaposto.
+    Uscita::factory()->for($rassegna)->approvato()->create(['screenshot_path' => 'catture/screenshot/perso.png']);
+
+    Livewire::test(Gestore::class, ['rassegna' => $rassegna])
+        ->assertSeeHtml('alt="Anteprima"')
+        ->assertSee('Anteprima non disponibile');
+});
+
 test('il gestore filtra le uscite per stato (es. solo scartate)', function () {
     $rassegna = Rassegna::factory()->create();
     Uscita::factory()->for($rassegna)->scartato()->create(['titolo' => 'Articolo Scartato']);
