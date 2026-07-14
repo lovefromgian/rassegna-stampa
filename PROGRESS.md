@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + scheda con metriche cliccabili · 15 lug 2026 · 114 test verdi (295 asserzioni)
+**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + metriche cliccabili + filtro uscite · 15 lug 2026 · 115 test verdi (297 asserzioni)
 
 ## ▶ RIPRENDI DA QUI
 
@@ -97,6 +97,9 @@
   (con la nota che spiega l'eventuale blocco). Supera la UI a bottoni contestuali di UX-01
   (la logica dei conteggi e lo stepper UX-04 restano). Test `SchedaProssimoPassoTest`
   aggiornati (metriche-link, pulsante unico, nota, conteggi).
+- **Gestore uscite: filtro per stato (collaudo):** menu a tendina + `#[Url] filtroStato`, e
+  il quadrato "Scartate" arriva già filtrato (`?stato=scartato`) → mostra solo le scartate.
+  Test in `UsciteGestoreTest`.
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file

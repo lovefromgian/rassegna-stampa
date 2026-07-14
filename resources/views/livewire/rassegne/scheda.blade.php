@@ -51,7 +51,7 @@
         <a class="metric plain" href="{{ route('rassegne.pdf', $rassegna) }}" wire:navigate>
             <div class="label">Approvate</div><div class="value">{{ $metriche['approvate'] }}</div>
         </a>
-        <a class="metric plain" href="{{ route('rassegne.uscite', $rassegna) }}" wire:navigate>
+        <a class="metric plain" href="{{ route('rassegne.uscite', ['rassegna' => $rassegna, 'stato' => \App\Enums\StatoUscita::Scartato->value]) }}" wire:navigate>
             <div class="label">Scartate</div><div class="value">{{ $metriche['scartate'] }}</div>
         </a>
     </div>

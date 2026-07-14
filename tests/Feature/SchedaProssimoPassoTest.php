@@ -18,7 +18,8 @@ test('le metriche sono cliccabili e portano alle rispettive schermate', function
         ->assertSeeHtml('href="'.route('rassegne.candidati', $rassegna).'"')
         ->assertSeeHtml('href="'.route('rassegne.revisione', $rassegna).'"')
         ->assertSeeHtml('href="'.route('rassegne.pdf', $rassegna).'"')
-        ->assertSeeHtml('href="'.route('rassegne.uscite', $rassegna).'"');
+        // "Scartate" arriva al gestore già filtrato sulle scartate.
+        ->assertSeeHtml('href="'.route('rassegne.uscite', ['rassegna' => $rassegna, 'stato' => 'scartato']).'"');
 });
 
 test('sotto le metriche c\'è un solo pulsante per generare il PDF', function () {

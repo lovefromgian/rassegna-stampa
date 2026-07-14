@@ -10,7 +10,15 @@
 
     <div class="card">
         <div class="spread mb-2">
-            <h2 class="m-0">Uscite raccolte ({{ $uscite->count() }})</h2>
+            <div style="display:flex;align-items:center;gap:10px;">
+                <h2 class="m-0">Uscite raccolte ({{ $uscite->count() }})</h2>
+                <select wire:model.live="filtroStato" style="margin:0;max-width:180px;">
+                    <option value="">Tutti gli stati</option>
+                    @foreach ($statiUscita as $s)
+                        <option value="{{ $s->value }}">{{ $s->etichetta() }}</option>
+                    @endforeach
+                </select>
+            </div>
             @if ($puoAggiungere && ! $mostraForm)
                 <button class="btn primary small" wire:click="nuovaUscita">+ Aggiungi uscita</button>
             @endif

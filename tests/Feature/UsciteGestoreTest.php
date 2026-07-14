@@ -152,6 +152,17 @@ test('sostituzione manuale del file: salva il file e porta a catturato', functio
     Storage::disk('public')->assertExists($uscita->file_caricato_path);
 });
 
+test('il gestore filtra le uscite per stato (es. solo scartate)', function () {
+    $rassegna = Rassegna::factory()->create();
+    Uscita::factory()->for($rassegna)->scartato()->create(['titolo' => 'Articolo Scartato']);
+    Uscita::factory()->for($rassegna)->catturato()->create(['titolo' => 'Articolo Catturato']);
+
+    Livewire::test(Gestore::class, ['rassegna' => $rassegna])
+        ->set('filtroStato', StatoUscita::Scartato->value)
+        ->assertSee('Articolo Scartato')
+        ->assertDontSee('Articolo Catturato');
+});
+
 test('scarto di un\'uscita: passa a scartato ma resta (soft delete non usato qui)', function () {
     $rassegna = Rassegna::factory()->create();
     $uscita = Uscita::factory()->for($rassegna)->confermato()->create();

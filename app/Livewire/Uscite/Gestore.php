@@ -14,6 +14,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -27,6 +28,10 @@ class Gestore extends Component
     use NotificaUtente, WithFileUploads;
 
     public Rassegna $rassegna;
+
+    /** Filtro per stato (nell'URL come ?stato=…), es. arrivando dal quadrato "Scartate". */
+    #[Url(as: 'stato')]
+    public string $filtroStato = '';
 
     // --- Form "nuova uscita" ---
     public bool $mostraForm = false;
@@ -185,12 +190,14 @@ class Gestore extends Component
     {
         $uscite = $this->rassegna->uscite()
             ->with('testata')
+            ->when($this->filtroStato !== '', fn ($q) => $q->where('stato', $this->filtroStato))
             ->orderByDesc('data_pubblicazione')
             ->get();
 
         return view('livewire.uscite.gestore', [
             'uscite' => $uscite,
             'tipiMedia' => TipoMedia::cases(),
+            'statiUscita' => StatoUscita::cases(),
             'isOnline' => $this->tipo_media === TipoMedia::Online->value,
             'puoAggiungere' => Gate::allows('create', Uscita::class),
             'statiInCattura' => [StatoCattura::InAttesa, StatoCattura::InCorso],
