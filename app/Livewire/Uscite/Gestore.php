@@ -9,8 +9,10 @@ use App\Livewire\Concerns\NotificaUtente;
 use App\Models\Rassegna;
 use App\Models\Testata;
 use App\Models\Uscita;
+use App\Services\Audit;
 use App\Services\GestioneCattura;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -54,6 +56,9 @@ class Gestore extends Component
     public ?int $uscitaFileId = null;
 
     public $fileSostitutivo = null;
+
+    /** @var array<int, int> id delle uscite selezionate per l'eliminazione in blocco */
+    public array $selezionati = [];
 
     public function mount(Rassegna $rassegna): void
     {
@@ -184,16 +189,57 @@ class Gestore extends Component
         $this->notifica('Uscita scartata (resta archiviata e recuperabile).');
     }
 
+    /**
+     * Elimina un'uscita (soft delete): finisce nel cestino, recuperabile. Solo supervisore
+     * (UscitaPolicy::delete). La cancellazione definitiva si fa dal cestino.
+     */
+    public function elimina(int $uscitaId): void
+    {
+        $uscita = $this->uscitaDellaRassegna($uscitaId);
+        Gate::authorize('delete', $uscita);
+
+        $uscita->delete();
+        Audit::registra('elimina_uscita', $uscita);
+        $this->notifica('Uscita eliminata (spostata nel cestino, recuperabile).');
+    }
+
+    public function selezionaTutti(bool $tutti): void
+    {
+        $this->selezionati = $tutti ? $this->usciteFiltrate()->pluck('id')->all() : [];
+    }
+
+    /** Elimina in blocco (soft delete) le uscite selezionate: solo supervisore. */
+    public function eliminaSelezionati(): void
+    {
+        $uscite = $this->rassegna->uscite()->whereKey($this->selezionati)->get();
+
+        foreach ($uscite as $uscita) {
+            Gate::authorize('delete', $uscita);
+            $uscita->delete();
+            Audit::registra('elimina_uscita', $uscita);
+        }
+
+        $n = $uscite->count();
+        $this->selezionati = [];
+        $this->notifica($n.' '.($n === 1 ? 'uscita eliminata' : 'uscite eliminate').' (nel cestino, recuperabili).');
+    }
+
     private function uscitaDellaRassegna(?int $id): Uscita
     {
         return $this->rassegna->uscite()->findOrFail($id);
     }
 
+    /** @return Builder<Uscita> */
+    private function usciteFiltrate()
+    {
+        return $this->rassegna->uscite()
+            ->when($this->filtroStato !== '', fn ($q) => $q->where('stato', $this->filtroStato));
+    }
+
     public function render(): View
     {
-        $uscite = $this->rassegna->uscite()
+        $uscite = $this->usciteFiltrate()
             ->with('testata')
-            ->when($this->filtroStato !== '', fn ($q) => $q->where('stato', $this->filtroStato))
             ->orderByDesc('data_pubblicazione')
             ->get();
 
@@ -203,6 +249,7 @@ class Gestore extends Component
             'statiUscita' => StatoUscita::cases(),
             'isOnline' => $this->tipo_media === TipoMedia::Online->value,
             'puoAggiungere' => Gate::allows('create', Uscita::class),
+            'puoEliminare' => auth()->user()->isSupervisore(),
             'statiInCattura' => [StatoCattura::InAttesa, StatoCattura::InCorso],
             // Voce evidenziata nello stepper quando si arriva filtrati da Approvate/Scartate.
             'faseCorrente' => match ($this->filtroStato) {

@@ -5,6 +5,7 @@ use App\Enums\StatoUscita;
 use App\Enums\TipoMedia;
 use App\Jobs\CatturaUscita;
 use App\Livewire\Uscite\Gestore;
+use App\Models\LogAzione;
 use App\Models\Rassegna;
 use App\Models\Testata;
 use App\Models\Uscita;
@@ -150,6 +151,43 @@ test('sostituzione manuale del file: salva il file e porta a catturato', functio
         ->and($uscita->file_caricato_path)->not->toBeNull();
 
     Storage::disk('public')->assertExists($uscita->file_caricato_path);
+});
+
+test('il supervisore elimina un\'uscita dal gestore (soft delete → cestino)', function () {
+    Livewire::actingAs(User::factory()->supervisore()->create());
+    $rassegna = Rassegna::factory()->create();
+    $uscita = Uscita::factory()->for($rassegna)->scartato()->create();
+
+    Livewire::test(Gestore::class, ['rassegna' => $rassegna])
+        ->call('elimina', $uscita->id);
+
+    $this->assertSoftDeleted('uscite', ['id' => $uscita->id]);
+    expect(LogAzione::where('azione', 'elimina_uscita')->exists())->toBeTrue();
+});
+
+test('eliminazione in blocco delle uscite selezionate (soft delete)', function () {
+    Livewire::actingAs(User::factory()->supervisore()->create());
+    $rassegna = Rassegna::factory()->create();
+    $a = Uscita::factory()->for($rassegna)->scartato()->create();
+    $b = Uscita::factory()->for($rassegna)->scartato()->create();
+    $c = Uscita::factory()->for($rassegna)->approvato()->create();
+
+    Livewire::test(Gestore::class, ['rassegna' => $rassegna])
+        ->set('selezionati', [$a->id, $b->id])
+        ->call('eliminaSelezionati');
+
+    $this->assertSoftDeleted('uscite', ['id' => $a->id]);
+    $this->assertSoftDeleted('uscite', ['id' => $b->id]);
+    $this->assertNotSoftDeleted('uscite', ['id' => $c->id]);
+});
+
+test('l\'operatore non ha i controlli di eliminazione nel gestore', function () {
+    $rassegna = Rassegna::factory()->create();
+    Uscita::factory()->for($rassegna)->scartato()->create();
+
+    Livewire::test(Gestore::class, ['rassegna' => $rassegna]) // operatore (beforeEach)
+        ->assertDontSee('Elimina selezionate')
+        ->assertDontSee('Seleziona tutte');
 });
 
 test('il gestore mostra la miniatura del materiale, e un segnaposto se il file manca', function () {

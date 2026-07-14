@@ -86,10 +86,28 @@
             </div>
         @endif
 
+        {{-- Selezione multipla per l'eliminazione in blocco (solo supervisore) --}}
+        @if ($puoEliminare && $uscite->isNotEmpty())
+            <div class="spread mb-2">
+                <label style="font-size:14px;color:var(--text-secondary);">
+                    <input type="checkbox" style="width:auto;margin:0;" wire:change="selezionaTutti($event.target.checked)"
+                           @checked(count($selezionati) && count($selezionati) === $uscite->count())>
+                    Seleziona tutte
+                </label>
+                <button class="btn small danger" wire:click="eliminaSelezionati" @disabled(! count($selezionati))
+                        wire:confirm="Eliminare le {{ count($selezionati) }} uscite selezionate? Vanno nel cestino (recuperabili).">
+                    Elimina selezionate ({{ count($selezionati) }})
+                </button>
+            </div>
+        @endif
+
         {{-- Elenco uscite --}}
         <div class="list">
             @forelse ($uscite as $uscita)
                 <div class="row" style="align-items:flex-start;">
+                    @if ($puoEliminare)
+                        <input type="checkbox" style="width:auto;margin-top:4px;" value="{{ $uscita->id }}" wire:model.live="selezionati">
+                    @endif
                     <div class="main">
                         <div class="title">{{ $uscita->testata->nome }}@if ($uscita->pagina_giornale) · {{ $uscita->pagina_giornale }} @endif</div>
                         <div class="sub">{{ $uscita->titolo }}</div>
@@ -148,6 +166,10 @@
                             @if ($uscita->stato !== \App\Enums\StatoUscita::Scartato)
                                 <button class="btn small danger" wire:click="scarta({{ $uscita->id }})"
                                         wire:confirm="Scartare questa uscita? Resta archiviata e recuperabile.">Scarta</button>
+                            @endif
+                            @if ($puoEliminare)
+                                <button class="btn small danger" wire:click="elimina({{ $uscita->id }})"
+                                        wire:confirm="Eliminare questa uscita? Va nel cestino (recuperabile).">Elimina</button>
                             @endif
                         </div>
                     </div>

@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + stepper 5 voci + anteprime robuste · 15 lug 2026 · 117 test verdi (312 asserzioni)
+**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + stepper 5 voci + eliminazione uscite · 15 lug 2026 · 120 test verdi (319 asserzioni)
 
 ## ▶ RIPRENDI DA QUI
 
@@ -119,6 +119,11 @@
   mancanti (immagine rotta → "sembra non ci sia niente"). Ora mostra il **materiale corrente**
   (screenshot o file caricato) come miniatura, un **segnaposto** chiaro se il file manca, e una
   nota per i PDF. Stesso controllo nell'anteprima della Revisione. Test in `UsciteGestoreTest`.
+- **Eliminazione uscite dal gestore (collaudo):** nel gestore uscite (es. sezione Scartate)
+  il supervisore può ora eliminare le uscite **singolarmente** e **in blocco** (selezione
+  multipla + "Elimina selezionate"). È un **soft delete**: le uscite vanno nel **cestino**
+  (recuperabili; la cancellazione definitiva resta lì). Audit `elimina_uscita`. Solo
+  supervisore (UscitaPolicy::delete). Test in `UsciteGestoreTest` (single, blocco, permessi).
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file
