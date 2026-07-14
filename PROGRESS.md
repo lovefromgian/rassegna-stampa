@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** scope v1 + revisione UX (UX-01→05) + eliminazione/cestino · 15 lug 2026 · 114 test verdi (291 asserzioni)
+**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + scheda con metriche cliccabili · 15 lug 2026 · 114 test verdi (295 asserzioni)
 
 ## ▶ RIPRENDI DA QUI
 
@@ -90,6 +90,13 @@
   vuota** (`wire:poll` nello stato vuoto), così le uscite appena catturate compaiono da sole;
   **nessun poll mentre si revisiona** (i campi non si azzerano). Lo stato vuoto distingue
   "Cattura in corso (N)" da "Revisione completata". Test `RevisioneTest` (5).
+- **Scheda: metriche cliccabili + un solo pulsante (collaudo):** su richiesta utente, i 4
+  quadrati (Candidati/Da revisionare/Approvate/Scartate) sono ora **link** alle rispettive
+  schermate (candidati / revisione / ordine-PDF / gestore uscite); la card "Prossimo passo"
+  con i 3 bottoni contestuali è sostituita da **un solo pulsante "Ordina e genera il PDF"**
+  (con la nota che spiega l'eventuale blocco). Supera la UI a bottoni contestuali di UX-01
+  (la logica dei conteggi e lo stepper UX-04 restano). Test `SchedaProssimoPassoTest`
+  aggiornati (metriche-link, pulsante unico, nota, conteggi).
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file

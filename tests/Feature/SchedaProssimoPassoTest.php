@@ -11,31 +11,25 @@ beforeEach(function () {
     Livewire::actingAs(User::factory()->operatore()->create());
 });
 
-test('con candidati pendenti il passo primario è "Conferma"', function () {
+test('le metriche sono cliccabili e portano alle rispettive schermate', function () {
     $rassegna = Rassegna::factory()->create();
-    Uscita::factory()->count(2)->for($rassegna)->create(['stato' => StatoUscita::Candidato]);
 
     Livewire::test(Scheda::class, ['rassegna' => $rassegna])
-        ->assertSeeHtml('data-passo="conferma"')
-        ->assertSee('Conferma i 2 candidati proposti');
+        ->assertSeeHtml('href="'.route('rassegne.candidati', $rassegna).'"')
+        ->assertSeeHtml('href="'.route('rassegne.revisione', $rassegna).'"')
+        ->assertSeeHtml('href="'.route('rassegne.pdf', $rassegna).'"')
+        ->assertSeeHtml('href="'.route('rassegne.uscite', $rassegna).'"');
 });
 
-test('a candidati=0 con catture da revisionare il passo primario è "Revisiona"', function () {
-    $rassegna = Rassegna::factory()->create();
-    Uscita::factory()->count(3)->for($rassegna)->catturato()->create();
-
-    Livewire::test(Scheda::class, ['rassegna' => $rassegna])
-        ->assertSeeHtml('data-passo="revisiona"')
-        ->assertSee('Revisiona le 3 uscite in attesa');
-});
-
-test('a tutto pronto (nessun candidato, nessuna da revisionare) il passo primario è "Genera PDF"', function () {
+test('sotto le metriche c\'è un solo pulsante per generare il PDF', function () {
     $rassegna = Rassegna::factory()->create();
     Uscita::factory()->for($rassegna)->approvato()->create();
 
     Livewire::test(Scheda::class, ['rassegna' => $rassegna])
-        ->assertSeeHtml('data-passo="pdf"')
-        ->assertSee('Ordina e genera il PDF');
+        ->assertSee('Ordina e genera il PDF')
+        // I vecchi bottoni contestuali non ci sono più: la navigazione è nelle metriche.
+        ->assertDontSee('Conferma i')
+        ->assertDontSee('Revisiona le');
 });
 
 test('la nota mostra il motivo reale di blocco del PDF', function () {

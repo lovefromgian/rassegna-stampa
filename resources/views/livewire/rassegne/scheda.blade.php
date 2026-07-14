@@ -40,45 +40,25 @@
 
     @include('partials.fasi-rassegna', ['rassegna' => $rassegna, 'corrente' => $faseCorrente])
 
-    {{-- Metriche a colpo d'occhio (UX-02, mockup 05): dagli stati delle uscite --}}
+    {{-- Metriche a colpo d'occhio, CLICCABILI: ognuna porta alla sua schermata --}}
     <div class="metrics">
-        <div class="metric"><div class="label">Candidati da decidere</div><div class="value">{{ $metriche['candidati'] }}</div></div>
-        <div class="metric"><div class="label">Da revisionare</div><div class="value">{{ $metriche['daRevisionare'] }}</div></div>
-        <div class="metric"><div class="label">Approvate</div><div class="value">{{ $metriche['approvate'] }}</div></div>
-        <div class="metric"><div class="label">Scartate</div><div class="value">{{ $metriche['scartate'] }}</div></div>
+        <a class="metric plain" href="{{ route('rassegne.candidati', $rassegna) }}" wire:navigate>
+            <div class="label">Candidati da decidere</div><div class="value">{{ $metriche['candidati'] }}</div>
+        </a>
+        <a class="metric plain" href="{{ route('rassegne.revisione', $rassegna) }}" wire:navigate>
+            <div class="label">Da revisionare</div><div class="value">{{ $metriche['daRevisionare'] }}</div>
+        </a>
+        <a class="metric plain" href="{{ route('rassegne.pdf', $rassegna) }}" wire:navigate>
+            <div class="label">Approvate</div><div class="value">{{ $metriche['approvate'] }}</div>
+        </a>
+        <a class="metric plain" href="{{ route('rassegne.uscite', $rassegna) }}" wire:navigate>
+            <div class="label">Scartate</div><div class="value">{{ $metriche['scartate'] }}</div>
+        </a>
     </div>
 
-    {{-- Prossimo passo contestuale (UX-01): un solo primario con conteggio --}}
+    {{-- Un solo pulsante: ordina e genera il PDF --}}
     <div class="card">
-        <h2>Prossimo passo</h2>
-        <div class="stack">
-            <a class="btn wide {{ $prossimo === 'conferma' ? 'primary' : '' }}" @if ($prossimo === 'conferma') data-passo="conferma" @endif
-               href="{{ route('rassegne.candidati', $rassegna) }}" wire:navigate>
-                @if ($metriche['candidati'] === 1)
-                    Conferma 1 candidato proposto
-                @elseif ($metriche['candidati'] > 1)
-                    Conferma i {{ $metriche['candidati'] }} candidati proposti
-                @else
-                    Candidati
-                @endif
-            </a>
-            <a class="btn wide {{ $prossimo === 'revisiona' ? 'primary' : '' }}" @if ($prossimo === 'revisiona') data-passo="revisiona" @endif
-               href="{{ route('rassegne.revisione', $rassegna) }}" wire:navigate>
-                @if ($metriche['daRevisionare'] === 1)
-                    Revisiona 1 uscita in attesa
-                @elseif ($metriche['daRevisionare'] > 1)
-                    Revisiona le {{ $metriche['daRevisionare'] }} uscite in attesa
-                @elseif ($inCattura > 0)
-                    Cattura in corso ({{ $inCattura }})
-                @else
-                    Revisiona le uscite catturate
-                @endif
-            </a>
-            <a class="btn wide {{ in_array($prossimo, ['pdf', 'chiusa'], true) ? 'primary' : '' }}" @if (in_array($prossimo, ['pdf', 'chiusa'], true)) data-passo="pdf" @endif
-               href="{{ route('rassegne.pdf', $rassegna) }}" wire:navigate>
-                {{ $prossimo === 'chiusa' ? 'Vedi e scarica il PDF' : 'Ordina e genera il PDF' }}
-            </a>
-        </div>
+        <a class="btn primary wide" href="{{ route('rassegne.pdf', $rassegna) }}" wire:navigate>Ordina e genera il PDF</a>
         <div class="note mt-3">{{ $nota }}</div>
     </div>
 
