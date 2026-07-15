@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + gestione utenti + deploy prod · 15 lug 2026 · 134 test verdi (367 asserzioni)
+**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + gestione utenti + deploy prod · 15 lug 2026 · 135 test verdi (369 asserzioni)
 
 ## ▶ RIPRENDI DA QUI
 
@@ -13,7 +13,7 @@
 
 - **Stato:** **SCOPE v1 COMPLETO (M1–M5).** Il gestionale gira end-to-end: clienti/rassegne
   → scoperta automatica → cattura → revisione → PDF impaginato versionato → contorno (log,
-  archivio, statistiche, chiusura/riapertura). **134 test verdi (367 asserzioni)** (comprese
+  archivio, statistiche, chiusura/riapertura). **135 test verdi (369 asserzioni)** (comprese
   le aggiunte post-M5: UX revisione, eliminazione/cestino, gestione utenti, deploy prod).
 - **M5 (Contorno) completata:** log di audit consultabile globale e per rassegna
   (`Audit\Registro`, immutabile); archivio con ricerca full-text sul testo estratto
@@ -193,6 +193,12 @@
   non si perde il lavoro. Approva/Scarta avanzano alla posizione lasciata; la ricattura resta
   sull'uscita. Header "N di M da revisionare". Test in `RevisioneTest` (navigazione + bordi +
   bozza). Deployato. (commit `5f0cc21`)
+- **Revisione: avviso "in acquisizione" (collaudo):** mentre si revisiona, le uscite ancora
+  in cattura (confermato + `stato_cattura` in_attesa/in_corso) non comparivano da nessuna parte
+  e sembrava non esistessero. Aggiunto un banner `⏳ N in acquisizione…` quando `inCattura > 0`,
+  con `wire:poll` attivo **solo** in quel caso (così le nuove compaiono da sole senza azzerare
+  i campi in corso; a acquisizione finita il poll si spegne). Variante `.flash.warning` in
+  `app.css`. Test in `RevisioneTest`. Deployato. (commit `956b77b`)
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file
