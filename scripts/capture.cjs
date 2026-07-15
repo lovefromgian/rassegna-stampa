@@ -160,10 +160,12 @@ async function scrollFinoInFondo(page) {
     await attendiStabilizzazione(page, 8000); // il consenso può innescare un'altra navigazione
     await scrollFinoInFondo(page);
 
-    await page.screenshot({ path: path.join(out, 'screenshot.png'), fullPage: true });
+    // timeout ampio (default 30s): pagine con font lenti o molto lunghe superavano i 30s
+    // "waiting for fonts to load"; il budget del job (CAPTURE_TIMEOUT) resta il tetto.
+    await page.screenshot({ path: path.join(out, 'screenshot.png'), fullPage: true, timeout: 60000, animations: 'disabled' });
 
     try {
-      await page.pdf({ path: path.join(out, 'page.pdf'), printBackground: true, format: 'A4' });
+      await page.pdf({ path: path.join(out, 'page.pdf'), printBackground: true, format: 'A4', timeout: 60000 });
     } catch (_) { /* page.pdf solo in headless: se fallisce, si prosegue senza */ }
 
     let testo = '';
