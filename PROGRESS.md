@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + gestione utenti · 15 lug 2026 · 129 test verdi (347 asserzioni)
+**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + gestione utenti + deploy prod · 15 lug 2026 · 131 test verdi (349 asserzioni)
 
 ## ▶ RIPRENDI DA QUI
 
@@ -153,6 +153,12 @@
   17 KB). Codice consegnato via `git clone` del repo pubblico (aggiornabile con `git pull` +
   `composer install`/`npm run build`/`php artisan migrate --force`/`optimize`). Debito aperto:
   **backup produzione** non ancora schedulati (TD-009).
+- **Fix post-deploy (500 su "Scansiona ora"):** in produzione la scansione dava errore 500.
+  Causa: `uscite.url`/`titolo` erano `varchar(255)`, ma gli URL di redirect Google News superano
+  i 255 caratteri; su SQLite (dev/test) la lunghezza non è applicata, su **PostgreSQL** sì
+  (SQLSTATE 22001). Migration → `text` (indice unique deduplica invariato), test di schema
+  anti-regressione, docs aggiornati. Verificato sul server: scansione reale OK, 72 candidati
+  inseriti, URL più lungo 877 caratteri. (commit `2d21187`)
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file
