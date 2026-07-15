@@ -63,8 +63,46 @@ async function chiudiConsenso(page) {
   }
 }
 
+// Un redirect (tipico degli URL Google News: la pagina d'atterraggio rimanda
+// all'articolo vero via JS) distrugge il contesto di esecuzione durante una evaluate.
+// Aspetta che l'URL smetta di cambiare prima di lavorare sulla pagina.
+async function attendiStabilizzazione(page, timeoutMs = 25000) {
+  const scadenza = Date.now() + timeoutMs;
+  let urlPrec = page.url();
+  let fermi = 0;
+  while (Date.now() < scadenza) {
+    await page.waitForTimeout(1000);
+    const urlOra = page.url();
+    if (urlOra === urlPrec) {
+      if (++fermi >= 2) break; // due giri senza cambi: consideriamo assestato
+    } else {
+      fermi = 0;
+      urlPrec = urlOra;
+      try { await page.waitForLoadState('domcontentloaded', { timeout: 6000 }); } catch (_) {}
+    }
+  }
+  try { await page.waitForLoadState('networkidle', { timeout: 8000 }); } catch (_) {}
+}
+
+function isNavigazione(err) {
+  const m = String(err && err.message ? err.message : err);
+  return m.includes('Execution context was destroyed') || m.includes('context was destroyed');
+}
+
+// Esegue una evaluate tollerando una navigazione tardiva: se il contesto viene
+// distrutto, riassesta la pagina e riprova una volta.
+async function evaluateResiliente(page, fn) {
+  try {
+    return await page.evaluate(fn);
+  } catch (err) {
+    if (!isNavigazione(err)) throw err;
+    await attendiStabilizzazione(page, 10000);
+    return await page.evaluate(fn);
+  }
+}
+
 async function scrollFinoInFondo(page) {
-  await page.evaluate(async () => {
+  await evaluateResiliente(page, async () => {
     await new Promise((resolve) => {
       let totale = 0;
       const passo = 400;
@@ -78,7 +116,7 @@ async function scrollFinoInFondo(page) {
       }, 100);
     });
   });
-  await page.evaluate(() => window.scrollTo(0, 0));
+  await evaluateResiliente(page, () => window.scrollTo(0, 0));
   await page.waitForTimeout(500);
 }
 
@@ -112,9 +150,14 @@ async function scrollFinoInFondo(page) {
     });
 
     const page = await context.newPage();
-    await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
+    // 'domcontentloaded' (non 'networkidle'): con gli URL Google News la pagina
+    // d'atterraggio redirige subito e 'networkidle' fa attendere/fallire. Ci si
+    // assesta subito dopo, aspettando che i redirect si esauriscano.
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await attendiStabilizzazione(page);
 
     await chiudiConsenso(page);
+    await attendiStabilizzazione(page, 8000); // il consenso può innescare un'altra navigazione
     await scrollFinoInFondo(page);
 
     await page.screenshot({ path: path.join(out, 'screenshot.png'), fullPage: true });
@@ -123,7 +166,8 @@ async function scrollFinoInFondo(page) {
       await page.pdf({ path: path.join(out, 'page.pdf'), printBackground: true, format: 'A4' });
     } catch (_) { /* page.pdf solo in headless: se fallisce, si prosegue senza */ }
 
-    const testo = await page.evaluate(() => document.body.innerText || '');
+    let testo = '';
+    try { testo = await evaluateResiliente(page, () => document.body.innerText || ''); } catch (_) { testo = ''; }
     fs.writeFileSync(path.join(out, 'text.txt'), testo, 'utf8');
 
     const title = await page.title();
