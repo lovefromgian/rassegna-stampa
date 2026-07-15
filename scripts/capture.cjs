@@ -101,6 +101,45 @@ async function evaluateResiliente(page, fn) {
   }
 }
 
+// Rimuove i banner di consenso/paywall/overlay rimasti dopo il tentativo di "Accetta":
+// per parole chiave note (CMP diffusi) e i modali/backdrop a tutto schermo che coprono
+// l'articolo. Ripristina lo scroll che i banner spesso bloccano. Best-effort.
+async function rimuoviBannerResidui(page) {
+  try {
+    await page.evaluate(() => {
+      const KW = /(cookie|consent|gdpr|privacy|cmp|didomi|onetrust|ot-sdk|iubenda|cookiebot|usercentrics|truste|qc-cmp|sp_message|sourcepoint|osano|cookieyes|borlabs|complianz|termly|__tcfapi|paywall|subscribe|newsletter-modal|gdpr-banner)/i;
+
+      // 1) contenitori che si dichiarano banner di consenso (id/classe/aria/attributi)
+      document.querySelectorAll('div,section,aside,dialog,iframe,aside').forEach((el) => {
+        const firma = [el.id, el.className, el.getAttribute('aria-label'), el.getAttribute('data-testid'), el.getAttribute('data-cy')]
+          .filter(Boolean).join(' ');
+        if (typeof firma === 'string' && KW.test(firma)) el.remove();
+      });
+
+      // 2) modali/backdrop fissi a tutto schermo che bloccano la lettura (z-index alto,
+      //    larghi e alti): quasi sempre consensi/iscrizioni. I piccoli sticky (header,
+      //    barre) restano.
+      document.querySelectorAll('body *').forEach((el) => {
+        const s = getComputedStyle(el);
+        if (s.position !== 'fixed' && s.position !== 'sticky') return;
+        const r = el.getBoundingClientRect();
+        const z = parseInt(s.zIndex, 10) || 0;
+        const largo = r.width >= window.innerWidth * 0.8;
+        const alto = r.height >= window.innerHeight * 0.5;
+        if (z >= 1000 && largo && alto) el.remove();
+      });
+
+      // 3) ripristina lo scroll bloccato dal banner
+      for (const el of [document.documentElement, document.body]) {
+        if (!el) continue;
+        el.style.setProperty('overflow', 'auto', 'important');
+        el.style.setProperty('position', 'static', 'important');
+        el.style.setProperty('filter', 'none', 'important');
+      }
+    });
+  } catch (_) { /* best-effort: se fallisce si prosegue */ }
+}
+
 async function scrollFinoInFondo(page) {
   await evaluateResiliente(page, async () => {
     await new Promise((resolve) => {
@@ -160,7 +199,9 @@ async function scrollFinoInFondo(page) {
 
     await chiudiConsenso(page);
     await attendiStabilizzazione(page, 8000); // il consenso può innescare un'altra navigazione
+    await rimuoviBannerResidui(page);         // togli i banner che il click non ha chiuso
     await scrollFinoInFondo(page);
+    await rimuoviBannerResidui(page);         // di nuovo: lo scroll può far comparire nuovi banner
 
     // timeout ampio (default 30s): pagine con font lenti o molto lunghe superavano i 30s
     // "waiting for fonts to load"; il budget del job (CAPTURE_TIMEOUT) resta il tetto.
