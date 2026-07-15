@@ -44,6 +44,6 @@
             @endforelse
         </div>
 
-        <div class="mt-3">{{ $voci->links() }}</div>
+        <div class="mt-3">{{ $voci->links('vendor.pagination.rassegna') }}</div>
     </div>
 </div>

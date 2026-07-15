@@ -29,6 +29,6 @@
             @endforelse
         </div>
 
-        <div class="mt-3">{{ $rassegne->links() }}</div>
+        <div class="mt-3">{{ $rassegne->links('vendor.pagination.rassegna') }}</div>
     </div>
 </div>

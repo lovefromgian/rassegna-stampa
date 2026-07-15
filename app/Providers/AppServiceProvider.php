@@ -6,6 +6,7 @@ use App\Support\Capture\PageCapturer;
 use App\Support\Capture\PlaywrightCapturer;
 use App\Support\Discovery\ArticleDiscoverySource;
 use App\Support\Discovery\GoogleNewsRss;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -39,5 +40,10 @@ class AppServiceProvider extends ServiceProvider
         // (Il default di Livewire 4 è `layouts::app`, che qui risolve al layout del
         // controller basato su @yield: incompatibile con l'iniezione via slot.)
         config(['livewire.component_layout' => 'components.layouts.app']);
+
+        // Paginazione con vista coerente al CSS del progetto (la default Tailwind
+        // rendeva le frecce SVG enormi: l'app non usa Tailwind).
+        Paginator::defaultView('vendor.pagination.rassegna');
+        Paginator::defaultSimpleView('vendor.pagination.rassegna');
     }
 }

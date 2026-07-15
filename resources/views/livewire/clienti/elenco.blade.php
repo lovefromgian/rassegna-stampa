@@ -39,6 +39,6 @@
             <p style="font-size:13px;color:var(--text-muted);margin:14px 0 0;">Solo il supervisore crea, modifica o elimina un cliente. Vedi l'elenco in sola lettura.</p>
         @endunless
 
-        <div class="mt-3">{{ $clienti->links() }}</div>
+        <div class="mt-3">{{ $clienti->links('vendor.pagination.rassegna') }}</div>
     </div>
 </div>

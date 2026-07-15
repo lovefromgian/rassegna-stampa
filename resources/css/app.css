@@ -214,6 +214,18 @@ input.invalid, select.invalid, textarea.invalid { border-color: var(--danger); }
 
 /* Colonna con spaziatura (azioni impilate, campi form) */
 .stack { display: flex; flex-direction: column; gap: 10px; }
+
+/* Paginazione (vista pagination/rassegna): niente SVG, coerente coi .btn */
+.pagination { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.pagination-link {
+  display: inline-block; padding: 5px 10px; font-size: 13px; line-height: 1.2;
+  font-family: inherit; cursor: pointer;
+  border: 1px solid var(--border-strong); border-radius: 8px;
+  background: var(--surface); color: var(--text); text-decoration: none;
+}
+.pagination-link:hover:not(.disabled):not(.current) { background: var(--surface-alt); }
+.pagination-link.current { background: var(--text); color: #fff; border-color: var(--text); }
+.pagination-link.disabled { color: var(--text-muted); opacity: .6; pointer-events: none; }
 .gap-sm { gap: 8px; }
 
 /* Barra di ricerca/filtri sopra un elenco */

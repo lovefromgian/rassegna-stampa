@@ -41,7 +41,7 @@
                     <div class="empty">Nessuna uscita trovata per "{{ $termine }}".</div>
                 @endforelse
             </div>
-            <div class="mt-3">{{ $risultati->links() }}</div>
+            <div class="mt-3">{{ $risultati->links('vendor.pagination.rassegna') }}</div>
         @endif
     </div>
 </div>
