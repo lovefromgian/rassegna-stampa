@@ -21,10 +21,13 @@
   versionamento PDF.
 - **Verifica reale M5:** ciclo di vita completo — v1 generata → chiusa → riaperta → uscita
   tardiva aggiunta → v2 generata, **entrambe le versioni conservate** (§9).
-- **Prossimo passo concreto:** nessuna milestone né feature residua richiesta. Eventuale
-  lavoro successivo: saldare il debito tecnico (TD-001 backup, TD-002 cookie banner, TD-004
-  URL Google News, TD-005 snippet, TD-006 UX-06), il **reset password self-service** (oggi la
-  resetta il supervisore — vedi gestione utenti) e l'hardening pre-produzione.
+- **In produzione:** l'app è online su **https://rs.fulviabenussi.com** (deploy 15 lug 2026 —
+  vedi sezione dedicata in fondo al blocco). Aggiornamenti futuri: `git pull` + `composer install`
+  + `npm run build` + `php artisan migrate --force` + `php artisan optimize` + restart worker.
+- **Prossimo passo concreto:** nessuna milestone né feature residua richiesta. Priorità di
+  hardening ora che c'è produzione: **backup DB+file** (TD-009, alto), poi resto del debito
+  (TD-002 cookie banner, TD-004 URL Google News, TD-005 snippet, TD-006 UX-06) e il **reset
+  password self-service** (oggi la resetta il supervisore).
 - **Decisioni M5:** log consultabile ma immutabile (nessuna UI di modifica); riapertura
   gated a supervisore lato server (Policy); chiusura rassegna richiede un PDF generato (§9).
 - **Aggiunte/fix post-M5 (collaudo con l'utente):**
@@ -137,6 +140,19 @@
   `crea_utente`/`modifica_utente`/`attiva_utente`/`disattiva_utente`. `docs/modello-dati.md`
   e CLAUDE §7 aggiornati. Test `UtentiTest` (9). **Debito noto:** nessun reset password
   self-service (lo fa il supervisore) — da tracciare come lavoro futuro. (commit `d4a8e2e`)
+- **Deploy in produzione (15 lug 2026):** l'app è online su **https://rs.fulviabenussi.com**
+  (VPS Hetzner Debian 13, condivisa con altri progetti — non toccati). Stack server: nginx →
+  PHP 8.4-FPM → Laravel → **PostgreSQL** (`rassegna_db`/`rassegna_user`, DB dedicato; deviazione
+  dalla spec MySQL → TD-008). Coda su tabella `database` via **Supervisor** (`rassegna-worker`),
+  scheduler `rassegne:scansiona` alle 08:00 via cron (`/etc/cron.d/rassegna-stampa`), cache/
+  sessioni su file (niente Redis condiviso). Cattura Playwright/Chromium in
+  `/var/www/rassegna-stampa/.ms-playwright` (`PLAYWRIGHT_BROWSERS_PATH` nel worker). HTTPS con
+  Let's Encrypt (rinnovo automatico). Utente **supervisore** creato (gianmaria.valente@gmail.com).
+  Verifiche reali: redirect http→https 301, `/login` 200, asset https (no mixed content), login
+  completo → dashboard 200 con nav da supervisore, **cattura di prova OK** (Chromium → screenshot
+  17 KB). Codice consegnato via `git clone` del repo pubblico (aggiornabile con `git pull` +
+  `composer install`/`npm run build`/`php artisan migrate --force`/`optimize`). Debito aperto:
+  **backup produzione** non ancora schedulati (TD-009).
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file

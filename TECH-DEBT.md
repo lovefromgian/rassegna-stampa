@@ -114,6 +114,18 @@ Formato voce: `TD-xxx` · titolo · motivo · rischio · azione prevista · file
   `database/migrations/2026_07_12_000004_create_uscite_table.php` (indice FULLTEXT solo su
   mysql), `config/database.php`, `.env` di produzione.
 
+### TD-009 — Nessun backup automatico in produzione (DB + file)
+- **Motivo:** il deploy su `rs.fulviabenussi.com` (Hetzner, 15 lug 2026) è andato in produzione
+  senza backup schedulati né del database PostgreSQL (`rassegna_db`) né della cartella file
+  (`storage/app`). Estende TD-001 (che riguardava solo i file) ora che esistono dati vivi e un
+  DB di produzione.
+- **Rischio:** **alto** — un guasto o un errore azzera clienti, rassegne, uscite e l'archivio
+  storico. Aggravato dall'esistenza della cancellazione definitiva (TD-007).
+- **Azione prevista:** cron di `pg_dump rassegna_db` giornaliero + copia di `storage/app` su
+  storage esterno (o object storage, vedi TD-001), con ritenzione. Verificare periodicamente il
+  ripristino, non solo il dump.
+- **File:** infrastruttura server (cron/systemd-timer), non nel repo.
+
 ## Risolti
 
 _(Sposta qui con la data quando il debito è saldato.)_
