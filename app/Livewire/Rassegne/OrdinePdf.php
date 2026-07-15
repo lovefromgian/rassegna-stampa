@@ -8,6 +8,7 @@ use App\Livewire\Concerns\NotificaUtente;
 use App\Models\DocumentoGenerato;
 use App\Models\Rassegna;
 use App\Models\Uscita;
+use App\Services\Audit;
 use App\Services\BlocchiGenerazione;
 use App\Services\GeneratorePdf;
 use Illuminate\Contracts\View\View;
@@ -63,6 +64,21 @@ class OrdinePdf extends Component
         }
     }
 
+    /**
+     * Elimina un'uscita direttamente da qui (soft delete → cestino, recuperabile).
+     * Solo supervisore (UscitaPolicy::delete). Toglie l'uscita dal PDF che verrà generato;
+     * le versioni già generate restano immutate (snapshot delle uscite incluse).
+     */
+    public function elimina(int $uscitaId): void
+    {
+        $uscita = $this->rassegna->uscite()->whereKey($uscitaId)->firstOrFail();
+        Gate::authorize('delete', $uscita);
+
+        $uscita->delete();
+        Audit::registra('elimina_uscita', $uscita);
+        $this->notifica('Uscita eliminata (spostata nel cestino, recuperabile).');
+    }
+
     public function genera(BlocchiGenerazione $blocchi): void
     {
         Gate::authorize('create', DocumentoGenerato::class);
@@ -95,6 +111,7 @@ class OrdinePdf extends Component
             'documenti' => $documenti,
             'candidatiPendenti' => $this->rassegna->uscite()->where('stato', StatoUscita::Candidato)->count(),
             'prossimaVersione' => ((int) $this->rassegna->documentiGenerati()->max('versione')) + 1,
+            'puoEliminare' => (bool) auth()->user()?->isSupervisore(),
         ]);
     }
 }

@@ -27,6 +27,11 @@
                             <button class="btn small" wire:click="spostaSu({{ $uscita->id }})" @disabled($i === 0) title="Su">▲</button>
                             <button class="btn small" wire:click="spostaGiu({{ $uscita->id }})" @disabled($i === $uscite->count() - 1) title="Giù">▼</button>
                         </div>
+                        @if ($puoEliminare)
+                            <button class="btn small danger" title="Elimina"
+                                    wire:click="elimina({{ $uscita->id }})"
+                                    wire:confirm="Eliminare questa uscita? Va nel cestino (recuperabile) e non comparirà nel PDF.">🗑</button>
+                        @endif
                     </div>
                 @empty
                     <div class="empty">Nessuna uscita approvata. Approva le uscite in <a href="{{ route('rassegne.revisione', $rassegna) }}" wire:navigate>revisione</a>.</div>

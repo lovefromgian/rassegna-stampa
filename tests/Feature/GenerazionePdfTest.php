@@ -173,3 +173,33 @@ test('il download restituisce il PDF, segna scaricato_il e registra l\'audit', f
     expect($doc->fresh()->scaricato_il)->not->toBeNull();
     expect(LogAzione::where('azione', 'scarica_pdf')->exists())->toBeTrue();
 });
+
+// ---- Eliminazione uscite dall'ordine PDF (collaudo) ----
+
+test('il supervisore elimina un\'uscita dall\'ordine PDF (soft delete + audit)', function () {
+    Livewire::actingAs(User::factory()->supervisore()->create());
+    $rassegna = Rassegna::factory()->create();
+    $u = Uscita::factory()->for($rassegna)->approvato()->create();
+
+    Livewire::test(OrdinePdf::class, ['rassegna' => $rassegna])
+        ->assertViewHas('puoEliminare', true)
+        ->assertSee('🗑')
+        ->call('elimina', $u->id);
+
+    expect($u->fresh()->trashed())->toBeTrue();
+    expect(LogAzione::where('azione', 'elimina_uscita')->where('entita_id', $u->id)->exists())->toBeTrue();
+});
+
+test('l\'operatore non può eliminare dall\'ordine PDF né vede il pulsante', function () {
+    Livewire::actingAs(User::factory()->operatore()->create());
+    $rassegna = Rassegna::factory()->create();
+    $u = Uscita::factory()->for($rassegna)->approvato()->create();
+
+    Livewire::test(OrdinePdf::class, ['rassegna' => $rassegna])
+        ->assertViewHas('puoEliminare', false)
+        ->assertDontSee('🗑')
+        ->call('elimina', $u->id)
+        ->assertForbidden();
+
+    expect($u->fresh()->trashed())->toBeFalse();
+});
