@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + gestione utenti + deploy prod · 15 lug 2026 · 131 test verdi (349 asserzioni)
+**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + gestione utenti + deploy prod · 15 lug 2026 · 132 test verdi (352 asserzioni)
 
 ## ▶ RIPRENDI DA QUI
 
@@ -159,6 +159,13 @@
   (SQLSTATE 22001). Migration → `text` (indice unique deduplica invariato), test di schema
   anti-regressione, docs aggiornati. Verificato sul server: scansione reale OK, 72 candidati
   inseriti, URL più lungo 877 caratteri. (commit `2d21187`)
+- **Fix paginazione (collaudo):** i pulsanti di navigazione pagine erano **enormi**. Causa:
+  l'app usa CSS custom (non Tailwind), ma Livewire rendeva la paginazione con la vista default
+  Tailwind, le cui frecce sono SVG con classi `w-5 h-5` inesistenti → SVG senza dimensioni.
+  Vista `pagination/rassegna` dedicata (Livewire-native con `wire:click`, testo al posto degli
+  SVG) passata esplicitamente nelle 4 viste che paginano (archivio, clienti, rassegne, log) +
+  stile `.pagination` in `app.css`. Test di regressione. Deployato e verificato in produzione.
+  (commit `c0f72a5`)
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file
