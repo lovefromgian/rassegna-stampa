@@ -132,7 +132,9 @@ async function scrollFinoInFondo(page) {
   let browser;
   try {
     const { chromium } = require('playwright');
-    browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
+    // --disable-dev-shm-usage: su server con /dev/shm piccolo, lo screenshot full-page
+    // di pagine molto lunghe fa crashare il tab ("Target crashed"); usa /tmp al suo posto.
+    browser = await chromium.launch({ headless: true, args: ['--no-sandbox', '--disable-dev-shm-usage'] });
     const context = await browser.newContext({
       locale: 'it-IT',
       viewport: { width: 1366, height: 900 },
