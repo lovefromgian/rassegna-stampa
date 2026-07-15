@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + gestione utenti + deploy prod · 15 lug 2026 · 135 test verdi (369 asserzioni)
+**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + gestione utenti + deploy prod · 15 lug 2026 · 136 test verdi (372 asserzioni)
 
 ## ▶ RIPRENDI DA QUI
 
@@ -13,7 +13,7 @@
 
 - **Stato:** **SCOPE v1 COMPLETO (M1–M5).** Il gestionale gira end-to-end: clienti/rassegne
   → scoperta automatica → cattura → revisione → PDF impaginato versionato → contorno (log,
-  archivio, statistiche, chiusura/riapertura). **135 test verdi (369 asserzioni)** (comprese
+  archivio, statistiche, chiusura/riapertura). **136 test verdi (372 asserzioni)** (comprese
   le aggiunte post-M5: UX revisione, eliminazione/cestino, gestione utenti, deploy prod).
 - **M5 (Contorno) completata:** log di audit consultabile globale e per rassegna
   (`Audit\Registro`, immutabile); archivio con ricerca full-text sul testo estratto
@@ -207,6 +207,12 @@
   consenso e dopo lo scroll. Verificato visivamente (Sky TG24: articolo pulito, nessun banner).
   Resta euristica → mitiga TD-002 (per i casi ostinati restano ricattura/caricamento manuale).
   (commit `6ce67ab`)
+- **Revisione: ricattura mostra "acquisizione in corso" (collaudo):** cliccando Ricattura, il
+  riquadro anteprima nasconde lo screenshot vecchio e mostra `⏳ Acquisizione in corso…` finché
+  il worker non produce la nuova cattura (`stato_cattura` in_attesa/in_corso); poi l'anteprima
+  nuova compare da sola (poll attivo solo durante l'acquisizione, consolidato con quello
+  dell'avviso "in acquisizione"). Pill "In acquisizione…". Test in `RevisioneTest`. Deployato.
+  (commit `7545e10`)
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file
