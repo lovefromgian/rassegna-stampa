@@ -49,6 +49,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/statistiche', Statistiche::class)->name('statistiche.index');
     Route::get('/cestino', Cestino::class)->name('cestino.index');
 
+    // Manuale d'uso: pagina statica autonoma (stili isolati), accessibile a tutti gli utenti.
+    Route::view('/manuale', 'manuale')->name('manuale');
+
     // Gestione utenti (solo supervisore, filtrato dalle Policy nei componenti)
     Route::get('/utenti', Utenti\Elenco::class)->name('utenti.index');
     Route::get('/utenti/nuovo', Utenti\Modifica::class)->name('utenti.create');
