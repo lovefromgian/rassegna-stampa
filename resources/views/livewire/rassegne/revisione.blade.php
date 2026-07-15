@@ -39,8 +39,12 @@
              Senza questo l'operatore pensa che non esistano. Poll SOLO quando c'è
              qualcosa in acquisizione, così le nuove compaiono da sole senza azzerare
              i campi in corso (le proprietà del componente sopravvivono al re-render). --}}
+        {{-- Poll SOLO mentre c'è qualcosa in acquisizione (questa uscita in ricattura, o
+             altre in coda): le anteprime si aggiornano da sole senza azzerare i campi in
+             corso. A acquisizione finita il poll si spegne. --}}
+        <div @if ($inAcquisizione || $inCattura > 0) wire:poll.4s @endif>
         @if ($inCattura > 0)
-            <div class="flash warning" wire:poll.8s wire:key="avviso-acquisizione">
+            <div class="flash warning" wire:key="avviso-acquisizione">
                 ⏳ {{ $inCattura }} {{ $inCattura === 1 ? 'uscita ancora in acquisizione' : 'uscite ancora in acquisizione' }}… compariranno qui appena pronte (aggiornamento automatico).
             </div>
         @endif
@@ -49,7 +53,9 @@
             <div class="card">
                 <div class="spread mb-2">
                     <h2 class="m-0">Anteprima cattura</h2>
-                    @if ($uscita->haMaterialeValido())
+                    @if ($inAcquisizione)
+                        <span class="pill neutral">In acquisizione…</span>
+                    @elseif ($uscita->haMaterialeValido())
                         <span class="pill success">Materiale presente</span>
                     @else
                         <span class="pill warning">Nessun materiale</span>
@@ -63,7 +69,13 @@
                     );
                     $esiste = $materiale && \Illuminate\Support\Facades\Storage::disk(config('capture.disk'))->exists($materiale);
                 @endphp
-                @if ($isImmagine && $esiste)
+                @if ($inAcquisizione)
+                    {{-- (Ri)cattura in corso: nascondi l'anteprima vecchia, mostra lo stato.
+                         Il poll aggiorna da solo appena la nuova cattura è pronta. --}}
+                    <div class="shot" style="min-height:200px;display:flex;align-items:center;justify-content:center;text-align:center;">
+                        <span>⏳ <strong>Acquisizione in corso…</strong><br>l'anteprima comparirà qui appena pronta (aggiornamento automatico).</span>
+                    </div>
+                @elseif ($isImmagine && $esiste)
                     {{-- key col path: forza il refresh dell'<img> quando il file cambia --}}
                     <img wire:key="materiale-{{ $materiale }}"
                          src="{{ \Illuminate\Support\Facades\Storage::disk(config('capture.disk'))->url($materiale) }}"
@@ -142,6 +154,7 @@
                     <button class="btn primary" wire:click="approva">Approva e vai avanti</button>
                 </div>
             </div>
+        </div>
         </div>
     @endif
 </div>

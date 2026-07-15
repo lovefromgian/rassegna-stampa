@@ -276,6 +276,14 @@ class Revisione extends Component
             ->whereIn('stato_cattura', [StatoCattura::InAttesa, StatoCattura::InCorso])
             ->count();
 
+        // L'uscita corrente è in (ri)cattura: mostra "acquisizione in corso" al posto
+        // dell'anteprima vecchia, e fa aggiornare la schermata finché non è pronta.
+        $inAcquisizione = $corrente && in_array(
+            $corrente->stato_cattura,
+            [StatoCattura::InAttesa, StatoCattura::InCorso],
+            true
+        );
+
         return view('livewire.rassegne.revisione', [
             'uscita' => $corrente,
             'posizione' => $posizione,
@@ -284,6 +292,7 @@ class Revisione extends Component
             'haPrecedente' => $pos !== false && $pos > 0,
             'haSuccessiva' => $pos !== false && $pos < $rimanenti - 1,
             'inCattura' => $inCattura,
+            'inAcquisizione' => $inAcquisizione,
             'tipiMedia' => TipoMedia::cases(),
             'rilevanze' => Rilevanza::cases(),
         ]);

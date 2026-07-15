@@ -132,6 +132,19 @@ test('mentre si revisiona, le catture ancora in coda sono segnalate come "in acq
         ->assertSee('in acquisizione');
 });
 
+test('un\'uscita in (ri)cattura mostra "acquisizione in corso" al posto dell\'anteprima vecchia', function () {
+    $rassegna = Rassegna::factory()->create();
+    $uscita = Uscita::factory()->for($rassegna)->catturato()->create([
+        'stato_cattura' => StatoCattura::InAttesa,
+        'screenshot_path' => 'screenshots/vecchio.png',
+    ]);
+
+    Livewire::test(Revisione::class, ['rassegna' => $rassegna])
+        ->assertSet('correnteId', $uscita->id)
+        ->assertSee('Acquisizione in corso')
+        ->assertDontSee('vecchio.png'); // la vecchia anteprima non viene mostrata
+});
+
 test('senza uscite catturate la revisione è completata', function () {
     $rassegna = Rassegna::factory()->create();
 
