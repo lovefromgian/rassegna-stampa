@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + gestione utenti + deploy prod · 15 lug 2026 · 136 test verdi (372 asserzioni)
+**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + gestione utenti + deploy prod · 15 lug 2026 · 138 test verdi (380 asserzioni)
 
 ## ▶ RIPRENDI DA QUI
 
@@ -13,7 +13,7 @@
 
 - **Stato:** **SCOPE v1 COMPLETO (M1–M5).** Il gestionale gira end-to-end: clienti/rassegne
   → scoperta automatica → cattura → revisione → PDF impaginato versionato → contorno (log,
-  archivio, statistiche, chiusura/riapertura). **136 test verdi (372 asserzioni)** (comprese
+  archivio, statistiche, chiusura/riapertura). **138 test verdi (380 asserzioni)** (comprese
   le aggiunte post-M5: UX revisione, eliminazione/cestino, gestione utenti, deploy prod).
 - **M5 (Contorno) completata:** log di audit consultabile globale e per rassegna
   (`Audit\Registro`, immutabile); archivio con ricerca full-text sul testo estratto
@@ -213,6 +213,12 @@
   nuova compare da sola (poll attivo solo durante l'acquisizione, consolidato con quello
   dell'avviso "in acquisizione"). Pill "In acquisizione…". Test in `RevisioneTest`. Deployato.
   (commit `7545e10`)
+- **Ordine/PDF: eliminazione uscite anche da qui (collaudo):** nella schermata "Ordine delle
+  uscite e generazione" ogni riga ha ora, per il **supervisore**, un pulsante Elimina (soft
+  delete → cestino, recuperabile) con conferma: toglie l'uscita dal PDF che verrà generato,
+  mentre le versioni già generate restano immutate (snapshot). Ri-autorizzato lato server
+  (`UscitaPolicy::delete`) + audit `elimina_uscita`. Test in `GenerazionePdfTest` (supervisore
+  elimina; operatore 403 e nessun pulsante). Deployato. (commit `0dce531`)
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file
