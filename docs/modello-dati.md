@@ -148,9 +148,9 @@ Soft delete (un'uscita scartata resta archiviata e recuperabile).
 | `id` | id | | |
 | `rassegna_id` | fk → rassegne | ✅ | |
 | `testata_id` | fk → testate | ✅ | |
-| `titolo` | string | ✅ | titolo dell'articolo |
+| `titolo` | text | ✅ | titolo dell'articolo (dal feed: può essere lungo) |
 | `data_pubblicazione` | date | ✅ | |
-| `url` | string | | solo per `online`; **unique per rassegna** (deduplica) |
+| `url` | text | | solo per `online`; **unique per rassegna** (deduplica). `text`: gli URL di redirect Google News superano i 255 caratteri (varchar rigido su PostgreSQL) |
 | `tipo_media` | enum | ✅ | `online` \| `carta` \| `radio` \| `tv` \| `agenzia` \| `social_blog` |
 | `rilevanza` | enum | | `principale` \| `secondaria` \| `citazione` — assegnata in revisione |
 | `stato` | enum | ✅ | ciclo di vita di business, vedi sotto |
