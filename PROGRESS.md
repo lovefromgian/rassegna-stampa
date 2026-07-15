@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + gestione utenti + deploy prod · 15 lug 2026 · 132 test verdi (352 asserzioni)
+**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + gestione utenti + deploy prod · 15 lug 2026 · 134 test verdi (367 asserzioni)
 
 ## ▶ RIPRENDI DA QUI
 
@@ -13,7 +13,7 @@
 
 - **Stato:** **SCOPE v1 COMPLETO (M1–M5).** Il gestionale gira end-to-end: clienti/rassegne
   → scoperta automatica → cattura → revisione → PDF impaginato versionato → contorno (log,
-  archivio, statistiche, chiusura/riapertura). **132 test verdi (352 asserzioni)** (comprese
+  archivio, statistiche, chiusura/riapertura). **134 test verdi (367 asserzioni)** (comprese
   le aggiunte post-M5: UX revisione, eliminazione/cestino, gestione utenti, deploy prod).
 - **M5 (Contorno) completata:** log di audit consultabile globale e per rassegna
   (`Audit\Registro`, immutabile); archivio con ricerca full-text sul testo estratto
@@ -186,6 +186,13 @@
      Chromium. (commit `18a9108`)
   Verificato sul server contro URL reali: le 16 uscite bloccate ora **tutte catturate, 0 in
   errore, 16 in Revisione**. Collegato a TD-004.
+- **Revisione: navigazione tra le uscite (collaudo):** prima si poteva solo approvare/scartare
+  (che avanzava). Ora si **sfoglia** avanti/indietro tra le uscite catturate coi pulsanti
+  Precedente/Successiva, senza dover decidere. Le scelte in corso (tipo, rilevanza, note)
+  restano salvate come **bozza** sull'uscita (nessun cambio di stato), così tornando indietro
+  non si perde il lavoro. Approva/Scarta avanzano alla posizione lasciata; la ricattura resta
+  sull'uscita. Header "N di M da revisionare". Test in `RevisioneTest` (navigazione + bordi +
+  bozza). Deployato. (commit `5f0cc21`)
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file
