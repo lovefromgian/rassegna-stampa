@@ -32,10 +32,17 @@ Formato voce: `TD-xxx` · titolo · motivo · rischio · azione prevista · file
 - **Rischio:** **medio** — non blocca il flusso (l'operatore vede il problema in revisione e
   ricattura o carica il file a mano), ma peggiora la resa su alcune testate e aumenta il
   lavoro manuale.
-- **Azione prevista:** ampliare la lista di selettori sulle testate FVG effettivamente usate;
-  valutare l'integrazione di una libreria di block-list consenso (es. `@cliqz/adblocker` o
-  regole EasyList/“I don't care about cookies”) nel contesto Playwright.
-- **File:** `scripts/capture.cjs` (array `SELETTORI_CONSENSO`).
+- **Mitigazione (15 lug 2026):** oltre al click su "Accetta", `capture.cjs` ora fa una passata
+  di **rimozione** dei banner residui prima dello screenshot — per parole chiave dei CMP
+  diffusi (OneTrust, Iubenda, Didomi, Cookiebot, Usercentrics, Sourcepoint/TCF, paywall…) e
+  per i modali/backdrop fissi a tutto schermo — ripristinando lo scroll. Verificato
+  visivamente su Sky TG24 (banner assente, articolo pulito). Resta **euristica**: banner in
+  shadow DOM o con firme non note possono sfuggire; per quei casi vale ancora ricattura /
+  caricamento manuale.
+- **Azione prevista:** ampliare parole chiave/selettori sulle testate FVG effettivamente
+  usate; valutare una block-list consenso (es. `@cliqz/adblocker` o "I don't care about
+  cookies") nel contesto Playwright per i casi ostinati.
+- **File:** `scripts/capture.cjs` (`SELETTORI_CONSENSO`, `chiudiConsenso`, `rimuoviBannerResidui`).
 
 ### TD-003 — Riordino uscite con frecce, non drag&drop
 - **Motivo:** la specifica (regole-business.md §6, mockup 08) prevede il riordino delle

@@ -199,6 +199,14 @@
   con `wire:poll` attivo **solo** in quel caso (così le nuove compaiono da sole senza azzerare
   i campi in corso; a acquisizione finita il poll si spegne). Variante `.flash.warning` in
   `app.css`. Test in `RevisioneTest`. Deployato. (commit `956b77b`)
+- **Cattura: rimozione banner cookie (collaudo — "togliere i banner prima di catturare"):**
+  il click su "Accetta" non chiudeva tutti i banner e gli screenshot uscivano coperti. Aggiunta
+  in `capture.cjs` una passata di rimozione dei banner residui prima dello screenshot (parole
+  chiave CMP: OneTrust, Iubenda, Didomi, Cookiebot, Usercentrics, Sourcepoint/TCF, paywall… +
+  modali/backdrop fissi a tutto schermo, con ripristino dello scroll), eseguita dopo il
+  consenso e dopo lo scroll. Verificato visivamente (Sky TG24: articolo pulito, nessun banner).
+  Resta euristica → mitiga TD-002 (per i casi ostinati restano ricattura/caricamento manuale).
+  (commit `6ce67ab`)
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file
