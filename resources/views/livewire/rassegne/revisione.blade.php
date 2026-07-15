@@ -26,6 +26,16 @@
             </div>
         </div>
     @else
+        {{-- Avviso: altre uscite sono ancora in cattura e non compaiono ancora qui.
+             Senza questo l'operatore pensa che non esistano. Poll SOLO quando c'è
+             qualcosa in acquisizione, così le nuove compaiono da sole senza azzerare
+             i campi in corso (le proprietà del componente sopravvivono al re-render). --}}
+        @if ($inCattura > 0)
+            <div class="flash warning" wire:poll.8s wire:key="avviso-acquisizione">
+                ⏳ {{ $inCattura }} {{ $inCattura === 1 ? 'uscita ancora in acquisizione' : 'uscite ancora in acquisizione' }}… compariranno qui appena pronte (aggiornamento automatico).
+            </div>
+        @endif
+
         <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:16px;align-items:start;">
             <div class="card">
                 <div class="spread mb-2">

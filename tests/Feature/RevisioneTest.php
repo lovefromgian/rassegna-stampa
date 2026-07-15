@@ -118,6 +118,20 @@ test('navigando, le scelte in corso restano salvate come bozza', function () {
         ->and($u1->note)->toBe('da ricontrollare');
 });
 
+test('mentre si revisiona, le catture ancora in coda sono segnalate come "in acquisizione"', function () {
+    $rassegna = Rassegna::factory()->create();
+    Uscita::factory()->for($rassegna)->catturato()->create(); // una pronta da revisionare
+    Uscita::factory()->for($rassegna)->confermato()->create([ // una ancora in cattura
+        'tipo_media' => TipoMedia::Online,
+        'url' => 'https://x.it/a',
+        'stato_cattura' => StatoCattura::InAttesa,
+    ]);
+
+    Livewire::test(Revisione::class, ['rassegna' => $rassegna])
+        ->assertSet('correnteId', fn ($id) => $id !== null) // sto revisionando la pronta
+        ->assertSee('in acquisizione');
+});
+
 test('senza uscite catturate la revisione è completata', function () {
     $rassegna = Rassegna::factory()->create();
 

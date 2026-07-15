@@ -179,6 +179,7 @@ a { color: var(--accent); }
 .flash { border-radius: var(--radius); padding: 12px 14px; margin-bottom: 16px; font-size: 14px; }
 .flash.success { background: var(--success-bg); color: var(--success); border: 1px solid var(--success); }
 .flash.danger { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger); }
+.flash.warning { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning); }
 
 /* Errori di validazione */
 .field-error { color: var(--danger); font-size: 13px; margin: -8px 0 12px; }
