@@ -27,7 +27,8 @@ codice si conforma ai documenti, non viceversa. Se codice e `docs/` divergono, v
 ## 2. Stack e comandi
 
 - **Framework:** Laravel 12 · **PHP** 8.3+
-- **Database:** MySQL 8 (o MariaDB)
+- **Database:** dev/test su SQLite; **produzione su PostgreSQL** (server standardizzato su
+  pgsql — vedi TECH-DEBT TD-008; la spec originale indicava MySQL 8/MariaDB)
 - **Frontend:** Blade + Livewire
 - **Test:** Pest
 - **Cattura pagine:** Playwright (Chromium headless), invocato da un job in coda

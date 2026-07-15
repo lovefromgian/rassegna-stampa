@@ -12,8 +12,8 @@ use Livewire\WithPagination;
 
 /**
  * Archivio: ricerca full-text sul testo estratto di tutte le uscite mai raccolte,
- * trasversale a clienti e anni (mockup 09). Su MySQL usa l'indice FULLTEXT; su SQLite
- * (dev/test) ripiega su LIKE. La fonte resta il testo catturato.
+ * trasversale a clienti e anni (mockup 09). Su MySQL usa l'indice FULLTEXT; su PostgreSQL
+ * (produzione) ripiega su ILIKE; su SQLite (dev/test) su LIKE. La fonte resta il testo catturato.
  */
 class Archivio extends Component
 {
@@ -39,11 +39,14 @@ class Archivio extends Component
                 ->with(['testata', 'rassegna.cliente'])
                 ->whereNotNull('testo_estratto');
 
-            if (DB::connection()->getDriverName() === 'mysql') {
+            $driver = DB::connection()->getDriverName();
+            if ($driver === 'mysql') {
                 $query->whereFullText('testo_estratto', $this->termine);
             } else {
+                // PostgreSQL: LIKE è case-sensitive → ILIKE. SQLite: LIKE è già case-insensitive.
+                $op = $driver === 'pgsql' ? 'ilike' : 'like';
                 $t = '%'.$this->termine.'%';
-                $query->where(fn ($q) => $q->where('testo_estratto', 'like', $t)->orWhere('titolo', 'like', $t));
+                $query->where(fn ($q) => $q->where('testo_estratto', $op, $t)->orWhere('titolo', $op, $t));
             }
 
             if ($this->testataId) {

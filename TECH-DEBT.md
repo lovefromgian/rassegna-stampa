@@ -97,6 +97,23 @@ Formato voce: `TD-xxx` · titolo · motivo · rischio · azione prevista · file
 - **File:** `app/Services/EliminazioneDefinitiva.php`, `app/Livewire/Cestino.php`,
   Policy `forceDelete` di Cliente/Rassegna/Uscita.
 
+### TD-008 — Produzione su PostgreSQL invece di MySQL (deviazione dalla spec)
+- **Motivo:** la spec firmata (`docs/`, CLAUDE §2) indica MySQL 8/MariaDB, ma il server di
+  produtione (Hetzner, `rs.fulviabenussi.com`) è standardizzato su **PostgreSQL** (già usato
+  dagli altri progetti sul box) e non ha `pdo_mysql`. Su richiesta del committente si è scelto
+  di usare il Postgres esistente anziché installare un secondo motore DB su una VPS condivisa
+  da 3.7 GB. Dev/test restano su SQLite.
+- **Rischio:** **basso** — l'app è ORM-first (Eloquent), l'unico punto driver-specifico è la
+  **ricerca full-text dell'archivio**: su MySQL usa l'indice `FULLTEXT`, su PostgreSQL degrada
+  a uno scan `ILIKE '%termine%'` (nessun indice full-text, niente ranking). Accettabile ai
+  volumi di un'agenzia; da rivedere se l'archivio cresce molto.
+- **Azione prevista:** se le ricerche diventano lente, adottare il full-text nativo di
+  PostgreSQL (`tsvector`/`tsquery` + indice GIN) nel ramo `pgsql` di `Archivio`. Nessuna
+  migrazione dati necessaria oggi.
+- **File:** `app/Livewire/Archivio.php` (ramo pgsql → ILIKE),
+  `database/migrations/2026_07_12_000004_create_uscite_table.php` (indice FULLTEXT solo su
+  mysql), `config/database.php`, `.env` di produzione.
+
 ## Risolti
 
 _(Sposta qui con la data quando il debito è saldato.)_
