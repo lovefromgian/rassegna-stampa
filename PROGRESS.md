@@ -172,6 +172,20 @@
   senza dover centrare il quadratino (`.row.pick` + `cursor:pointer` in `app.css`). Il link
   "Apri l'articolo" resta cliccabile (elemento interattivo annidato: non attiva la label).
   Soluzione senza JS, sincronizzata con `wire:model`. Deployato. (commit `c2bcc8d`)
+- **Fix cattura in produzione (collaudo — "confermo un candidato ma non arriva in revisione"):**
+  le catture online fallivano tutte, quindi nessuna uscita raggiungeva la Revisione (restavano
+  `confermato`/`stato_cattura=errore`). Tre cause, tutte in `scripts/capture.cjs`, emerse solo
+  con Playwright reale su URL Google News (i test usano un capturer finto):
+  1. **Redirect JS** di Google News → "Execution context was destroyed" durante le `evaluate`.
+     Fix: `goto` con `domcontentloaded` + attesa che l'URL si stabilizzi prima di ogni
+     `evaluate`, con `evaluate` resilienti (retry dopo riassestamento). (commit `1c9a673`)
+  2. **Screenshot in timeout** ("waiting for fonts to load", 30s): screenshot/pdf a 60s +
+     `animations:disabled`; `CAPTURE_TIMEOUT` prod a 150s (< `--timeout=180` del worker).
+     (commit `49424b5`)
+  3. **"Target crashed"** su pagine molto lunghe: aggiunto `--disable-dev-shm-usage` al lancio
+     Chromium. (commit `18a9108`)
+  Verificato sul server contro URL reali: le 16 uscite bloccate ora **tutte catturate, 0 in
+  errore, 16 in Revisione**. Collegato a TD-004.
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file

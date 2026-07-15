@@ -54,10 +54,16 @@ Formato voce: `TD-xxx` · titolo · motivo · rischio · azione prevista · file
   corretto), ma la deduplica lavora sul link di Google: lo stesso articolo raggiunto con due
   redirect diversi potrebbe sfuggire alla dedup, e l'URL mostrato non è quello dell'editore.
 - **Rischio:** **basso/medio** — dedup imperfetta tra scansioni, URL poco leggibile nel PDF.
-- **Azione prevista:** risolvere il redirect al `urlFinale` dopo la cattura e salvarlo come
-  `url` canonico (la cattura già conosce `urlFinale`); oppure passare a una fonte che
-  restituisce l'URL diretto (API a pagamento), essendo la fonte dietro interfaccia.
-- **File:** `app/Support/Discovery/GoogleNewsRss.php`, `app/Jobs/CatturaUscita.php`.
+- **Nota (15 lug 2026):** il redirect JS di Google News faceva **fallire** la cattura
+  ("Execution context was destroyed"): risolto rendendo `scripts/capture.cjs` robusto ai
+  redirect (attende che l'URL si stabilizzi prima delle `evaluate`). La cattura ora segue e
+  risolve correttamente il redirect (verificato: `urlFinale` = URL editore). Resta aperto il
+  punto sotto: `urlFinale` non viene ancora **salvato** come `url` canonico.
+- **Azione prevista:** salvare `urlFinale` come `url` canonico dopo la cattura (la cattura già
+  lo conosce); oppure passare a una fonte che restituisce l'URL diretto (API a pagamento),
+  essendo la fonte dietro interfaccia.
+- **File:** `app/Support/Discovery/GoogleNewsRss.php`, `app/Jobs/CatturaUscita.php`,
+  `scripts/capture.cjs`.
 
 ### TD-006 — Ticket UX residuo (UX-06)
 - **Motivo:** la revisione UX di Cowork (`REVISIONE-UX.md`) elenca 6 interventi. Fatti i
