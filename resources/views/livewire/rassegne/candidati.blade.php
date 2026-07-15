@@ -40,7 +40,10 @@
                         default => ['danger', 'Corrispondenza debole'],
                     };
                 @endphp
-                <div class="row" style="align-items:flex-start;">
+                {{-- Riga = <label>: un clic ovunque seleziona la checkbox; il link "Apri
+                     l'articolo" resta cliccabile (un elemento interattivo annidato non
+                     attiva la label, per specifica HTML). --}}
+                <label class="row pick" style="align-items:flex-start;">
                     <input type="checkbox" style="margin-top:4px;width:auto;" value="{{ $c->id }}" wire:model="selezionati">
                     <div class="main">
                         <div class="spread">
@@ -61,7 +64,7 @@
                             @endif
                         </div>
                     </div>
-                </div>
+                </label>
             @empty
                 <div class="empty">Nessun candidato in attesa. Usa "Scansiona ora" oppure aggiungi un'uscita a mano dalla scheda.</div>
             @endforelse
