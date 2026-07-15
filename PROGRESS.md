@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + gestione utenti + deploy prod · 15 lug 2026 · 138 test verdi (380 asserzioni)
+**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + gestione utenti + deploy prod · 15 lug 2026 · 140 test verdi (385 asserzioni)
 
 ## ▶ RIPRENDI DA QUI
 
@@ -13,7 +13,7 @@
 
 - **Stato:** **SCOPE v1 COMPLETO (M1–M5).** Il gestionale gira end-to-end: clienti/rassegne
   → scoperta automatica → cattura → revisione → PDF impaginato versionato → contorno (log,
-  archivio, statistiche, chiusura/riapertura). **138 test verdi (380 asserzioni)** (comprese
+  archivio, statistiche, chiusura/riapertura). **140 test verdi (385 asserzioni)** (comprese
   le aggiunte post-M5: UX revisione, eliminazione/cestino, gestione utenti, deploy prod).
 - **M5 (Contorno) completata:** log di audit consultabile globale e per rassegna
   (`Audit\Registro`, immutabile); archivio con ricerca full-text sul testo estratto
@@ -219,6 +219,14 @@
   mentre le versioni già generate restano immutate (snapshot). Ri-autorizzato lato server
   (`UscitaPolicy::delete`) + audit `elimina_uscita`. Test in `GenerazionePdfTest` (supervisore
   elimina; operatore 403 e nessun pulsante). Deployato. (commit `0dce531`)
+- **Manuale d'uso nell'app (collaudo):** creato un manuale d'uso navigabile e accessibile
+  direttamente dal programma. È una **pagina statica autonoma** (`resources/views/manuale.blade.php`,
+  stili isolati per non collidere con `app.css`, tema chiaro/scuro, indice laterale con scrollspy,
+  responsive), servita dalla rotta `/manuale` (dietro auth) e raggiungibile dalla **voce
+  "Manuale ↗" in topbar** (apre in nuova scheda, tutti gli utenti). Contenuti allineati al
+  comportamento reale (menu, flusso candidati→revisione→ordine/PDF, stati, FAQ). Ne esiste anche
+  una versione Artifact pubblicata separatamente. Test `ManualeTest` (utente vede il manuale;
+  ospite → login). Deployato. (commit `fa2109d`)
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file
