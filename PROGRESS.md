@@ -21,9 +21,10 @@
   versionamento PDF.
 - **Verifica reale M5:** ciclo di vita completo — v1 generata → chiusa → riaperta → uscita
   tardiva aggiunta → v2 generata, **entrambe le versioni conservate** (§9).
-- **Prossimo passo concreto:** nessuna milestone residua nello scope v1. Eventuale lavoro
-  successivo: saldare il debito tecnico (TD-001 backup, TD-002 cookie banner, TD-003
-  drag&drop, TD-004 URL Google News, TD-005 snippet) e l'hardening pre-produzione.
+- **Prossimo passo concreto:** nessuna milestone né feature residua richiesta. Eventuale
+  lavoro successivo: saldare il debito tecnico (TD-001 backup, TD-002 cookie banner, TD-004
+  URL Google News, TD-005 snippet, TD-006 UX-06), il **reset password self-service** (oggi la
+  resetta il supervisore — vedi gestione utenti) e l'hardening pre-produzione.
 - **Decisioni M5:** log consultabile ma immutabile (nessuna UI di modifica); riapertura
   gated a supervisore lato server (Policy); chiusura rassegna richiede un PDF generato (§9).
 - **Aggiunte/fix post-M5 (collaudo con l'utente):**
@@ -124,6 +125,18 @@
   multipla + "Elimina selezionate"). È un **soft delete**: le uscite vanno nel **cestino**
   (recuperabili; la cancellazione definitiva resta lì). Audit `elimina_uscita`. Solo
   supervisore (UscitaPolicy::delete). Test in `UsciteGestoreTest` (single, blocco, permessi).
+- **Gestione utenti (collaudo, richiesta utente "dove gestisco gli utenti?"):** voce
+  **Utenti** in topbar (solo supervisore) con elenco, creazione/modifica e attivazione.
+  Componenti `Utenti\Elenco` e `Utenti\Modifica`, rotte `/utenti[/nuovo|/{u}/modifica]`,
+  gating via **`UserPolicy`** lato server (viewAny/create/update/attivazione = solo
+  supervisore; l'operatore prende 403). **Decisione di dominio:** gli utenti **non si
+  eliminano**, si **disattivano** (colonna `users.attivo`), così il log di audit resta
+  integro (le azioni passate restano attribuite a un utente esistente). Un account
+  disattivato **non può più fare login** (controllo in `LoginController`, non solo UI); non
+  si può disattivare sé stessi. In modifica la password si cambia solo se compilata. Audit
+  `crea_utente`/`modifica_utente`/`attiva_utente`/`disattiva_utente`. `docs/modello-dati.md`
+  e CLAUDE §7 aggiornati. Test `UtentiTest` (9). **Debito noto:** nessun reset password
+  self-service (lo fa il supervisore) — da tracciare come lavoro futuro. (commit `d4a8e2e`)
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file
