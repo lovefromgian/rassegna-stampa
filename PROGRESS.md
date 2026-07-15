@@ -13,7 +13,8 @@
 
 - **Stato:** **SCOPE v1 COMPLETO (M1–M5).** Il gestionale gira end-to-end: clienti/rassegne
   → scoperta automatica → cattura → revisione → PDF impaginato versionato → contorno (log,
-  archivio, statistiche, chiusura/riapertura). **85 test verdi (221 asserzioni).**
+  archivio, statistiche, chiusura/riapertura). **132 test verdi (352 asserzioni)** (comprese
+  le aggiunte post-M5: UX revisione, eliminazione/cestino, gestione utenti, deploy prod).
 - **M5 (Contorno) completata:** log di audit consultabile globale e per rassegna
   (`Audit\Registro`, immutabile); archivio con ricerca full-text sul testo estratto
   (`Archivio`, MySQL fulltext / LIKE su SQLite); statistiche per cliente e testata
@@ -166,6 +167,11 @@
   SVG) passata esplicitamente nelle 4 viste che paginano (archivio, clienti, rassegne, log) +
   stile `.pagination` in `app.css`. Test di regressione. Deployato e verificato in produzione.
   (commit `c0f72a5`)
+- **Candidati: riga interamente cliccabile (collaudo):** la riga del candidato è ora un
+  `<label>` che avvolge la checkbox — un clic ovunque sulla riga la seleziona/deseleziona,
+  senza dover centrare il quadratino (`.row.pick` + `cursor:pointer` in `app.css`). Il link
+  "Apri l'articolo" resta cliccabile (elemento interattivo annidato: non attiva la label).
+  Soluzione senza JS, sincronizzata con `wire:model`. Deployato. (commit `c2bcc8d`)
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file
