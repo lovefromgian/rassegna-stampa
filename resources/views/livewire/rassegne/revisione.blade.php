@@ -7,7 +7,7 @@
 
     <div class="page-head">
         <h1 class="mt-0">Revisione uscita
-            @if ($uscita)<span class="muted" style="font-size:15px;font-weight:400;">— {{ $indice }} di {{ $totale }}</span>@endif
+            @if ($uscita)<span class="muted" style="font-size:15px;font-weight:400;">— {{ $posizione }} di {{ $rimanenti }} da revisionare</span>@endif
         </h1>
         <p>Verifica la cattura, correggi i metadati, assegna la rilevanza.</p>
     </div>
@@ -116,6 +116,13 @@
 
                     <label class="field" for="note">Note interne</label>
                     <textarea id="note" wire:model="note" placeholder="Visibili solo al team"></textarea>
+                </div>
+
+                {{-- Navigazione: sfoglia le uscite da revisionare senza dover decidere.
+                     Le scelte in corso (tipo, rilevanza, note) restano salvate come bozza. --}}
+                <div class="actions">
+                    <button class="btn" wire:click="precedente" @disabled(! $haPrecedente)>‹ Precedente</button>
+                    <button class="btn" wire:click="successiva" @disabled(! $haSuccessiva)>Successiva ›</button>
                 </div>
 
                 <div class="actions">

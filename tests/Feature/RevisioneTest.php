@@ -78,6 +78,46 @@ test('si può sostituire il file direttamente dalla revisione, restando sull\'us
     Storage::disk('public')->assertExists($uscita->file_caricato_path);
 });
 
+test('si può navigare tra le uscite da revisionare senza doverle decidere', function () {
+    $rassegna = Rassegna::factory()->create();
+    $u1 = Uscita::factory()->for($rassegna)->catturato()->create(['data_rilevamento' => now()->subHours(2)]);
+    $u2 = Uscita::factory()->for($rassegna)->catturato()->create(['data_rilevamento' => now()->subHour()]);
+    $u3 = Uscita::factory()->for($rassegna)->catturato()->create(['data_rilevamento' => now()]);
+
+    Livewire::test(Revisione::class, ['rassegna' => $rassegna])
+        ->assertSet('correnteId', $u1->id)
+        ->call('successiva')->assertSet('correnteId', $u2->id)
+        ->call('successiva')->assertSet('correnteId', $u3->id)
+        ->call('successiva')->assertSet('correnteId', $u3->id) // ultimo: al bordo resta
+        ->call('precedente')->assertSet('correnteId', $u2->id)
+        ->call('precedente')->assertSet('correnteId', $u1->id)
+        ->call('precedente')->assertSet('correnteId', $u1->id); // primo: al bordo resta
+
+    // Nessuna decisione presa navigando: restano tutte da revisionare.
+    expect(Uscita::where('stato', StatoUscita::Catturato)->count())->toBe(3);
+});
+
+test('navigando, le scelte in corso restano salvate come bozza', function () {
+    $rassegna = Rassegna::factory()->create();
+    $u1 = Uscita::factory()->for($rassegna)->catturato()->create(['data_rilevamento' => now()->subHour()]);
+    Uscita::factory()->for($rassegna)->catturato()->create(['data_rilevamento' => now()]);
+
+    Livewire::test(Revisione::class, ['rassegna' => $rassegna])
+        ->assertSet('correnteId', $u1->id)
+        ->set('rilevanza', Rilevanza::Citazione->value)
+        ->set('note', 'da ricontrollare')
+        ->call('successiva')
+        ->call('precedente')
+        ->assertSet('correnteId', $u1->id)
+        ->assertSet('rilevanza', Rilevanza::Citazione->value)
+        ->assertSet('note', 'da ricontrollare');
+
+    $u1->refresh();
+    expect($u1->stato)->toBe(StatoUscita::Catturato)   // la bozza NON decide
+        ->and($u1->rilevanza)->toBe(Rilevanza::Citazione)
+        ->and($u1->note)->toBe('da ricontrollare');
+});
+
 test('senza uscite catturate la revisione è completata', function () {
     $rassegna = Rassegna::factory()->create();
 

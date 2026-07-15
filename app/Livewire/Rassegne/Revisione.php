@@ -59,10 +59,21 @@ class Revisione extends Component
             ->orderBy('data_rilevamento');
     }
 
-    private function caricaProssima(): void
+    /** @return array<int, int> id delle uscite da revisionare, nell'ordine di navigazione */
+    private function idsDaRevisionare(): array
     {
-        $uscita = $this->daRevisionare()->first();
+        return $this->daRevisionare()->pluck('id')->all();
+    }
+
+    /** Carica nella scheda l'uscita indicata (se ancora da revisionare); null → la prima. */
+    private function caricaUscita(?int $id): void
+    {
         $this->resetValidation();
+
+        $uscita = $id
+            ? $this->rassegna->uscite()->whereKey($id)->where('stato', StatoUscita::Catturato)->first()
+            : null;
+        $uscita ??= $this->daRevisionare()->first();
 
         if (! $uscita) {
             $this->correnteId = null;
@@ -74,6 +85,80 @@ class Revisione extends Component
         $this->tipo_media = $uscita->tipo_media->value;
         $this->rilevanza = $uscita->rilevanza?->value ?? Rilevanza::Principale->value;
         $this->note = $uscita->note ?? '';
+    }
+
+    private function caricaProssima(): void
+    {
+        $this->caricaUscita(null);
+    }
+
+    /** Vai all'uscita precedente/successiva da revisionare, senza doverla approvare o scartare. */
+    public function precedente(): void
+    {
+        $this->naviga(-1);
+    }
+
+    public function successiva(): void
+    {
+        $this->naviga(1);
+    }
+
+    private function naviga(int $delta): void
+    {
+        $ids = $this->idsDaRevisionare();
+        if (! $ids) {
+            return;
+        }
+
+        // Non perdere le scelte in corso: salvale come bozza sull'uscita attuale.
+        $this->salvaBozza();
+
+        $pos = array_search($this->correnteId, $ids, true);
+        if ($pos === false) {
+            $this->caricaUscita(null);
+
+            return;
+        }
+
+        $nuovo = $pos + $delta;
+        if ($nuovo < 0 || $nuovo >= count($ids)) {
+            return; // ai bordi non ci si muove
+        }
+
+        $this->caricaUscita($ids[$nuovo]);
+    }
+
+    /**
+     * Salva le scelte in corso (tipo, rilevanza, note) sull'uscita attuale senza cambiarne
+     * lo stato: così navigando avanti/indietro il lavoro non decisi non va perso.
+     */
+    private function salvaBozza(): void
+    {
+        $uscita = $this->corrente();
+        if (! $uscita || $uscita->stato !== StatoUscita::Catturato) {
+            return;
+        }
+
+        Gate::authorize('update', $uscita);
+        $uscita->update([
+            'tipo_media' => $this->tipo_media ?: $uscita->tipo_media->value,
+            'rilevanza' => $this->rilevanza ?: null,
+            'note' => $this->note ?: null,
+        ]);
+    }
+
+    /** Dopo una decisione, mostra l'uscita che ora occupa la posizione lasciata (la successiva). */
+    private function avanzaDaPosizione(int $pos): void
+    {
+        $ids = $this->idsDaRevisionare();
+        if (! $ids) {
+            $this->correnteId = null;
+            $this->resetValidation();
+
+            return;
+        }
+
+        $this->caricaUscita($ids[min($pos, count($ids) - 1)]);
     }
 
     private function corrente(): ?Uscita
@@ -94,6 +179,8 @@ class Revisione extends Component
             'rilevanza' => ['required', Rule::enum(Rilevanza::class)],
         ]);
 
+        $pos = array_search($this->correnteId, $this->idsDaRevisionare(), true);
+
         $uscita->update([
             'tipo_media' => $this->tipo_media,
             'rilevanza' => $this->rilevanza,
@@ -103,7 +190,7 @@ class Revisione extends Component
 
         Audit::registra('approva_uscita', $uscita, ['rilevanza' => $this->rilevanza]);
         $this->notifica('Uscita approvata.');
-        $this->caricaProssima();
+        $this->avanzaDaPosizione($pos === false ? 0 : $pos);
     }
 
     public function scarta(): void
@@ -112,6 +199,8 @@ class Revisione extends Component
         abort_if(! $uscita, 404);
         Gate::authorize('update', $uscita);
 
+        $pos = array_search($this->correnteId, $this->idsDaRevisionare(), true);
+
         $uscita->update([
             'note' => $this->note ?: null,
             'stato' => StatoUscita::Scartato,
@@ -119,7 +208,7 @@ class Revisione extends Component
 
         Audit::registra('scarto_uscita', $uscita);
         $this->notifica('Uscita scartata (resta archiviata e recuperabile).');
-        $this->caricaProssima();
+        $this->avanzaDaPosizione($pos === false ? 0 : $pos);
     }
 
     public function ricattura(GestioneCattura $cattura): void
@@ -130,7 +219,7 @@ class Revisione extends Component
 
         if ($cattura->avvia($uscita)) {
             $this->notifica('Ricattura accodata.');
-            $this->caricaProssima();
+            $this->caricaUscita($this->correnteId); // resta sull'uscita, mostra lo stato aggiornato
         }
     }
 
@@ -174,7 +263,11 @@ class Revisione extends Component
         $totale = $this->rassegna->uscite()
             ->whereIn('stato', [StatoUscita::Catturato, StatoUscita::Approvato])
             ->count();
-        $rimanenti = $this->daRevisionare()->count();
+
+        $ids = $this->idsDaRevisionare();
+        $rimanenti = count($ids);
+        $pos = array_search($this->correnteId, $ids, true);
+        $posizione = $pos === false ? 0 : $pos + 1;
 
         // Uscite confermate ancora in cattura: quando il worker finisce diventano
         // "catturato" e compaiono qui. Serve a distinguere "attendi" da "finito".
@@ -185,9 +278,11 @@ class Revisione extends Component
 
         return view('livewire.rassegne.revisione', [
             'uscita' => $corrente,
-            'indice' => $totale - $rimanenti + 1,
-            'totale' => $totale,
+            'posizione' => $posizione,
             'rimanenti' => $rimanenti,
+            'totale' => $totale,
+            'haPrecedente' => $pos !== false && $pos > 0,
+            'haSuccessiva' => $pos !== false && $pos < $rimanenti - 1,
             'inCattura' => $inCattura,
             'tipiMedia' => TipoMedia::cases(),
             'rilevanze' => Rilevanza::cases(),
