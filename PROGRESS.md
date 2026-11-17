@@ -235,7 +235,10 @@
   advisory. 140 test verdi. Verificati a mano: PDF dompdf con logo + screenshot (immagini
   incorporate e rese correttamente), scoperta reale Google News RSS via Guzzle, JS Livewire
   servito dal vendor (non pubblicato in `public/`). Markdown non usato dal progetto.
-  **Da fare in produzione:** `composer install --no-dev` + riavvio di queue worker e PHP-FPM.
+  **Deployato in produzione (17 nov 2026):** `git pull` + `composer install --no-dev`, `optimize`,
+  reload PHP-FPM, restart worker. Verificati sul server: versioni attese, `composer audit --no-dev`
+  pulito, `/login` 200, Livewire JS 200, dompdf con immagine OK, Google News reale 100 risultati.
+  Backup per rollback: `/root/rassegna-vendor-bak-20261117` e `/root/rassegna-composer.lock-bak-20261117`.
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file
