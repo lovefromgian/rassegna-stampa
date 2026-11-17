@@ -3,7 +3,7 @@
 > Dove siamo: cosa è fatto, in corso, prossimi passi, decisioni da ricordare.
 > Convenzioni e setup → CLAUDE.md. Debito tecnico → TECH-DEBT.md. Qui solo lo **stato**.
 
-**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + gestione utenti + deploy prod · 15 lug 2026 · 140 test verdi (385 asserzioni)
+**Ultimo aggiornamento:** scope v1 + revisione UX + eliminazione/cestino + gestione utenti + deploy prod + aggiornamento sicurezza dipendenze · 17 nov 2026 · 140 test verdi (385 asserzioni)
 
 ## ▶ RIPRENDI DA QUI
 
@@ -227,6 +227,15 @@
   comportamento reale (menu, flusso candidati→revisione→ordine/PDF, stati, FAQ). Ne esiste anche
   una versione Artifact pubblicata separatamente. Test `ManualeTest` (utente vede il manuale;
   ospite → login). Deployato. (commit `fa2109d`)
+- **Aggiornamento di sicurezza dipendenze (17 nov 2026):** `composer update` mirato su
+  laravel/framework 12.63→12.73, dompdf 3.1.5→3.1.6, guzzle 7.14→7.16.3, league/commonmark
+  2.8.3→2.10.7, livewire 4.3.3→4.4.8, symfony/http-foundation 7.4.14→7.4.23, league/flysystem
+  3.35.2→3.36.0 (+ dipendenze), più symfony/yaml 8.1.1→8.1.11 (solo dev, via laravel/sail).
+  La critica su TokenGuard non era sfruttabile (solo guardia a sessione). `composer audit`: nessun
+  advisory. 140 test verdi. Verificati a mano: PDF dompdf con logo + screenshot (immagini
+  incorporate e rese correttamente), scoperta reale Google News RSS via Guzzle, JS Livewire
+  servito dal vendor (non pubblicato in `public/`). Markdown non usato dal progetto.
+  **Da fare in produzione:** `composer install --no-dev` + riavvio di queue worker e PHP-FPM.
 - **Nessun lavoro in sospeso.** Working tree pulito a ogni commit.
 
 ## Come usare questo file
